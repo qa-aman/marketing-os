@@ -1,6 +1,6 @@
 ---
 name: competitor-analyst
-description: Analyze competitors and produce a positioning matrix, messaging comparison, and differentiation map. Use when the user asks for competitive analysis, competitor research, "how do we compare to X", positioning vs competitors, market landscape, "analyze our competition", or wants to update competitor docs. Writes to knowledge/markets/competitors.md.
+description: Analyze competitors using Blue Ocean Strategy's ERRC Grid and Strategy Canvas (W. Chan Kim and Renee Mauborgne) to identify uncontested market space, not just who is better on the same axes. Produces an ERRC Grid, Strategy Canvas, positioning matrix, messaging comparison, and differentiation map. Use when the user asks for competitive analysis, competitor research, "how do we compare to X", positioning vs competitors, market landscape, "analyze our competition", "where is the blue ocean", or wants to update competitor docs. Writes to knowledge/markets/competitors.md.
 reads:
   - knowledge/markets/competitors.md
   - knowledge/markets/positioning.md
@@ -13,7 +13,7 @@ writes:
 
 # competitor-analyst
 
-Builds an evidence-based competitor map. Writes to `knowledge/markets/competitors.md` so positioning and content skills get sharper.
+Builds an evidence-based competitor map using Blue Ocean Strategy's ERRC Grid and Strategy Canvas. The goal is not to find where we can be 10% better than the competition - it is to find where we can make the competition irrelevant. Writes to `knowledge/markets/competitors.md` so positioning and content skills get sharper.
 
 ## When to use
 
@@ -22,6 +22,24 @@ Builds an evidence-based competitor map. Writes to `knowledge/markets/competitor
 - "How do we compare to X?"
 - "Update our competitive positioning"
 - "Where do we win and lose vs <competitor>?"
+- "Where is the blue ocean in our market?"
+
+## Framework: Blue Ocean Strategy - ERRC Grid (Kim and Mauborgne)
+
+Most companies compete in "red oceans" - the same market space, the same factors, trying to be marginally better. Blue Ocean Strategy creates uncontested market space by competing on different factors entirely.
+
+**The ERRC Grid** - apply to every competitive analysis before building comparison tables:
+
+| Action | Question | Purpose |
+|---|---|---|
+| **Eliminate** | Which factors the industry takes for granted should be eliminated? | Remove cost and complexity that buyers don't actually value |
+| **Reduce** | Which factors should be reduced well below industry standard? | Stop over-delivering where buyers don't care |
+| **Raise** | Which factors should be raised well above industry standard? | Deliver more where the industry systematically under-delivers |
+| **Create** | Which factors should be created that the industry has never offered? | New value that no competitor provides |
+
+**Strategy Canvas** - a line chart with competing factors on the x-axis and performance level (1-10) on the y-axis, one line per player. The goal is a different curve shape, not a higher version of the same curve.
+
+**Self-check question**: Does our value curve look meaningfully different from competitors, or just higher on the same axes? If it's just higher, we are in a red ocean.
 
 ## Inputs needed
 
@@ -42,10 +60,65 @@ Builds an evidence-based competitor map. Writes to `knowledge/markets/competitor
 
    If WebFetch fails or pages are gated, ask the user to paste content.
 
-3. **Build the comparison matrix.** Use this structure:
+3. **Run the ERRC Grid first.** Before any comparison table, complete this analysis:
+
+   ```
+   ## ERRC Grid (Blue Ocean Strategy)
+
+   ### Eliminate
+   Which factors does this industry compete on that add cost and complexity but buyers don't actually care about?
+   - <Factor>: <why it should be eliminated>
+   - <Factor>: <why it should be eliminated>
+
+   ### Reduce
+   Which factors does the industry over-invest in where buyers don't value the excess?
+   - <Factor>: current industry level vs what buyers actually need
+   - <Factor>: current industry level vs what buyers actually need
+
+   ### Raise
+   Which factors does the industry systematically under-deliver on relative to what buyers need?
+   - <Factor>: current industry level vs what buyers actually want
+   - <Factor>: current industry level vs what buyers actually want
+
+   ### Create
+   Which factors could be created that no competitor currently offers?
+   - <Factor>: new value source, why buyers would care
+   - <Factor>: new value source, why buyers would care
+   ```
+
+4. **Build the Strategy Canvas.**
+
+   ```
+   ## Strategy Canvas
+
+   Competing factors (x-axis): list 6-10 factors the industry competes on
+   Score each player 1 (low) to 10 (high)
+
+   | Factor | <Us> | <Competitor 1> | <Competitor 2> | <Competitor 3> |
+   |---|---|---|---|---|
+   | <Factor 1> | | | | |
+   | <Factor 2> | | | | |
+   | <Factor 3> | | | | |
+   | <Factor 4> | | | | |
+   | <Factor 5> | | | | |
+   | <Factor 6> | | | | |
+
+   **Curve analysis**:
+   - Where our curve is identical to competitors: red ocean - we are competing on the same factors
+   - Where our curve diverges: potential blue ocean - we are competing differently
+   - Factors we should CREATE (from ERRC): these add new rows to the canvas that competitors cannot score
+   ```
+
+5. **Build the full comparison matrix.**
 
    ```
    # Competitor analysis (DD-MM-YYYY)
+
+   ## Blue ocean positioning assessment
+   Are we currently in a red ocean (competing on same factors) or a blue ocean (competing differently)?
+   - **Current state**: <red/blue ocean assessment with evidence>
+   - **Blue ocean opportunity**: <factor(s) from CREATE quadrant that no competitor addresses>
+   - **Recommended move**: <one concrete repositioning action>
 
    ## Quick comparison
    | | <Us> | <Competitor 1> | <Competitor 2> | <Competitor 3> |
@@ -88,7 +161,7 @@ Builds an evidence-based competitor map. Writes to `knowledge/markets/competitor
    - One feature description
 
    Then compare to ours. Identify:
-   - Where we sound the same (a problem)
+   - Where we sound the same (a problem - red ocean language)
    - Where we say less than them (a gap)
    - Where we say more (good if true, bad if puffery)
 
@@ -117,25 +190,30 @@ Builds an evidence-based competitor map. Writes to `knowledge/markets/competitor
    - List every URL with date accessed
    ```
 
-4. **Update `knowledge/markets/competitors.md`** with the executive summary (top quick comparison + per-competitor advantages/disadvantages). Keep it tight (under 500 lines) so other skills can load it cheaply.
+6. **Update `knowledge/markets/competitors.md`** with the executive summary (ERRC Grid + quick comparison + per-competitor advantages/disadvantages). Keep it tight (under 500 lines) so other skills can load it cheaply.
 
-5. **Save the full analysis** to `output/competitor-analysis/<DD-MM-YYYY>-comparison.md`.
+7. **Save the full analysis** to `output/competitor-analysis/<DD-MM-YYYY>-comparison.md`.
 
-6. **Self-check**:
+8. **Self-check**:
+   - ERRC Grid is complete before the comparison matrix
+   - Strategy Canvas shows whether our value curve is different or just higher
+   - "Blue ocean opportunity" section names at least one CREATE factor
    - Every claim has a source (URL or interview)
    - Compared on what the buyer cares about, not on what's easy to compare
    - "Where we lose" is not empty (if it is, you're flattering yourself)
    - Battle card is short enough that a sales rep can use it on a call
 
-7. **Offer follow-ups**:
-   - Update `knowledge/markets/positioning.md` if the analysis surfaced positioning gaps
+9. **Offer follow-ups**:
+   - Update `knowledge/markets/positioning.md` if the ERRC analysis surfaced a repositioning opportunity
    - Run `/landing-page-writer` for a new homepage that addresses competitor weak spots
-   - Run `/thought-leadership-writer` for a POV piece that establishes the angle
+   - Run `/thought-leadership-writer` for a POV piece that stakes out the blue ocean territory
 
 ## Rules
 
+- Run the ERRC Grid before any comparison table. The grid tells you what to compare. The table does not tell you what to compete on.
 - Never compare on features alone. The buyer compares on outcomes. Tie features to outcomes.
 - Always include "where we lose". If you can't find weaknesses in your own product vs competitors, you're not looking hard enough.
+- If the Strategy Canvas shows our curve is identical to competitors on every factor, say so directly. That is the finding. Repositioning is required before more campaigns will work.
 - Pricing comparisons must reference the date scraped. Pricing changes frequently.
 - Comparison pages from the competitor (their "vs you" page) are a goldmine. Read theirs before writing yours.
 - Do not produce sales battle cards without confirming with the user that sales reps will actually use them. Otherwise it's dead documentation.

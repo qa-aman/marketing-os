@@ -1,6 +1,6 @@
 ---
 name: ppt-maker
-description: Build branded PowerPoint decks (.pptx) for pitches, internal updates, sales decks, customer QBRs, board updates, conference talks. Use when the user asks for a deck, presentation, slides, pitch deck, sales deck, board deck, QBR, "make slides for X", or "build a presentation". Uses templates/ for brand assets. Generates structured slide content with speaker notes.
+description: Build branded PowerPoint decks (.pptx) for pitches, internal updates, sales decks, customer QBRs, board updates, conference talks using the Pyramid Principle and SCQA framework (Barbara Minto, The Minto Pyramid Principle). Every deck starts with the answer - conclusion on slide 2, evidence after. Slide titles are conclusions, not topics. Use when the user asks for a deck, presentation, slides, pitch deck, sales deck, board deck, QBR, "make slides for X", or "build a presentation". Uses templates/ for brand assets. Generates structured slide content with speaker notes.
 reads:
   - knowledge/brand/voice.md
   - knowledge/brand/visual.md
@@ -13,7 +13,35 @@ writes:
 
 # ppt-maker
 
-Builds .pptx decks using the brand template, with structured slide content and speaker notes.
+Builds .pptx decks using the brand template, with structured slide content and speaker notes. Applies the Pyramid Principle (Barbara Minto) - the top of the pyramid is the one answer, below it are the supporting arguments, below each argument is the evidence. State the conclusion first, then prove it.
+
+## Framework: Pyramid Principle and SCQA
+
+### The Pyramid Principle
+Ideas form a pyramid. The deck title is the one overarching recommendation or answer. Below it are 3-5 supporting arguments (the sections). Below each argument is the data and evidence that proves it.
+
+Top-down rule: state the conclusion first, then prove it. Never build to a reveal. Never make the audience wait for the answer.
+
+### SCQA Structure
+Complete this before building any slide:
+
+**SITUATION**: what the audience already knows and accepts as true. Sets the context.
+**COMPLICATION**: what changed, what went wrong, what tension exists. Creates the "so what?"
+**QUESTION**: the question the complication raises in the audience's mind.
+**ANSWER**: the deck answers this question. State it on slide 2 or 3 - before any evidence.
+
+The SCQA opening creates immediate relevance. The audience understands WHY they're in this meeting before seeing the first data slide.
+
+### Action Titles (Slide-Level Pyramid Principle)
+- Slide title = the conclusion of that slide (not the topic)
+- BAD: "Q3 Results"
+- GOOD: "Q3 pipeline missed by 22% due to top-of-funnel drop"
+- Maximum 3 supporting points per slide. If you need more than 3, you have two slides.
+- The audience should be able to read only the slide titles and understand the full argument.
+
+### Pyramid Check
+Deck title -> section titles -> slide titles must form a coherent argument.
+Test: read only the titles in order. Does the argument hold? If not, the structure is wrong.
 
 ## When to use
 
@@ -46,22 +74,45 @@ Builds .pptx decks using the brand template, with structured slide content and s
 
 1. **Load context.** Read `knowledge/brand/voice.md` (for slide copy) and `knowledge/brand/visual.md` (for color, type, image style references). Read `knowledge/markets/positioning.md` for any positioning slides. Confirm a `.pptx` template exists in `templates/`.
 
-2. **Outline first.** Before generating, show the user the slide-by-slide outline as a numbered list:
+2. **Complete the SCQA pre-work.** Before touching slides:
    ```
-   1. Title slide: <working headline>
-   2. Hook: <opening question or stat>
-   3. Problem: <the pain>
+   SITUATION: [what the audience already knows]
+   COMPLICATION: [what changed or what the tension is]
+   QUESTION: [what the complication makes the audience ask]
+   ANSWER: [the one-sentence answer the deck delivers]
+   ```
+   The ANSWER becomes the deck title. The deck is the proof for that answer.
+
+3. **Pyramid check.** Draft the deck structure as a pyramid:
+   ```
+   DECK TITLE (= the Answer from SCQA)
+   ├── Section 1: [supporting argument 1]
+   │   ├── Slide: [conclusion that proves argument 1]
+   │   └── Slide: [conclusion that proves argument 1]
+   ├── Section 2: [supporting argument 2]
+   │   └── Slide: [conclusion that proves argument 2]
+   └── Section 3: [supporting argument 3]
+       └── Slide: [conclusion that proves argument 3]
+   ```
+   Read the titles top to bottom. Does the argument hold without the body content? If not, restructure.
+
+4. **Outline first.** Show the user the slide-by-slide outline as a numbered list, with action titles:
+   ```
+   1. Title slide: [deck title = the SCQA Answer]
+   2. The answer: [SCQA Answer restated as the key recommendation - slide 2, before evidence]
+   3. [Section 1 header: argument 1]
+   4. [Slide title = conclusion of slide 4]
    ...
    ```
    Wait for the user to confirm or edit before building the file.
 
-3. **Build the deck.** For each slide, generate:
-   - **Slide title** (5-9 words, sentence case)
-   - **Body content** (3-5 bullets max OR one big number OR one pull quote OR one diagram description)
+5. **Build the deck.** For each slide, generate:
+   - **Slide title** (action title - the conclusion, 5-9 words, sentence case)
+   - **Body content** (3 supporting points max OR one big number OR one pull quote OR one diagram description)
    - **Speaker notes** (2-4 sentences, what the presenter says out loud)
-   - **Visual recommendation** (the visual type, not the image: "screenshot of dashboard", "chart: bar, MRR by month", "icon grid: 4 logos")
+   - **Visual recommendation** (the visual type: "screenshot of dashboard", "chart: bar, MRR by month", "icon grid: 4 logos")
 
-4. **Use python-pptx to write the file.** Pseudocode the script if you do not have execution access; otherwise run it. The script should:
+6. **Use python-pptx to write the file.** Pseudocode the script if you do not have execution access; otherwise run it. The script should:
    - Open `templates/<brand>.pptx` as the base
    - Add slides using existing layouts (Title, Title+Content, Section Header, etc.)
    - Insert title and body text into the layout placeholders, not free-floating text boxes
@@ -72,21 +123,26 @@ Builds .pptx decks using the brand template, with structured slide content and s
    - Generate `output/ppt/<DD-MM-YYYY>-<slug>.md` with the full slide-by-slide content
    - Tell the user how to install python-pptx and rerun
 
-5. **Slide design rules**:
+7. **Slide design rules**:
    - One idea per slide. If you have two, split.
    - 6 words max per bullet
-   - 5 bullets max per slide
+   - 3 bullets max per slide (Pyramid Principle: no more than 3 supporting points)
    - Numbers > words ("$2.4M" beats "significant revenue")
-   - Title states the takeaway, not the topic ("Sales doubled in Q3" beats "Q3 sales review")
+   - Title states the conclusion, not the topic (Pyramid Principle action title rule)
 
-6. **Self-check**:
+8. **Self-check**:
+   - SCQA completed before slides were built
+   - Slide 2 states the answer (SCQA-A) before any evidence slides
+   - Every slide title is a conclusion, not a topic label
+   - Reading only the slide titles tells the full story - test this explicitly
+   - Pyramid holds: deck title -> section titles -> slide titles form a coherent argument
    - Title slide includes presenter name, date in DD-MM-YYYY, audience name
    - Every slide has speaker notes
    - Closing slide has one clear CTA or ask
    - Voice matches `knowledge/brand/voice.md`
    - Brand template applied (no default Office theme)
 
-7. **Save** the .pptx and a parallel `.md` outline to `output/ppt/`.
+9. **Save** the .pptx and a parallel `.md` outline to `output/ppt/`.
 
 ## Building the file
 
@@ -107,7 +163,9 @@ prs.save("output/ppt/DD-MM-YYYY-deck-name.pptx")
 
 ## Rules
 
-- Never put a slide together without first showing the user the outline.
+- Never put a slide together without first completing the SCQA and showing the user the outline.
 - Never use the default PowerPoint theme. If no template is in `templates/`, stop and ask the user to drop one in.
 - Speaker notes are not optional. A deck without notes is half-done.
+- Slide titles are conclusions, not topics. If a title does not contain a verb or a clear claim, it is a topic label - rewrite it.
 - For pitch decks, confirm the financial numbers (ARR, runway, ask) with the user before building. Do not pull from old `knowledge/kpis.md` without confirming they are current.
+- "What does the audience need to DO?" must be answerable from the deck title alone. If it is not, the deck title is wrong.
