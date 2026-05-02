@@ -18,6 +18,9 @@ output/**
 # Local Claude settings
 .claude/settings.local.json
 
+# Local folder
+.post/
+
 # Python
 __pycache__/
 *.pyc
@@ -31,3 +34,4 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
