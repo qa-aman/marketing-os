@@ -19,7 +19,7 @@ output/**
 .claude/settings.local.json
 
 # Local folder
-.post/
+post/
 
 # Python
 __pycache__/

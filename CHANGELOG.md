@@ -1,5 +1,46 @@
 # Changelog
 
+## v0.2.0 (02-05-2026)
+
+### Skills - book frameworks added to all 21 skills
+
+Every skill now has a proven framework from a bestselling marketing or strategy book wired into its process - not just referenced, but built into the pre-write, structure, and self-check.
+
+| Skill | Framework | Book |
+|---|---|---|
+| landing-page-writer | StoryBrand SB7 | Donald Miller, *Building a StoryBrand* |
+| ad-campaign-writer | Schwartz Awareness Levels + Cialdini 6 Principles | *Breakthrough Advertising* + *Influence* |
+| thought-leadership-writer | SUCCESs | Chip & Dan Heath, *Made to Stick* |
+| email-nurture | Hook Model + PAS | Nir Eyal, *Hooked* |
+| icp-research | Jobs-to-be-Done | Christensen/Moesta, *Competing Against Luck* |
+| content-repurposer | STEPPS | Jonah Berger, *Contagious* |
+| seo-article-writer | Big 5 | Marcus Sheridan, *They Ask You Answer* |
+| campaign-brief | Before/During/After | Allan Dib, *The 1-Page Marketing Plan* |
+| competitor-analyst | ERRC Grid + Strategy Canvas | Kim & Mauborgne, *Blue Ocean Strategy* |
+| webinar-planner | 5-Component Positioning | April Dunford, *Obviously Awesome* |
+| case-study-writer | SCR + Pyramid Principle | Barbara Minto, McKinsey |
+| newsletter-writer | Curiosity Gap + Shiny Dime | George Loewenstein + David Perell |
+| content-writer | PAS + AIDA | Dan Kennedy + Elias Lewis |
+| pr-pitch-writer | AIDA + Journalist Psychology | Ryan Holiday, *Trust Me I'm Lying* |
+| retro | Five Whys + Start-Stop-Continue | Taiichi Ohno, Toyota Production System |
+| kpi-review | Big Idea + Narrative Arc | Cole Nussbaumer Knaflic, *Storytelling with Data* |
+| ppt-maker | Pyramid Principle + SCQA | Barbara Minto, *The Minto Pyramid Principle* |
+| press-release-writer | Inverted Pyramid + Ogilvy Headlines | AP Style + David Ogilvy, *Ogilvy on Advertising* |
+| social-calendar | Content Marketing Matrix 40/40/20 | Dave Chaffey, Smart Insights |
+| linkedin-post | Hook-Story-Offer + Curiosity Gap | Alex Hormozi, *$100M Offers* + Loewenstein |
+| ab-copy-writer | Awareness Levels + Cialdini Principles | Schwartz + Cialdini |
+
+### Knowledge examples
+
+- Added `knowledge.example/services/`: complete fictional professional services reference (Clearpath Advisory, B2B GTM consultancy). Covers company, role, brand voice, ICP, services, positioning, competitors, KPIs, learnings, case study, and blog post. Shows how the OS works for a non-SaaS vertical.
+
+### Infrastructure
+
+- MIT license added
+- `post/` folder added to .gitignore (local drafts, not tracked)
+
+---
+
 ## v0.1.0 (02-05-2026)
 
 Initial release.
