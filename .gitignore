@@ -1,0 +1,33 @@
+# Private context. Never push your company's IP upstream.
+knowledge/**
+!knowledge/README.md
+!knowledge/.gitkeep
+
+# Uploaded source files (PDFs, docs, decks)
+uploads/**
+!uploads/.gitkeep
+
+# Brand templates (.pptx, email shells, image kits)
+templates/**
+!templates/.gitkeep
+
+# Generated deliverables
+output/**
+!output/.gitkeep
+
+# Local Claude settings
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
