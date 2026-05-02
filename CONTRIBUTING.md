@@ -23,9 +23,12 @@ A skill is mergeable if it:
 
 ### 2. Add a knowledge example for a new vertical
 
-Right now there's `knowledge.example/saas/`. Verticals worth adding:
+Current examples:
+- `knowledge.example/saas/` - B2B SaaS (Threadline, activation platform)
+- `knowledge.example/services/` - B2B professional services (Clearpath Advisory, GTM consultancy)
+
+Verticals still needed:
 - `knowledge.example/edtech/`
-- `knowledge.example/services/` (agency or consultancy)
 - `knowledge.example/ecommerce/`
 - `knowledge.example/fintech/`
 - `knowledge.example/healthcare/`
