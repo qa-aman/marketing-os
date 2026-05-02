@@ -4,7 +4,7 @@
 
 Initial release.
 
-### Skills (19)
+### Skills (21)
 
 **Content writing**
 - content-writer: short-to-medium form (LinkedIn, blog, email, ad, landing hero)
@@ -37,6 +37,10 @@ Initial release.
 **Research**
 - icp-research: ICP and persona builder
 - competitor-analyst: competitive matrix and battle cards
+
+**Planning & testing**
+- social-calendar: month-by-week content calendar across channels with pillar-to-metric mapping
+- ab-copy-writer: 3-5 copy variants per element with angle, hypothesis, and test setup guidance
 
 **Orchestration**
 - content-repurposer: one source piece to multi-channel asset pack
