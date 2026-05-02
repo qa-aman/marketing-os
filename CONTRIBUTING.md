@@ -88,4 +88,4 @@ Every skill in this repo follows the same contract. Keep it.
 
 ## License
 
-Apache 2.0. Fork it, adapt it, ship it back.
+MIT. Fork it, adapt it, ship it back.

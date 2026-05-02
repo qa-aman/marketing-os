@@ -148,4 +148,4 @@ See `CONTRIBUTING.md`. Add a new skill, contribute a knowledge example for your 
 
 ## License
 
-Apache 2.0. Fork it, adapt it, share it back.
+MIT. Fork it, adapt it, share it back.
