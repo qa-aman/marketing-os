@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 4 - Connect your tools</title>
+<style>
+  :root{
+    --green:#2F6B4F; --green-d:#234f3b; --cream:#F7F4EC; --terra:#C56B47;
+    --ink:#1F2A24; --muted:#5c6b62; --line:#e2ddd0; --white:#fffdf8; --paper:#fbf9f2;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--ink);color:var(--ink);overflow:hidden}
+
+  #bar{position:fixed;top:0;left:0;height:4px;background:var(--terra);width:0;z-index:50;transition:width .3s ease}
+  #counter{position:fixed;bottom:16px;right:20px;z-index:50;font:600 12px/1 var(--sans);color:var(--muted);letter-spacing:.04em}
+  #hint{position:fixed;bottom:16px;left:20px;z-index:50;font:500 11px/1 var(--sans);color:var(--muted);opacity:.75}
+  #hint b{color:var(--green);font-weight:700}
+
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:6.5vh 6vw;background:var(--cream);color:var(--ink)}
+  .slide.active{display:flex;animation:in .4s ease}
+  @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .kicker{font:700 12px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:18px}
+  h1{font-size:clamp(32px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  h2{font-size:clamp(26px,3.6vw,42px);line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  .sub{font-size:clamp(16px,1.9vw,21px);color:var(--muted);margin-top:16px;font-weight:500;max-width:36ch}
+  .foot{margin-top:26px;font-size:14px;color:var(--muted);font-weight:600}
+
+  /* split: point on left, live example on right - fills the slide */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center;width:100%}
+  .split .left h2{max-width:15ch}
+  .split .sub{max-width:30ch}
+
+  /* title */
+  .title{background:var(--green);color:var(--cream);justify-content:center}
+  .title h1{color:#fff}.title .kicker{color:#e7c9b6}.title .sub{color:#d8e6dd;max-width:40ch}
+  .title .brandbar{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--terra)}
+
+  /* generic example panel */
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+    box-shadow:0 14px 36px rgba(35,79,59,.10)}
+  .panel .cap{font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:14px}
+
+  /* window chrome for realism */
+  .win{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 16px 40px rgba(35,79,59,.12)}
+  .win .bar{display:flex;gap:7px;align-items:center;padding:11px 14px;background:#efece2;border-bottom:1px solid var(--line)}
+  .win .bar i{width:11px;height:11px;border-radius:50%;background:#cfc9ba;display:inline-block}
+  .win .bar .t{margin-left:10px;font:600 12px/1 var(--sans);color:var(--muted)}
+  .win .body{padding:18px 20px}
+
+  /* file tree */
+  .tree{font-family:var(--mono);font-size:15px;line-height:1.9;color:var(--ink)}
+  .tree .dir{color:var(--green);font-weight:700}
+  .tree .f{color:var(--ink)}
+  .tree .in{padding-left:22px}.tree .in2{padding-left:44px}
+  .tree .hl{background:#eaf3ee;border-radius:5px;padding:1px 6px}
+
+  /* code / prompt */
+  .code{background:#10201a;border:1px solid #2b4a3c;border-radius:12px;padding:18px 20px}
+  .code .lbl{font:700 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:#7fb79a;margin-bottom:10px}
+  .code code{font-family:var(--mono);font-size:14px;line-height:1.55;color:#e8f3ec;white-space:pre-wrap;display:block}
+
+  /* two cards */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;width:100%;margin-top:6px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 10px 30px rgba(35,79,59,.06)}
+  .card .tag{font:800 15px/1 var(--sans);margin-bottom:12px}
+  .card.chat .tag{color:var(--muted)}.card.cw .tag{color:var(--green)}
+  .card p{font-size:clamp(15px,1.6vw,19px);line-height:1.45}
+  .card .eg{margin-top:14px;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--paper);
+    border:1px dashed var(--line);border-radius:8px;padding:8px 10px}
+  .card.cw{border-color:var(--green);box-shadow:0 12px 34px rgba(47,107,79,.14)}
+
+  /* numbered agenda */
+  ul.big{list-style:none;display:grid;gap:14px}
+  ul.big li{font-size:clamp(17px,1.9vw,21px);font-weight:600;display:flex;gap:14px;align-items:flex-start;line-height:1.25}
+  ul.big li .n{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:var(--green);color:#fff;font:800 15px/30px var(--sans);text-align:center}
+
+  ul.q{list-style:none;display:grid;gap:16px}
+  ul.q li{font-size:clamp(19px,2.4vw,28px);font-weight:700;color:var(--green-d);padding-left:22px;position:relative}
+  ul.q li:before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;border-radius:50%;background:var(--terra)}
+
+  /* steps (task loop) */
+  .todo{font-size:15.5px;line-height:2.15}
+  .todo .done{color:var(--muted)}.todo .now{color:var(--green-d);font-weight:700}
+  .todo .box{display:inline-block;width:20px}
+  .todo .now .box{color:var(--terra)}
+
+  /* file chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .chips span{font:700 13px/1 var(--sans);background:var(--paper);border:1px solid var(--line);color:var(--green-d);padding:9px 13px;border-radius:8px}
+
+  /* permission dialog */
+  .dialog{max-width:320px}
+  .dialog .msg{font-size:15px;line-height:1.5;color:var(--ink)}
+  .dialog .msg b{color:var(--green-d)}
+  .dialog .btns{display:flex;gap:10px;margin-top:16px}
+  .dialog .btns button{font:700 13px/1 var(--sans);padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+  .dialog .btns .allow{background:var(--green);color:#fff;border-color:var(--green)}
+
+  /* output thumbnails */
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .thumbs .th{aspect-ratio:16/10;background:var(--white);border:1px solid var(--line);border-radius:7px;padding:8px;
+    display:flex;flex-direction:column;gap:4px;box-shadow:0 4px 12px rgba(35,79,59,.06)}
+  .thumbs .th .b{height:6px;border-radius:3px;background:#dfe8e2}
+  .thumbs .th .b.g{background:var(--green);width:60%}
+  .thumbs .th .b.t{background:var(--terra);width:40%}
+
+  /* model picker */
+  .picker{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:11px 14px;font:700 14px/1 var(--sans);color:var(--green-d);box-shadow:0 6px 16px rgba(35,79,59,.06)}
+  .picker .dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .picker .ch{color:var(--muted);font-weight:600}
+
+  .quote{background:var(--green-d);color:var(--cream);justify-content:center}
+  .quote .mark{font-size:110px;line-height:.4;color:var(--terra);font-family:Georgia,serif}
+  .quote p{font-size:clamp(24px,3.6vw,42px);line-height:1.25;font-weight:600;max-width:20ch;margin-top:8px}
+
+  .pill{align-self:flex-start;margin-top:18px;background:var(--terra);color:#fff;font:800 14px/1 var(--sans);padding:12px 20px;border-radius:999px}
+  .lab .big-time{margin-top:22px;font-size:clamp(19px,2.4vw,26px);font-weight:800;color:var(--terra)}
+
+  #notes{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(16,25,20,.96);color:#e8f3ec;
+    padding:16px 22px 20px;transform:translateY(110%);transition:transform .3s ease;max-height:42vh;overflow:auto}
+  #notes.show{transform:none}
+  #notes .nlbl{font:800 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#7fb79a;margin-bottom:7px}
+  #notes p{font-size:15px;line-height:1.5;max-width:82ch}
+
+  @media (max-width:860px){.split,.cols{grid-template-columns:1fr;gap:24px}.thumbs{grid-template-columns:repeat(3,1fr)}}
+  @media print{body{overflow:visible;background:#fff}#bar,#counter,#hint,#notes{display:none}
+    .slide{position:relative;display:flex!important;height:100vh;page-break-after:always;inset:auto}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide title" data-notes="Welcome them back. Session 4 of 6. The shift today: Cowork stops working only with your local folder and starts using the tools they already have open all day - Gmail, Drive, Calendar, Teams, and more.">
+    <div class="brandbar"></div>
+    <div class="kicker">Cowork for the team - Session 4 of 6</div>
+    <h1>Connect your tools</h1>
+    <div class="sub">Cowork stops working with just your folder and starts using your whole stack.</div>
+  </section>
+
+  <!-- 2 RECAP + PROMISE -->
+  <section class="slide" data-notes="Quick recap of sessions 1-3: they set up a folder, added brand context, built prompts and projects. Today is the jump: connect live tools so Cowork can pull real data in and push finished work out. One connector unlocks this immediately.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">So far and today</div>
+        <h2>So far: Cowork worked with your local folder. Today: connect the live tools you already use.</h2>
+        <div class="sub">One connector changes what Cowork can do. Connect once, use in every prompt from here on.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Connect once, use anywhere</div>
+          <div class="chips">
+            <span>Gmail</span>
+            <span>Drive</span>
+            <span>Calendar</span>
+            <span>Outlook</span>
+            <span>Teams</span>
+          </div>
+          <div style="margin-top:16px;font:600 13px/1.5 var(--sans);color:var(--muted)">Each connector gives Cowork live access to that tool, worked the same way as your local files.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 AGENDA -->
+  <section class="slide" data-notes="Three blocks today. Connectors first - Google and Microsoft. Then the wider library of other connectors. Then Claude in Chrome, which lets Cowork browse real websites. All set up in Customize > Connectors, no code required.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Today's agenda</div>
+        <ul class="big">
+          <li><span class="n">1</span><span>Connectors - Google Workspace and Microsoft 365</span></li>
+          <li><span class="n">2</span><span>Other connectors - scraping, analytics, deck builders</span></li>
+          <li><span class="n">3</span><span>Claude in Chrome - browsing real websites</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Customize &gt; Connectors</div>
+          <div class="tree" style="font-size:14px;line-height:2">
+            <div class="f">Google Workspace</div>
+            <div class="f">Microsoft 365</div>
+            <div class="f">Web scraping</div>
+            <div class="f">Analytics</div>
+            <div class="f">Deck builders</div>
+            <div class="f">...and more in the library</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 WHAT CONNECTORS DO -->
+  <section class="slide" data-notes="The core idea: a connector gives Cowork live access to an external tool, worked exactly the same as local files. You do not write any code. You click the connector on in Customize > Connectors, sign in once, and it is there for every future prompt. Show the mock window here.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">What connectors do</div>
+        <h2>A connector gives Cowork live access to a tool, worked the same way as your files.</h2>
+        <div class="sub">You click it on. You sign in once. Then you ask Cowork to use it, just like you ask it to read a local document.</div>
+      </div>
+      <div class="right">
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><span class="t">Customize &gt; Connectors</span></div>
+          <div class="body">
+            <div class="tree" style="font-size:13.5px;line-height:2">
+              <div><span class="dir">Gmail</span> &mdash; on</div>
+              <div><span class="dir">Google Drive</span> &mdash; on</div>
+              <div><span class="dir">Google Calendar</span> &mdash; on</div>
+              <div style="color:var(--muted)">Outlook &mdash; off</div>
+              <div style="color:var(--muted)">OneDrive &mdash; off</div>
+              <div style="color:var(--muted)">Teams &mdash; off</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 GOOGLE WORKSPACE -->
+  <section class="slide" data-notes="Google Workspace covers three connectors: Drive for documents and briefs, Gmail for emails and threads, Calendar for schedules and deadlines. Show the Verdal example: pull last month's campaign brief from Drive without downloading it first. Cowork reads it as if it were a local file.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Google Workspace</div>
+        <h2>Drive, Gmail, and Calendar.</h2>
+        <div class="sub">Cowork reads Drive documents, searches Gmail threads, and checks Calendar events - without you downloading anything.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Google Workspace</div>
+          <div class="chips">
+            <span>Drive</span>
+            <span>Gmail</span>
+            <span>Calendar</span>
+          </div>
+          <div style="margin-top:18px;font:600 13px/1.5 var(--sans);color:var(--green-d)">Verdal example</div>
+          <div style="margin-top:6px;font:500 13px/1.6 var(--sans);color:var(--muted)">Pull last month's campaign brief from Drive, read it, and use it to draft the next one - no download needed.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 MICROSOFT 365 -->
+  <section class="slide" data-notes="Microsoft 365 covers Outlook, OneDrive, SharePoint, and Teams. Same idea: Cowork treats files in OneDrive or SharePoint exactly like local files. Teams messages and threads become readable context. Good to call out for teams that live in M365.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Microsoft 365</div>
+        <h2>Outlook, OneDrive, SharePoint, and Teams.</h2>
+        <div class="sub">If your team lives in Microsoft tools, Cowork connects directly. Files in OneDrive and SharePoint work like local files.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Microsoft 365</div>
+          <div class="chips">
+            <span>Outlook</span>
+            <span>OneDrive</span>
+            <span>SharePoint</span>
+            <span>Teams</span>
+          </div>
+          <div style="margin-top:18px;font:600 13px/1.5 var(--sans);color:var(--muted)">Connect one or all four. Each turns on separately in Customize &gt; Connectors.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 OTHER CONNECTORS -->
+  <section class="slide" data-notes="Beyond Google and Microsoft there is a connector library. Point out the categories: a scraping tool to pull competitor posts or pricing pages, analytics integrations to pull live numbers, and deck builders to push finished slides directly to a presentation tool. The library grows, so show attendees where to browse it.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Other connectors</div>
+        <h2>Scraping, analytics, and deck builders.</h2>
+        <div class="sub">Browse the connector library in Customize &gt; Connectors. New connectors are added regularly.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Also connectable</div>
+          <div class="tree" style="font-size:14px;line-height:2">
+            <div class="f">Web scraping - pull competitor posts and pricing</div>
+            <div class="f">Analytics - pull live traffic and campaign data</div>
+            <div class="f">Deck builders - push slides into your presentation tool</div>
+          </div>
+          <div style="margin-top:14px;font:600 13px/1.5 var(--sans);color:var(--muted)">Verdal use: scrape The Sill and Bloomscape product pages for a competitor snapshot.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 CLAUDE IN CHROME -->
+  <section class="slide" data-notes="Claude in Chrome is different from connectors: it gives Cowork a browser. It can click, read, and capture what it finds on live websites. The main use case is research that requires actually visiting a page - checking how a brand appears in search results, reading a competitor's live site, or grabbing pricing that is not in a document.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Claude in Chrome</div>
+        <h2>Cowork can browse real websites.</h2>
+        <div class="sub">It clicks, reads, and captures what it finds. Use it for research that requires a live page, not a stored document.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Claude in Chrome</div>
+          <div class="tree" style="font-size:13.5px;line-height:1.9">
+            <div class="f hl" style="display:inline-block;margin-bottom:8px">Task example</div>
+            <div style="font:500 14px/1.6 var(--sans);color:var(--ink)">"Check if Verdal shows up when people search for AI for plant food. Screenshot the top three results and save them to projects/search-audit.md."</div>
+          </div>
+          <div style="margin-top:14px;font:600 12px/1.4 var(--sans);color:var(--muted)">Cowork opens Chrome, searches, reads the page, and saves what it finds.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 SAFETY NOTE -->
+  <section class="slide" data-notes="Do not skip this slide. Non-technical attendees worry about over-granting access. The rule is simple: grant the minimum the tool asks for. Read-only is almost always enough for marketing work. You can revoke access at any time in Customize > Connectors. Show the dialog mock and walk through it.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">A note on access</div>
+        <h2>Grant the minimum access a tool asks for. Read-only is usually enough.</h2>
+        <div class="sub">You can revoke any connector at any time in Customize &gt; Connectors. Cowork asks before it does anything outside your folder.</div>
+      </div>
+      <div class="right">
+        <div class="panel dialog">
+          <div class="cap">When you connect Gmail</div>
+          <div class="msg">Allow Claude to read your Gmail messages and threads? <b>Cowork will not send emails on your behalf.</b></div>
+          <div class="btns"><button class="allow">Allow</button><button>Not now</button></div>
+          <div style="margin-top:14px;font:500 12px/1.5 var(--sans);color:var(--muted)">Choose read-only where the option appears. Sending and editing permissions are optional.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 LIVE DEMO -->
+  <section class="slide" data-notes="Switch to Cowork. Connect Gmail live if not already done (Customize > Connectors, sign in with the demo account). Then paste the prompt. Narrate: watch it read the Gmail thread, pull the key points, then open the newsletter file and write the new section. Key line: the prompt touched a live inbox and a local file in the same task. That is the difference connectors make.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Live demo - watch this</div>
+        <h2>Pull a real email into a Verdal deliverable.</h2>
+        <div class="code" style="margin-top:18px">
+          <div class="lbl">The prompt</div>
+          <code>Read my Gmail, find the latest plant-care
+trends email a teammate sent, pull the
+key points, and add a short "this month"
+section to projects/verdal-newsletter.md.</code>
+        </div>
+        <span class="pill">Live data, straight into your files</span>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What comes back</div>
+          <div class="tree">
+            <div class="dir">&#128193; verdal-marketing/</div>
+            <div class="in dir">&#128193; projects/</div>
+            <div class="in2 f">&#128196; verdal-newsletter.md <span class="hl">updated now</span></div>
+          </div>
+          <div style="margin-top:14px;font:600 13px/1.5 var(--sans);color:var(--muted)">The "this month" section is in the file, sourced from the real email thread. Cowork also did a quick Chrome browse to verify one trend claim.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 YOUR TURN (LAB) -->
+  <section class="slide lab" data-notes="Attendees work on their own laptops. Circulate. Common blockers: the connector sign-in flow gets interrupted, or they look for results in the chat panel instead of in projects/. If someone is on a shared login, they watch the volunteer drive and do this as homework. Allow extra time for the connector sign-in step - it takes 2-3 minutes the first time.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Your turn - 45 minutes</div>
+        <h2>Connect one tool you use.</h2>
+        <ul class="big" style="margin-top:20px">
+          <li><span class="n">1</span><span>Go to Customize &gt; Connectors, connect Gmail or Drive</span></li>
+          <li><span class="n">2</span><span>Grant read access when prompted</span></li>
+          <li><span class="n">3</span><span>Ask Cowork to pull one real thing into a Verdal file in projects/</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Copy this into Cowork</div>
+          <code>Read my Google Drive, find the most
+recent Verdal document, pull the main
+points, and save a one-page summary
+to projects/verdal-drive-summary.md.
+Use the brand voice in context/brand-voice.md.</code>
+        </div>
+        <div class="foot" style="margin-top:16px">On a shared login? Watch the volunteer drive, then connect your own Gmail or Drive as homework and run this prompt there.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 DEBRIEF -->
+  <section class="slide" data-notes="Let a few people answer each question. The goal is to surface the moment connectors clicked: when Cowork pulled something real from a live tool and put it straight into a file. That is the mental model for the rest of the course.">
+    <div class="kicker">Debrief</div>
+    <ul class="q">
+      <li>Which tool did you connect?</li>
+      <li>What did Cowork pull in?</li>
+      <li>What would you automate with this?</li>
+    </ul>
+  </section>
+
+  <!-- 13 NEXT + HOMEWORK -->
+  <section class="slide" data-notes="Preview Session 5: bigger outputs and automation - live dashboards and scheduled jobs that run without them sitting at the keyboard. The homework is small and concrete: connect one tool for their own brand and pull one real thing. This makes Session 5 land harder because they arrive with a connector already working.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Next time and homework</div>
+        <h2>Next: bigger outputs and automation.</h2>
+        <div class="sub">Live dashboards and scheduled jobs, so Cowork runs tasks without you sitting there.</div>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Homework - before next session</div>
+          <code>Connect one tool you use for your own
+brand (Gmail, Drive, Outlook, or other).
+Ask Cowork to pull one real piece of
+content and save it to your projects/
+folder using your brand voice rules.</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 THANK YOU -->
+  <section class="slide title" data-notes="Close. Session 5 is bigger outputs and automation. Send them to the official course for the certificate.">
+    <div class="brandbar"></div>
+    <div class="kicker">Thank you</div>
+    <h1>See you next session.</h1>
+    <div class="sub">Session 5: Bigger outputs and automation.</div>
+  </section>
+
+</div>
+
+<div id="counter">1 / 14</div>
+<div id="hint">Arrows to move &middot; <b>N</b> notes &middot; <b>F</b> fullscreen</div>
+<div id="notes"><div class="nlbl">Speaker notes</div><p id="notetext"></p></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar'),counter=document.getElementById('counter');
+  const notes=document.getElementById('notes'),noteText=document.getElementById('notetext');
+  let i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,x)=>s.classList.toggle('active',x===i));
+    bar.style.width=(i/(slides.length-1)*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    noteText.textContent=slides[i].dataset.notes||'';
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  const next=()=>show(i+1),prev=()=>show(i-1);
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='n')notes.classList.toggle('show');
+    else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  });
+  document.getElementById('deck').addEventListener('click',e=>{(e.clientX<window.innerWidth*0.33)?prev():next()});
+  let tx=0;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next():prev())},{passive:true});
+  addEventListener('hashchange',()=>{const n=parseInt(location.hash.replace('#',''));if(n&&n-1!==i)show(n-1)});
+  show((parseInt(location.hash.replace('#',''))||1)-1);
+</script>
+</body>
+</html>

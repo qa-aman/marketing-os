@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 6 - Safety, sharing, and next steps</title>
+<style>
+  :root{
+    --green:#2F6B4F; --green-d:#234f3b; --cream:#F7F4EC; --terra:#C56B47;
+    --ink:#1F2A24; --muted:#5c6b62; --line:#e2ddd0; --white:#fffdf8; --paper:#fbf9f2;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--ink);color:var(--ink);overflow:hidden}
+
+  #bar{position:fixed;top:0;left:0;height:4px;background:var(--terra);width:0;z-index:50;transition:width .3s ease}
+  #counter{position:fixed;bottom:16px;right:20px;z-index:50;font:600 12px/1 var(--sans);color:var(--muted);letter-spacing:.04em}
+  #hint{position:fixed;bottom:16px;left:20px;z-index:50;font:500 11px/1 var(--sans);color:var(--muted);opacity:.75}
+  #hint b{color:var(--green);font-weight:700}
+
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:6.5vh 6vw;background:var(--cream);color:var(--ink)}
+  .slide.active{display:flex;animation:in .4s ease}
+  @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .kicker{font:700 12px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:18px}
+  h1{font-size:clamp(32px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  h2{font-size:clamp(26px,3.6vw,42px);line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  .sub{font-size:clamp(16px,1.9vw,21px);color:var(--muted);margin-top:16px;font-weight:500;max-width:36ch}
+  .foot{margin-top:26px;font-size:14px;color:var(--muted);font-weight:600}
+
+  /* split: point on left, live example on right - fills the slide */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center;width:100%}
+  .split .left h2{max-width:15ch}
+  .split .sub{max-width:30ch}
+
+  /* title */
+  .title{background:var(--green);color:var(--cream);justify-content:center}
+  .title h1{color:#fff}.title .kicker{color:#e7c9b6}.title .sub{color:#d8e6dd;max-width:40ch}
+  .title .brandbar{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--terra)}
+
+  /* generic example panel */
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+    box-shadow:0 14px 36px rgba(35,79,59,.10)}
+  .panel .cap{font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:14px}
+
+  /* window chrome for realism */
+  .win{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 16px 40px rgba(35,79,59,.12)}
+  .win .bar{display:flex;gap:7px;align-items:center;padding:11px 14px;background:#efece2;border-bottom:1px solid var(--line)}
+  .win .bar i{width:11px;height:11px;border-radius:50%;background:#cfc9ba;display:inline-block}
+  .win .bar .t{margin-left:10px;font:600 12px/1 var(--sans);color:var(--muted)}
+  .win .body{padding:18px 20px}
+
+  /* file tree */
+  .tree{font-family:var(--mono);font-size:15px;line-height:1.9;color:var(--ink)}
+  .tree .dir{color:var(--green);font-weight:700}
+  .tree .f{color:var(--ink)}
+  .tree .in{padding-left:22px}.tree .in2{padding-left:44px}
+  .tree .hl{background:#eaf3ee;border-radius:5px;padding:1px 6px}
+
+  /* code / prompt */
+  .code{background:#10201a;border:1px solid #2b4a3c;border-radius:12px;padding:18px 20px}
+  .code .lbl{font:700 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:#7fb79a;margin-bottom:10px}
+  .code code{font-family:var(--mono);font-size:14px;line-height:1.55;color:#e8f3ec;white-space:pre-wrap;display:block}
+
+  /* two cards */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;width:100%;margin-top:6px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 10px 30px rgba(35,79,59,.06)}
+  .card .tag{font:800 15px/1 var(--sans);margin-bottom:12px}
+  .card.chat .tag{color:var(--muted)}.card.cw .tag{color:var(--green)}
+  .card p{font-size:clamp(15px,1.6vw,19px);line-height:1.45}
+  .card .eg{margin-top:14px;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--paper);
+    border:1px dashed var(--line);border-radius:8px;padding:8px 10px}
+  .card.cw{border-color:var(--green);box-shadow:0 12px 34px rgba(47,107,79,.14)}
+
+  /* numbered agenda */
+  ul.big{list-style:none;display:grid;gap:14px}
+  ul.big li{font-size:clamp(17px,1.9vw,21px);font-weight:600;display:flex;gap:14px;align-items:flex-start;line-height:1.25}
+  ul.big li .n{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:var(--green);color:#fff;font:800 15px/30px var(--sans);text-align:center}
+
+  ul.q{list-style:none;display:grid;gap:16px}
+  ul.q li{font-size:clamp(19px,2.4vw,28px);font-weight:700;color:var(--green-d);padding-left:22px;position:relative}
+  ul.q li:before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;border-radius:50%;background:var(--terra)}
+
+  /* steps (task loop) */
+  .todo{font-size:15.5px;line-height:2.15}
+  .todo .done{color:var(--muted)}.todo .now{color:var(--green-d);font-weight:700}
+  .todo .box{display:inline-block;width:20px}
+  .todo .now .box{color:var(--terra)}
+
+  /* file chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .chips span{font:700 13px/1 var(--sans);background:var(--paper);border:1px solid var(--line);color:var(--green-d);padding:9px 13px;border-radius:8px}
+
+  /* permission dialog */
+  .dialog{max-width:320px}
+  .dialog .msg{font-size:15px;line-height:1.5;color:var(--ink)}
+  .dialog .msg b{color:var(--green-d)}
+  .dialog .btns{display:flex;gap:10px;margin-top:16px}
+  .dialog .btns button{font:700 13px/1 var(--sans);padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+  .dialog .btns .allow{background:var(--green);color:#fff;border-color:var(--green)}
+
+  /* output thumbnails */
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .thumbs .th{aspect-ratio:16/10;background:var(--white);border:1px solid var(--line);border-radius:7px;padding:8px;
+    display:flex;flex-direction:column;gap:4px;box-shadow:0 4px 12px rgba(35,79,59,.06)}
+  .thumbs .th .b{height:6px;border-radius:3px;background:#dfe8e2}
+  .thumbs .th .b.g{background:var(--green);width:60%}
+  .thumbs .th .b.t{background:var(--terra);width:40%}
+
+  /* model picker */
+  .picker{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:11px 14px;font:700 14px/1 var(--sans);color:var(--green-d);box-shadow:0 6px 16px rgba(35,79,59,.06)}
+  .picker .dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .picker .ch{color:var(--muted);font-weight:600}
+
+  .quote{background:var(--green-d);color:var(--cream);justify-content:center}
+  .quote .mark{font-size:110px;line-height:.4;color:var(--terra);font-family:Georgia,serif}
+  .quote p{font-size:clamp(24px,3.6vw,42px);line-height:1.25;font-weight:600;max-width:20ch;margin-top:8px}
+
+  .pill{align-self:flex-start;margin-top:18px;background:var(--terra);color:#fff;font:800 14px/1 var(--sans);padding:12px 20px;border-radius:999px}
+  .lab .big-time{margin-top:22px;font-size:clamp(19px,2.4vw,26px);font-weight:800;color:var(--terra)}
+
+  #notes{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(16,25,20,.96);color:#e8f3ec;
+    padding:16px 22px 20px;transform:translateY(110%);transition:transform .3s ease;max-height:42vh;overflow:auto}
+  #notes.show{transform:none}
+  #notes .nlbl{font:800 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#7fb79a;margin-bottom:7px}
+  #notes p{font-size:15px;line-height:1.5;max-width:82ch}
+
+  @media (max-width:860px){.split,.cols{grid-template-columns:1fr;gap:24px}.thumbs{grid-template-columns:repeat(3,1fr)}}
+  @media print{body{overflow:visible;background:#fff}#bar,#counter,#hint,#notes{display:none}
+    .slide{position:relative;display:flex!important;height:100vh;page-break-after:always;inset:auto}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide title" data-notes="Welcome to the final session. Today is about working safely and making what they built shareable. By the end they leave with a plan for their first real task on their own brand.">
+    <div class="brandbar"></div>
+    <div class="kicker">Cowork for the team - Session 6 of 6</div>
+    <h1>Safety, sharing, and next steps</h1>
+    <div class="sub">Work safely, share what you built, and plan your first real use.</div>
+  </section>
+
+  <!-- 2 RECAP + PROMISE -->
+  <section class="slide" data-notes="They have built real skills, connected tools, and scheduled jobs. Today they lock in two habits: safe operation and sharing what they made. Keep this tight and energetic - this is the final session.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Where we are</div>
+        <h2>You can build real things. Today you make them safe and shareable.</h2>
+        <div class="sub">Five sessions in, you have the whole toolkit. Now we make sure you use it safely and hand it to the team.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">The last mile</div>
+          <ul class="big" style="gap:10px">
+            <li><span class="n">1</span><span>Work safely</span></li>
+            <li><span class="n">2</span><span>Share your tools</span></li>
+            <li><span class="n">3</span><span>Plan your first real task</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 AGENDA -->
+  <section class="slide" data-notes="Three segments today. The lab includes a short quiz and a prompt-planning exercise. Lightest session on new content, heaviest on consolidation.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Today's agenda</div>
+        <ul class="big">
+          <li><span class="n">1</span><span>Working safely - permissions, review, and sensitive data</span></li>
+          <li><span class="n">2</span><span>Validate and share a skill with the team</span></li>
+          <li><span class="n">3</span><span>Course recap, quiz, and where to go next</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">The folder we work in today</div>
+          <div class="tree">
+            <div class="dir">&#128193; verdal-marketing/</div>
+            <div class="in dir">&#128193; context/</div>
+            <div class="in2 f">brand-context.md</div>
+            <div class="in2 f">brand-voice.md</div>
+            <div class="in dir">&#128193; templates/</div>
+            <div class="in2 f">weekly-content-brief.skill</div>
+            <div class="in dir">&#128193; projects/ <span style="color:var(--muted)">&larr; output lands here</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 WORKING SAFELY -->
+  <section class="slide" data-notes="Three safety habits: read what Cowork changed before anything ships, check the folder to confirm output looks right, then approve or revise. Cowork is powerful precisely because it takes action - which means review matters.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Working safely</div>
+        <h2>You are always in control.</h2>
+        <div class="sub">Set the right permissions, review output before it ships, and keep sensitive data out of the folder.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Before anything ships</div>
+          <div class="todo">
+            <div class="done"><span class="box">&#10003;</span> Read what Cowork changed</div>
+            <div class="done"><span class="box">&#10003;</span> Open the output file and check it</div>
+            <div class="now"><span class="box">&#9654;</span> Approve - or redirect and re-run</div>
+          </div>
+          <div style="margin-top:14px;font:600 13px/1.4 var(--sans);color:var(--muted)">Nothing leaves the folder until you say so.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 PERMISSION MODES -->
+  <section class="slide" data-notes="Point to Settings > Permissions in the app. The default is ask every time - the safest starting point. You can loosen it once you trust a workflow. Recommend staying cautious until they have run a skill at least three times on Verdal.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Permission modes</div>
+        <h2>You choose what Cowork does without asking.</h2>
+        <div class="sub">Start cautious. Loosen permissions only once you trust the workflow.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Permission options</div>
+          <ul class="big" style="gap:12px">
+            <li><span class="n" style="background:var(--terra)">1</span><span>Ask every time - safest, recommended to start</span></li>
+            <li><span class="n">2</span><span>Allow within this folder - unlocks for trusted workflows</span></li>
+          </ul>
+          <div style="margin-top:18px;font:600 13px/1.4 var(--sans);color:var(--muted)">Settings &rsaquo; Permissions. Start on option 1 and move to 2 only when you are confident in the skill.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 SENSITIVE DATA -->
+  <section class="slide" data-notes="The rule is simple: the folder you open is the folder it sees. Do not open a folder containing customer PII, credentials, or anything you would not share with a new contractor. Grant only what a connector actually needs.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Sensitive data</div>
+        <h2>Only open folders you are comfortable sharing.</h2>
+        <div class="sub">Grant the minimum a connector asks for. If a folder has customer data or credentials, keep it out of the Cowork workspace.</div>
+      </div>
+      <div class="right">
+        <div class="panel dialog">
+          <div class="cap">Folder access prompt</div>
+          <div class="msg">Allow Claude to read and edit files in <b>verdal-marketing</b>?<br><br>This folder contains brand context and templates only - no customer data.</div>
+          <div class="btns"><button class="allow">Allow</button><button>Not now</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 VALIDATING A SKILL -->
+  <section class="slide" data-notes="Before sharing a skill, run it once on a real Verdal example. Check: does the output sound on brand? Did it save to the right folder? Is anything missing? If all three are good, the skill is ready to package. Do not share until you have done this check.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Validating a skill</div>
+        <h2>Test a skill before you share it.</h2>
+        <div class="sub">Run it once on a real example and check the output. If it is right, package it. If not, fix the skill first.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Validate before sharing</div>
+          <div class="todo">
+            <div class="done"><span class="box">&#10003;</span> Run it once on Verdal</div>
+            <div class="done"><span class="box">&#10003;</span> Check the output is on brand</div>
+            <div class="done"><span class="box">&#10003;</span> Confirm it saved to the right folder</div>
+            <div class="now"><span class="box">&#9654;</span> Package and share</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 SHARING WITH THE TEAM -->
+  <section class="slide" data-notes="The packaged skill is a single file. A teammate installs it in one step from the Skills panel - nothing to configure, nothing to paste. The Skill Creator in the app handles packaging. Walk through this briefly, then show it live in the demo.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Sharing with the team</div>
+        <h2>Package your skill. A colleague installs it in one step.</h2>
+        <div class="sub">Use the Skill Creator to package. Hand the file to a teammate. They get the same output you get, every time.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Share</div>
+          <div class="tree" style="font-size:14px;line-height:2.2">
+            <div class="dir">Your skill</div>
+            <div style="color:var(--terra);padding-left:4px">&#8595; package via Skill Creator</div>
+            <div class="f">&#128196; weekly-content-brief.skill</div>
+            <div style="color:var(--terra);padding-left:4px">&#8595; teammate installs</div>
+            <div class="hl" style="display:inline-block">Same output, same brand</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 COURSE RECAP -->
+  <section class="slide" data-notes="Let this land. Run through each item out loud. Ask the room: which one changed how you work most? This is the moment to celebrate what they have built across six sessions.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Course recap</div>
+        <h2>What you can do now.</h2>
+        <div class="sub">Six sessions. Six real capabilities. These are yours to use this week.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">The whole course</div>
+          <div class="todo">
+            <div class="done"><span class="box">&#10003;</span> Hand Cowork a task and watch it work</div>
+            <div class="done"><span class="box">&#10003;</span> Set standing context and projects</div>
+            <div class="done"><span class="box">&#10003;</span> Build and run a skill</div>
+            <div class="done"><span class="box">&#10003;</span> Connect your tools</div>
+            <div class="done"><span class="box">&#10003;</span> Build a live artifact and schedule a job</div>
+            <div class="done"><span class="box">&#10003;</span> Share safely with the team</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 LIVE DEMO -->
+  <section class="slide" data-notes="Switch to Cowork. Run the weekly-content-brief skill on Verdal, narrate what comes back, confirm it looks right, then use the Skill Creator to package it. Key line: one command and now a teammate can run this exact workflow without any setup.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Live demo - watch this</div>
+        <h2>Validate and share a Verdal skill.</h2>
+        <div class="code" style="margin-top:18px">
+          <div class="lbl">The prompt</div>
+          <code>Run the weekly-content-brief skill once
+on Verdal, show me the output, and if it
+looks good, package it so I can share it
+with the team.</code>
+        </div>
+        <span class="pill">Test, then share</span>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What comes back</div>
+          <div class="tree">
+            <div class="dir">&#128193; projects/</div>
+            <div class="in f">&#128196; weekly-brief-03-07-2026.md <span class="hl">test output</span></div>
+            <div class="dir" style="margin-top:10px">&#128193; templates/</div>
+            <div class="in f">&#128196; weekly-content-brief.skill <span class="hl">ready to share</span></div>
+          </div>
+          <div style="margin-top:14px;font:600 13px/1.4 var(--sans);color:var(--muted)">On-brand output confirmed. Packaged skill ready to hand to the team.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 YOUR TURN - LAB -->
+  <section class="slide lab" data-notes="Quiz first: 3-5 quick questions on a shared screen, hands up or a short form. Then prompt planning: they pick one real task and write a Cowork prompt for it. Walk the room. The shared-login note at the bottom handles anyone without their own seat.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Your turn</div>
+        <h2>Quiz, then plan your first real task.</h2>
+        <ul class="big" style="margin-top:20px">
+          <li><span class="n">1</span><span>Take the short knowledge check</span></li>
+          <li><span class="n">2</span><span>Pick one real task you will run this week</span></li>
+          <li><span class="n">3</span><span>Write it as a Cowork prompt using the template on the right</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Write your first real prompt</div>
+          <code>Read the context in [your-folder]/context/
+and [describe your task - e.g. draft a
+monthly email, write three captions, build
+a brief]. Save the output to [your-folder]/
+projects/[filename].</code>
+        </div>
+        <div class="foot" style="margin-top:16px">On a shared login? Write your prompt now and run it at your desk after the session.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 WHERE NEXT -->
+  <section class="slide" data-notes="The official Anthropic Cowork course has video lessons, exercises, and a shareable certificate. It takes about three hours and is self-paced. This is the right next step for anyone who wants to go deeper or needs the credential.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Where next</div>
+        <h2>Go deeper and get the certificate.</h2>
+        <div class="sub">Anthropic's free Cowork course covers everything in this workshop and more, with a shareable certificate when you finish.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Next</div>
+          <div style="font-size:15px;line-height:1.6;color:var(--ink)">
+            <div style="font-weight:700;color:var(--green-d);margin-bottom:8px">Introduction to Claude Cowork</div>
+            <div style="color:var(--muted);margin-bottom:14px">Anthropic's official self-paced course. Free. Certificate included.</div>
+            <div style="font:700 13px/1 var(--sans);letter-spacing:.06em;color:var(--terra)">anthropic.skilljar.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 TITLE - COURSE COMPLETE -->
+  <section class="slide title" data-notes="A warm close. Let them sit with it. They built something real across six sessions. The next step is theirs.">
+    <div class="brandbar"></div>
+    <div class="kicker">Session 6 of 6 - complete</div>
+    <h1>You finished the course.</h1>
+    <div class="sub">Now rebuild it all on your own brand. That is where it becomes your system.</div>
+  </section>
+
+</div>
+
+<div id="counter">1 / 13</div>
+<div id="hint">Arrows to move &middot; <b>N</b> notes &middot; <b>F</b> fullscreen</div>
+<div id="notes"><div class="nlbl">Speaker notes</div><p id="notetext"></p></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar'),counter=document.getElementById('counter');
+  const notes=document.getElementById('notes'),noteText=document.getElementById('notetext');
+  let i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,x)=>s.classList.toggle('active',x===i));
+    bar.style.width=(i/(slides.length-1)*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    noteText.textContent=slides[i].dataset.notes||'';
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  const next=()=>show(i+1),prev=()=>show(i-1);
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='n')notes.classList.toggle('show');
+    else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  });
+  document.getElementById('deck').addEventListener('click',e=>{(e.clientX<window.innerWidth*0.33)?prev():next()});
+  let tx=0;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next():prev())},{passive:true});
+  addEventListener('hashchange',()=>{const n=parseInt(location.hash.replace('#',''));if(n&&n-1!==i)show(n-1)});
+  show((parseInt(location.hash.replace('#',''))||1)-1);
+</script>
+</body>
+</html>

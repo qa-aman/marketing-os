@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 1 - Meet Claude Cowork</title>
+<style>
+  :root{
+    --green:#2F6B4F; --green-d:#234f3b; --cream:#F7F4EC; --terra:#C56B47;
+    --ink:#1F2A24; --muted:#5c6b62; --line:#e2ddd0; --white:#fffdf8; --paper:#fbf9f2;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--ink);color:var(--ink);overflow:hidden}
+
+  #bar{position:fixed;top:0;left:0;height:4px;background:var(--terra);width:0;z-index:50;transition:width .3s ease}
+  #counter{position:fixed;bottom:16px;right:20px;z-index:50;font:600 12px/1 var(--sans);color:var(--muted);letter-spacing:.04em}
+  #hint{position:fixed;bottom:16px;left:20px;z-index:50;font:500 11px/1 var(--sans);color:var(--muted);opacity:.75}
+  #hint b{color:var(--green);font-weight:700}
+
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:6.5vh 6vw;background:var(--cream);color:var(--ink)}
+  .slide.active{display:flex;animation:in .4s ease}
+  @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .kicker{font:700 12px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:18px}
+  h1{font-size:clamp(32px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  h2{font-size:clamp(26px,3.6vw,42px);line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  .sub{font-size:clamp(16px,1.9vw,21px);color:var(--muted);margin-top:16px;font-weight:500;max-width:36ch}
+  .foot{margin-top:26px;font-size:14px;color:var(--muted);font-weight:600}
+
+  /* split: point on left, live example on right - fills the slide */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center;width:100%}
+  .split .left h2{max-width:15ch}
+  .split .sub{max-width:30ch}
+
+  /* title */
+  .title{background:var(--green);color:var(--cream);justify-content:center}
+  .title h1{color:#fff}.title .kicker{color:#e7c9b6}.title .sub{color:#d8e6dd;max-width:40ch}
+  .title .brandbar{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--terra)}
+
+  /* generic example panel */
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+    box-shadow:0 14px 36px rgba(35,79,59,.10)}
+  .panel .cap{font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:14px}
+
+  /* window chrome for realism */
+  .win{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 16px 40px rgba(35,79,59,.12)}
+  .win .bar{display:flex;gap:7px;align-items:center;padding:11px 14px;background:#efece2;border-bottom:1px solid var(--line)}
+  .win .bar i{width:11px;height:11px;border-radius:50%;background:#cfc9ba;display:inline-block}
+  .win .bar .t{margin-left:10px;font:600 12px/1 var(--sans);color:var(--muted)}
+  .win .body{padding:18px 20px}
+
+  /* file tree */
+  .tree{font-family:var(--mono);font-size:15px;line-height:1.9;color:var(--ink)}
+  .tree .dir{color:var(--green);font-weight:700}
+  .tree .f{color:var(--ink)}
+  .tree .in{padding-left:22px}.tree .in2{padding-left:44px}
+  .tree .hl{background:#eaf3ee;border-radius:5px;padding:1px 6px}
+
+  /* code / prompt */
+  .code{background:#10201a;border:1px solid #2b4a3c;border-radius:12px;padding:18px 20px}
+  .code .lbl{font:700 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:#7fb79a;margin-bottom:10px}
+  .code code{font-family:var(--mono);font-size:14px;line-height:1.55;color:#e8f3ec;white-space:pre-wrap;display:block}
+
+  /* two cards */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;width:100%;margin-top:6px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 10px 30px rgba(35,79,59,.06)}
+  .card .tag{font:800 15px/1 var(--sans);margin-bottom:12px}
+  .card.chat .tag{color:var(--muted)}.card.cw .tag{color:var(--green)}
+  .card p{font-size:clamp(15px,1.6vw,19px);line-height:1.45}
+  .card .eg{margin-top:14px;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--paper);
+    border:1px dashed var(--line);border-radius:8px;padding:8px 10px}
+  .card.cw{border-color:var(--green);box-shadow:0 12px 34px rgba(47,107,79,.14)}
+
+  /* numbered agenda */
+  ul.big{list-style:none;display:grid;gap:14px}
+  ul.big li{font-size:clamp(17px,1.9vw,21px);font-weight:600;display:flex;gap:14px;align-items:flex-start;line-height:1.25}
+  ul.big li .n{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:var(--green);color:#fff;font:800 15px/30px var(--sans);text-align:center}
+
+  ul.q{list-style:none;display:grid;gap:16px}
+  ul.q li{font-size:clamp(19px,2.4vw,28px);font-weight:700;color:var(--green-d);padding-left:22px;position:relative}
+  ul.q li:before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;border-radius:50%;background:var(--terra)}
+
+  /* steps (task loop) */
+  .todo{font-size:15.5px;line-height:2.15}
+  .todo .done{color:var(--muted)}.todo .now{color:var(--green-d);font-weight:700}
+  .todo .box{display:inline-block;width:20px}
+  .todo .now .box{color:var(--terra)}
+
+  /* file chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .chips span{font:700 13px/1 var(--sans);background:var(--paper);border:1px solid var(--line);color:var(--green-d);padding:9px 13px;border-radius:8px}
+
+  /* permission dialog */
+  .dialog{max-width:320px}
+  .dialog .msg{font-size:15px;line-height:1.5;color:var(--ink)}
+  .dialog .msg b{color:var(--green-d)}
+  .dialog .btns{display:flex;gap:10px;margin-top:16px}
+  .dialog .btns button{font:700 13px/1 var(--sans);padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+  .dialog .btns .allow{background:var(--green);color:#fff;border-color:var(--green)}
+
+  /* output thumbnails */
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .thumbs .th{aspect-ratio:16/10;background:var(--white);border:1px solid var(--line);border-radius:7px;padding:8px;
+    display:flex;flex-direction:column;gap:4px;box-shadow:0 4px 12px rgba(35,79,59,.06)}
+  .thumbs .th .b{height:6px;border-radius:3px;background:#dfe8e2}
+  .thumbs .th .b.g{background:var(--green);width:60%}
+  .thumbs .th .b.t{background:var(--terra);width:40%}
+
+  /* model picker */
+  .picker{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:11px 14px;font:700 14px/1 var(--sans);color:var(--green-d);box-shadow:0 6px 16px rgba(35,79,59,.06)}
+  .picker .dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .picker .ch{color:var(--muted);font-weight:600}
+
+  .quote{background:var(--green-d);color:var(--cream);justify-content:center}
+  .quote .mark{font-size:110px;line-height:.4;color:var(--terra);font-family:Georgia,serif}
+  .quote p{font-size:clamp(24px,3.6vw,42px);line-height:1.25;font-weight:600;max-width:20ch;margin-top:8px}
+
+  .pill{align-self:flex-start;margin-top:18px;background:var(--terra);color:#fff;font:800 14px/1 var(--sans);padding:12px 20px;border-radius:999px}
+  .lab .big-time{margin-top:22px;font-size:clamp(19px,2.4vw,26px);font-weight:800;color:var(--terra)}
+
+  #notes{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(16,25,20,.96);color:#e8f3ec;
+    padding:16px 22px 20px;transform:translateY(110%);transition:transform .3s ease;max-height:42vh;overflow:auto}
+  #notes.show{transform:none}
+  #notes .nlbl{font:800 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#7fb79a;margin-bottom:7px}
+  #notes p{font-size:15px;line-height:1.5;max-width:82ch}
+
+  @media (max-width:860px){.split,.cols{grid-template-columns:1fr;gap:24px}.thumbs{grid-template-columns:repeat(3,1fr)}}
+  @media print{body{overflow:visible;background:#fff}#bar,#counter,#hint,#notes{display:none}
+    .slide{position:relative;display:flex!important;height:100vh;page-break-after:always;inset:auto}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide title" data-notes="Welcome them. First of six short sessions. Today is about seeing why Cowork is a different tool from the chat they already know.">
+    <div class="brandbar"></div>
+    <div class="kicker">Cowork for the team - Session 1 of 6</div>
+    <h1>Meet Claude Cowork</h1>
+    <div class="sub">From chat box to working teammate. Today you run your first real task.</div>
+  </section>
+
+  <!-- 2 PROMISE -->
+  <section class="slide" data-notes="Set expectations. Nobody types until the lab. By the end they will have a finished file saved in their folder.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Today's promise</div>
+        <h2>You hand Cowork a real task and watch it save a finished file.</h2>
+        <div class="foot">One rule today: watch first, then you try.</div>
+      </div>
+      <div class="right">
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><span class="t">verdal-marketing / projects</span></div>
+          <div class="body">
+            <div class="tree">
+              <div class="f">&#128196; verdal-strategy-2026.pptx <span class="hl">just now</span></div>
+              <div class="f">&#128196; instagram-captions.md</div>
+              <div class="f">&#128196; competitor-notes.md</div>
+            </div>
+            <div style="margin-top:14px;font:600 13px/1.4 var(--sans);color:var(--muted)">This is what you leave with: real files, saved by Cowork.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 AGENDA -->
+  <section class="slide" data-notes="Four ideas today. Small on purpose. On the right is the actual folder we work in all session: the Verdal marketing folder.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Today's agenda</div>
+        <ul class="big">
+          <li><span class="n">1</span><span>The task loop - how Cowork plans and works</span></li>
+          <li><span class="n">2</span><span>Setup and permissions - what it can and cannot touch</span></li>
+          <li><span class="n">3</span><span>Files - real docs, decks, sheets, images</span></li>
+          <li><span class="n">4</span><span>The model picker - the right model per task</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">The folder we work in today</div>
+          <div class="tree">
+            <div class="dir">&#128193; verdal-marketing/</div>
+            <div class="in dir">&#128193; context/</div>
+            <div class="in2 f">brand-context.md</div>
+            <div class="in2 f">brand-voice.md</div>
+            <div class="in2 f">ideal-customer-profile.md</div>
+            <div class="in dir">&#128193; templates/</div>
+            <div class="in2 f">strategy-deck-outline.md</div>
+            <div class="in dir">&#128193; projects/ <span style="color:var(--muted)">&larr; output lands here</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 PROBLEM -->
+  <section class="slide" data-notes="The hook. Ask who has used Claude Chat. Cowork looks similar but works completely differently: Chat gives you a wall of text to copy, Cowork gives you the finished file.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">The problem</div>
+        <h2>Most people use Cowork like a chat box.</h2>
+        <div class="sub">They copy text out by hand and miss the point: Cowork does the work and saves the file.</div>
+      </div>
+      <div class="right">
+        <div class="cols" style="margin:0">
+          <div class="card chat"><div class="tag">Chat gives you</div><p>A wall of text to copy.</p><div class="eg">"Here are 3 captions: ..."<br>(now copy, paste, save)</div></div>
+          <div class="card cw"><div class="tag">Cowork gives you</div><p>The finished file.</p><div class="eg">&#128196; instagram-captions.md<br>saved to projects/</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 CHAT VS COWORK -->
+  <section class="slide" data-notes="The key difference: Chat runs in the cloud and hands you words. Cowork is a local agent that reads your folder and saves finished files. For most marketing work, Cowork is where the work happens.">
+    <div class="kicker">Chat vs Cowork</div>
+    <div class="cols">
+      <div class="card chat">
+        <div class="tag">Claude Chat</div>
+        <p>Runs in the cloud. Hands you text. You copy, paste, and save it yourself.</p>
+        <div class="eg">You: "write captions" &rarr; text appears &rarr; you save it somewhere</div>
+      </div>
+      <div class="card cw">
+        <div class="tag">Claude Cowork</div>
+        <p>A local desktop agent. Reads your folder, does the work, saves the file back.</p>
+        <div class="eg">You: "write captions to projects/" &rarr; file is there</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 QUOTE -->
+  <section class="slide quote" data-notes="Let this land. Pause. This is the mental model for the whole course.">
+    <div class="mark">&ldquo;</div>
+    <p>Chat is a colleague on a phone call. Cowork is that colleague at your computer, with your files open, doing the work.</p>
+  </section>
+
+  <!-- 7 WHAT COWORK READS (practical) -->
+  <section class="slide" data-notes="Show the real files. Open brand-voice.md live if you can. The point: Cowork sounds on-brand because the brand rules live in the folder, not because you paste them each time.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">What Cowork reads - the real files</div>
+        <h2>Your brand lives in the folder.</h2>
+        <div class="sub">Cowork reads these before it writes anything, so output sounds like Verdal, not generic AI.</div>
+      </div>
+      <div class="right">
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><span class="t">context / brand-voice.md</span></div>
+          <div class="body">
+            <div class="tree" style="font-size:13.5px;line-height:1.8">
+              <div><span class="dir">Voice:</span> warm, expert, plain</div>
+              <div><span class="dir">Use:</span> new growth, roots, feed, repot, thrive</div>
+              <div><span class="dir">Avoid:</span> revolutionary, miracle, game-changing</div>
+              <div style="margin-top:8px;color:var(--muted)"># Talk to one plant owner, lead with the plant,</div>
+              <div style="color:var(--muted)"># never shame someone for a dead leaf.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 TASK LOOP (practical to-do) -->
+  <section class="slide" data-notes="Point out you can watch the to-do list and stop or redirect any time. This is what makes longer tasks trustworthy. The list on the right is what they will actually see in the app.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">The task loop</div>
+        <h2>It plans, works step by step, then saves.</h2>
+        <div class="sub">You watch the to-do list and steer. It is not a black box.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What you see in Cowork</div>
+          <div class="todo">
+            <div class="done"><span class="box">&#10003;</span> Read brand context</div>
+            <div class="done"><span class="box">&#10003;</span> Research plant-care trends</div>
+            <div class="now"><span class="box">&#9654;</span> Build the 12-slide outline</div>
+            <div class="done" style="color:var(--muted)"><span class="box">&#9633;</span> Generate slides</div>
+            <div class="done" style="color:var(--muted)"><span class="box">&#9633;</span> Save to projects/</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 SETUP & PERMISSIONS (practical dialog) -->
+  <section class="slide" data-notes="Reassure the non-technical room. It cannot wander your whole computer. You grant access to one folder, and it asks the first time. This is the dialog they will see.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Setup and permissions</div>
+        <h2>It only touches the folder you point it at.</h2>
+        <div class="sub">Cowork asks the first time. You stay in control of what it can see.</div>
+      </div>
+      <div class="right">
+        <div class="panel dialog">
+          <div class="cap">First time you load a folder</div>
+          <div class="msg">Allow Claude to read and edit files in <b>verdal-marketing</b>?</div>
+          <div class="btns"><button class="allow">Allow</button><button>Not now</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 FILES & MODEL PICKER (practical) -->
+  <section class="slide" data-notes="Show where the model picker sits in the app during the demo. Most of the time the default is fine. Cowork works with real file types, output lands in the folder.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Files and the model picker</div>
+        <h2>Real files in, real files out.</h2>
+        <div class="sub">Output lands in your folder, not a chat window. Pick a heavier model for hard thinking, a faster one for simple jobs.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Works with</div>
+          <div class="chips"><span>.docx</span><span>.pptx</span><span>.xlsx</span><span>.pdf</span><span>.png</span><span>.md</span></div>
+          <div class="cap" style="margin-top:22px">Model picker</div>
+          <div class="picker"><span class="dot"></span> Opus 4.8 <span class="ch">&mdash; switch per task &#9662;</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 DEMO -->
+  <section class="slide" data-notes="Switch to Cowork. Load Verdal, grant access, show the context files, paste the prompt, narrate the task loop, open the finished deck. Key line: I did not paste any brand details, it knew them because they live in the folder.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Live demo - watch this</div>
+        <h2>Cowork builds a 12-slide Verdal strategy deck.</h2>
+        <div class="code" style="margin-top:18px">
+          <div class="lbl">The prompt</div>
+          <code>Load my verdal-marketing folder. Read the
+brand context in context/, then build a
+12-slide on-brand strategy deck using
+templates/strategy-deck-outline.md.
+Save it to projects/.</code>
+        </div>
+        <span class="pill">Watch the folder, not the chat</span>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What comes back - saved to projects/</div>
+          <div class="thumbs">
+            <div class="th"><div class="b g"></div><div class="b"></div><div class="b" style="width:80%"></div></div>
+            <div class="th"><div class="b t"></div><div class="b"></div><div class="b" style="width:70%"></div></div>
+            <div class="th"><div class="b g"></div><div class="b"></div><div class="b" style="width:85%"></div></div>
+            <div class="th"><div class="b"></div><div class="b t"></div><div class="b" style="width:60%"></div></div>
+            <div class="th"><div class="b g"></div><div class="b"></div><div class="b" style="width:75%"></div></div>
+            <div class="th"><div class="b"></div><div class="b"></div><div class="b t" style="width:50%"></div></div>
+          </div>
+          <div style="margin-top:12px;font:600 13px/1.4 var(--sans);color:var(--muted)">On-brand colors, real positioning, saved as a .pptx.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 LAB (practical, copy this) -->
+  <section class="slide lab" data-notes="Attendees work on their own laptops. Circulate. Two blockers to watch: folder access not granted, and looking for output in the chat instead of the folder. The prompt on the right is theirs to copy.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Your turn - 45 minutes</div>
+        <h2>Run your first task on Verdal.</h2>
+        <ul class="big" style="margin-top:20px">
+          <li><span class="n">1</span><span>Open Cowork, load your verdal-marketing folder, click Allow</span></li>
+          <li><span class="n">2</span><span>Paste the prompt on the right</span></li>
+          <li><span class="n">3</span><span>Watch the task loop, then open the file in projects/</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Copy this into Cowork</div>
+          <code>Read the brand context in context/ and
+write three on-brand Instagram captions
+about repotting a plant. Save them to
+projects/repotting-captions.md</code>
+        </div>
+        <div class="foot" style="margin-top:16px">On a shared login? Watch the volunteer drive, then do this at your desk as homework.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 DEBRIEF -->
+  <section class="slide" data-notes="Let a few people answer each. This cements the mental model better than you repeating it.">
+    <div class="kicker">Debrief</div>
+    <ul class="q">
+      <li>What surprised you?</li>
+      <li>Where did it save the file?</li>
+      <li>How was this different from Chat?</li>
+    </ul>
+  </section>
+
+  <!-- 14 NEXT -->
+  <section class="slide" data-notes="Send them off with momentum and one small action.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Next time and homework</div>
+        <h2>Next: make Cowork yours.</h2>
+        <div class="sub">Global instructions and projects, so it remembers your brand and your rules without repeating them.</div>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Homework - one task before next session</div>
+          <code>Read context/ and draft a short weekly
+plant-care email for Verdal. Save it to
+projects/weekly-email.md</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 THANK YOU -->
+  <section class="slide title" data-notes="Point them to the official course for the certificate. Close.">
+    <div class="brandbar"></div>
+    <div class="kicker">Thank you</div>
+    <h1>See you next session.</h1>
+    <div class="sub">Go deeper with Anthropic's free Cowork course at anthropic.skilljar.com</div>
+  </section>
+
+</div>
+
+<div id="counter">1 / 15</div>
+<div id="hint">Arrows to move &middot; <b>N</b> notes &middot; <b>F</b> fullscreen</div>
+<div id="notes"><div class="nlbl">Speaker notes</div><p id="notetext"></p></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar'),counter=document.getElementById('counter');
+  const notes=document.getElementById('notes'),noteText=document.getElementById('notetext');
+  let i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,x)=>s.classList.toggle('active',x===i));
+    bar.style.width=(i/(slides.length-1)*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    noteText.textContent=slides[i].dataset.notes||'';
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  const next=()=>show(i+1),prev=()=>show(i-1);
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='n')notes.classList.toggle('show');
+    else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  });
+  document.getElementById('deck').addEventListener('click',e=>{(e.clientX<window.innerWidth*0.33)?prev():next()});
+  let tx=0;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next():prev())},{passive:true});
+  addEventListener('hashchange',()=>{const n=parseInt(location.hash.replace('#',''));if(n&&n-1!==i)show(n-1)});
+  show((parseInt(location.hash.replace('#',''))||1)-1);
+</script>
+</body>
+</html>

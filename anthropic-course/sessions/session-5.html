@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 5 - Bigger outputs and automation</title>
+<style>
+  :root{
+    --green:#2F6B4F; --green-d:#234f3b; --cream:#F7F4EC; --terra:#C56B47;
+    --ink:#1F2A24; --muted:#5c6b62; --line:#e2ddd0; --white:#fffdf8; --paper:#fbf9f2;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--ink);color:var(--ink);overflow:hidden}
+
+  #bar{position:fixed;top:0;left:0;height:4px;background:var(--terra);width:0;z-index:50;transition:width .3s ease}
+  #counter{position:fixed;bottom:16px;right:20px;z-index:50;font:600 12px/1 var(--sans);color:var(--muted);letter-spacing:.04em}
+  #hint{position:fixed;bottom:16px;left:20px;z-index:50;font:500 11px/1 var(--sans);color:var(--muted);opacity:.75}
+  #hint b{color:var(--green);font-weight:700}
+
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:6.5vh 6vw;background:var(--cream);color:var(--ink)}
+  .slide.active{display:flex;animation:in .4s ease}
+  @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .kicker{font:700 12px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:18px}
+  h1{font-size:clamp(32px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  h2{font-size:clamp(26px,3.6vw,42px);line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  .sub{font-size:clamp(16px,1.9vw,21px);color:var(--muted);margin-top:16px;font-weight:500;max-width:36ch}
+  .foot{margin-top:26px;font-size:14px;color:var(--muted);font-weight:600}
+
+  /* split: point on left, live example on right - fills the slide */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center;width:100%}
+  .split .left h2{max-width:15ch}
+  .split .sub{max-width:30ch}
+
+  /* title */
+  .title{background:var(--green);color:var(--cream);justify-content:center}
+  .title h1{color:#fff}.title .kicker{color:#e7c9b6}.title .sub{color:#d8e6dd;max-width:40ch}
+  .title .brandbar{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--terra)}
+
+  /* generic example panel */
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+    box-shadow:0 14px 36px rgba(35,79,59,.10)}
+  .panel .cap{font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:14px}
+
+  /* window chrome for realism */
+  .win{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 16px 40px rgba(35,79,59,.12)}
+  .win .bar{display:flex;gap:7px;align-items:center;padding:11px 14px;background:#efece2;border-bottom:1px solid var(--line)}
+  .win .bar i{width:11px;height:11px;border-radius:50%;background:#cfc9ba;display:inline-block}
+  .win .bar .t{margin-left:10px;font:600 12px/1 var(--sans);color:var(--muted)}
+  .win .body{padding:18px 20px}
+
+  /* file tree */
+  .tree{font-family:var(--mono);font-size:15px;line-height:1.9;color:var(--ink)}
+  .tree .dir{color:var(--green);font-weight:700}
+  .tree .f{color:var(--ink)}
+  .tree .in{padding-left:22px}.tree .in2{padding-left:44px}
+  .tree .hl{background:#eaf3ee;border-radius:5px;padding:1px 6px}
+
+  /* code / prompt */
+  .code{background:#10201a;border:1px solid #2b4a3c;border-radius:12px;padding:18px 20px}
+  .code .lbl{font:700 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:#7fb79a;margin-bottom:10px}
+  .code code{font-family:var(--mono);font-size:14px;line-height:1.55;color:#e8f3ec;white-space:pre-wrap;display:block}
+
+  /* two cards */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;width:100%;margin-top:6px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 10px 30px rgba(35,79,59,.06)}
+  .card .tag{font:800 15px/1 var(--sans);margin-bottom:12px}
+  .card.chat .tag{color:var(--muted)}.card.cw .tag{color:var(--green)}
+  .card p{font-size:clamp(15px,1.6vw,19px);line-height:1.45}
+  .card .eg{margin-top:14px;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--paper);
+    border:1px dashed var(--line);border-radius:8px;padding:8px 10px}
+  .card.cw{border-color:var(--green);box-shadow:0 12px 34px rgba(47,107,79,.14)}
+
+  /* numbered agenda */
+  ul.big{list-style:none;display:grid;gap:14px}
+  ul.big li{font-size:clamp(17px,1.9vw,21px);font-weight:600;display:flex;gap:14px;align-items:flex-start;line-height:1.25}
+  ul.big li .n{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:var(--green);color:#fff;font:800 15px/30px var(--sans);text-align:center}
+
+  ul.q{list-style:none;display:grid;gap:16px}
+  ul.q li{font-size:clamp(19px,2.4vw,28px);font-weight:700;color:var(--green-d);padding-left:22px;position:relative}
+  ul.q li:before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;border-radius:50%;background:var(--terra)}
+
+  /* steps (task loop) */
+  .todo{font-size:15.5px;line-height:2.15}
+  .todo .done{color:var(--muted)}.todo .now{color:var(--green-d);font-weight:700}
+  .todo .box{display:inline-block;width:20px}
+  .todo .now .box{color:var(--terra)}
+
+  /* file chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .chips span{font:700 13px/1 var(--sans);background:var(--paper);border:1px solid var(--line);color:var(--green-d);padding:9px 13px;border-radius:8px}
+
+  /* permission dialog */
+  .dialog{max-width:320px}
+  .dialog .msg{font-size:15px;line-height:1.5;color:var(--ink)}
+  .dialog .msg b{color:var(--green-d)}
+  .dialog .btns{display:flex;gap:10px;margin-top:16px}
+  .dialog .btns button{font:700 13px/1 var(--sans);padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+  .dialog .btns .allow{background:var(--green);color:#fff;border-color:var(--green)}
+
+  /* output thumbnails */
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .thumbs .th{aspect-ratio:16/10;background:var(--white);border:1px solid var(--line);border-radius:7px;padding:8px;
+    display:flex;flex-direction:column;gap:4px;box-shadow:0 4px 12px rgba(35,79,59,.06)}
+  .thumbs .th .b{height:6px;border-radius:3px;background:#dfe8e2}
+  .thumbs .th .b.g{background:var(--green);width:60%}
+  .thumbs .th .b.t{background:var(--terra);width:40%}
+
+  /* model picker */
+  .picker{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:11px 14px;font:700 14px/1 var(--sans);color:var(--green-d);box-shadow:0 6px 16px rgba(35,79,59,.06)}
+  .picker .dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .picker .ch{color:var(--muted);font-weight:600}
+
+  .quote{background:var(--green-d);color:var(--cream);justify-content:center}
+  .quote .mark{font-size:110px;line-height:.4;color:var(--terra);font-family:Georgia,serif}
+  .quote p{font-size:clamp(24px,3.6vw,42px);line-height:1.25;font-weight:600;max-width:20ch;margin-top:8px}
+
+  .pill{align-self:flex-start;margin-top:18px;background:var(--terra);color:#fff;font:800 14px/1 var(--sans);padding:12px 20px;border-radius:999px}
+  .lab .big-time{margin-top:22px;font-size:clamp(19px,2.4vw,26px);font-weight:800;color:var(--terra)}
+
+  #notes{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(16,25,20,.96);color:#e8f3ec;
+    padding:16px 22px 20px;transform:translateY(110%);transition:transform .3s ease;max-height:42vh;overflow:auto}
+  #notes.show{transform:none}
+  #notes .nlbl{font:800 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#7fb79a;margin-bottom:7px}
+  #notes p{font-size:15px;line-height:1.5;max-width:82ch}
+
+  @media (max-width:860px){.split,.cols{grid-template-columns:1fr;gap:24px}.thumbs{grid-template-columns:repeat(3,1fr)}}
+  @media print{body{overflow:visible;background:#fff}#bar,#counter,#hint,#notes{display:none}
+    .slide{position:relative;display:flex!important;height:100vh;page-break-after:always;inset:auto}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide title" data-notes="Welcome them back. Session 5 of 6. Today they stop making one-off things and start building outputs that keep working - dashboards that refresh themselves and jobs that run without anyone pressing a button.">
+    <div class="brandbar"></div>
+    <div class="kicker">Cowork for the team - Session 5 of 6</div>
+    <h1>Bigger outputs and automation</h1>
+    <div class="sub">Build things that keep working: dashboards that refresh, jobs that run themselves.</div>
+  </section>
+
+  <!-- 2 RECAP + PROMISE -->
+  <section class="slide" data-notes="Anchor them in where they have come from. Sessions 1 through 4 covered single tasks: one brief, one draft, one report. Today the output stays alive. The promise: by the end they will have a pinned dashboard and a scheduled job running for Verdal.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">So far and today's promise</div>
+        <h2>So far you make one thing at a time. Today you build outputs that stay alive.</h2>
+        <div class="sub">One prompt, one file, done. Today: one prompt, and Cowork keeps it current.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Build once, keeps working</div>
+          <div class="todo">
+            <div class="done"><span class="box">&#128200;</span> Verdal AI-search dashboard - pinned, refreshes on open</div>
+            <div style="margin-top:12px" class="done"><span class="box">&#128197;</span> Weekly competitor digest - runs every Sunday, saves to projects/</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 AGENDA -->
+  <section class="slide" data-notes="Three topics today. Keep pace: 20 minutes of teaching, demo, then the lab. The agenda on the right matches what they will actually do in the lab.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Today's agenda</div>
+        <ul class="big">
+          <li><span class="n">1</span><span>Live artifacts - dashboards that refresh their data</span></li>
+          <li><span class="n">2</span><span>Scheduled tasks - recurring jobs that run on their own</span></li>
+          <li><span class="n">3</span><span>Parallel and research workflows - Cowork works on several things at once</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What we build today</div>
+          <div class="todo">
+            <div class="done"><span class="box">1</span> A live Verdal keyword dashboard - pin it, refresh it</div>
+            <div class="done" style="margin-top:10px"><span class="box">2</span> A scheduled weekly competitor digest - set it, forget it</div>
+            <div class="done" style="margin-top:10px"><span class="box">3</span> A parallel research run across three competitors</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 LIVE ARTIFACTS -->
+  <section class="slide" data-notes="Live artifacts are the biggest shift in how they think about Cowork output. A static file is done when it is written. A live artifact is a small app: you pin it, you click refresh, and it fetches fresh data. Walk them through the Verdal example on the right - keyword opportunities and competitor activity, updated whenever you open it.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Live artifacts</div>
+        <h2>A live artifact is a dashboard that refreshes.</h2>
+        <div class="sub">Build it once. Pin it. Click refresh for new data - no re-prompting needed.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Verdal AI-search visibility dashboard</div>
+          <div style="margin-top:4px">
+            <div style="font:700 12px/1 var(--sans);color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">This week's keyword opportunities</div>
+            <div style="display:grid;gap:6px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="font:600 13px/1 var(--sans);color:var(--ink);width:150px">indoor plant care guide</div>
+                <div style="flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden"><div style="width:78%;height:100%;background:var(--green);border-radius:4px"></div></div>
+                <div style="font:700 12px/1 var(--sans);color:var(--green)">78</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="font:600 13px/1 var(--sans);color:var(--ink);width:150px">repot monstera</div>
+                <div style="flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden"><div style="width:61%;height:100%;background:var(--green);border-radius:4px"></div></div>
+                <div style="font:700 12px/1 var(--sans);color:var(--green)">61</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="font:600 13px/1 var(--sans);color:var(--ink);width:150px">plant watering schedule</div>
+                <div style="flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden"><div style="width:54%;height:100%;background:var(--terra);border-radius:4px"></div></div>
+                <div style="font:700 12px/1 var(--sans);color:var(--terra)">54</div>
+              </div>
+            </div>
+            <div style="margin-top:14px;font:600 12px/1 var(--sans);color:var(--muted)">Last refreshed: today at 9:02am</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 HOW TO BUILD A LIVE ARTIFACT -->
+  <section class="slide" data-notes="Three steps. Stress step 2: the words live artifact matter. If they do not say it, Cowork will write a static markdown file and they will wonder why nothing refreshes. The tip panel on the right is the one thing to remember.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">How to build one</div>
+        <ul class="big">
+          <li><span class="n">1</span><span>Turn on Artifacts and Code Execution in Cowork settings</span></li>
+          <li><span class="n">2</span><span>Use the words "live artifact" in your prompt</span></li>
+          <li><span class="n">3</span><span>Pin it to your sidebar - click refresh anytime for new data</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Tip - the words that matter</div>
+          <div style="font-size:15px;line-height:1.6;color:var(--ink)">Say <strong>"live artifact"</strong> in the prompt or Cowork will produce a static file instead.</div>
+          <div style="margin-top:14px;font-family:var(--mono);font-size:13px;color:var(--muted);background:var(--paper);border:1px dashed var(--line);border-radius:8px;padding:10px 12px">
+            "Build a <strong style="color:var(--green-d)">live artifact</strong> for Verdal showing..."<br>
+            vs.<br>
+            "Build a dashboard for Verdal..." &larr; static
+          </div>
+          <div style="margin-top:14px;font:600 13px/1.4 var(--sans);color:var(--muted)">Settings path: Cowork preferences &rarr; Features &rarr; Artifacts + Code Execution &rarr; On</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 SCHEDULED TASKS -->
+  <section class="slide" data-notes="Some work should just happen. A weekly competitor digest, a monthly content brief - these are repeatable and predictable. Set the task once, Cowork runs it on the schedule you pick. Show the mock form on the right and talk through each field.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Scheduled tasks</div>
+        <h2>Some jobs should run on their own.</h2>
+        <div class="sub">Set it once. Cowork runs it every week and saves the file to your folder.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">New scheduled task</div>
+          <div style="display:grid;gap:10px;font-size:14px">
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:8px">
+              <span style="color:var(--muted);font-weight:600">Name</span>
+              <span style="font-weight:700;color:var(--ink)">Verdal weekly competitor digest</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:8px">
+              <span style="color:var(--muted);font-weight:600">Folder</span>
+              <span style="font-weight:700;color:var(--ink)">verdal-marketing/projects/</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:8px">
+              <span style="color:var(--muted);font-weight:600">Frequency</span>
+              <span style="font-weight:700;color:var(--green)">Every Sunday at 9am</span>
+            </div>
+            <div style="display:flex;justify-content:space-between">
+              <span style="color:var(--muted);font-weight:600">Status</span>
+              <span style="font-weight:700;color:var(--green)">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 WHAT TO AUTOMATE -->
+  <section class="slide" data-notes="Give them a mental model for what is worth scheduling. Repeatable, time-boxed, data-driven work. Not creative strategy, not one-off briefs. The list on the right is the cheat sheet they take back to their desks.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">What to automate</div>
+        <h2>Recurring, predictable, data-driven work is what scheduling is built for.</h2>
+        <div class="sub">If you could write the same prompt every Monday, automate it.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Good candidates to automate</div>
+          <div class="todo">
+            <div class="now"><span class="box">&#9654;</span> Weekly content brief - every Monday 8am</div>
+            <div class="now" style="margin-top:8px"><span class="box">&#9654;</span> Weekly competitor digest - every Sunday 9am</div>
+            <div class="now" style="margin-top:8px"><span class="box">&#9654;</span> Monthly performance report - first Monday of month</div>
+            <div class="now" style="margin-top:8px"><span class="box">&#9654;</span> Monthly newsletter draft - last Friday of month</div>
+          </div>
+          <div style="margin-top:16px;font:600 12px/1.5 var(--sans);color:var(--muted)">Leave creative strategy, positioning, and one-off work for prompted sessions.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 PARALLEL AND RESEARCH WORKFLOWS -->
+  <section class="slide" data-notes="For large research tasks, Cowork can spin up parallel helpers: one scans The Sill, one scans Bloomscape, one scans Leon and George, then they merge the findings. You get three reports worth of research in the time of one. Show the todo list and narrate it.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Parallel and research workflows</div>
+        <h2>For big jobs, Cowork spins helpers to work on several things at once.</h2>
+        <div class="sub">Tell it to research multiple targets and it runs them in parallel, then merges the findings.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Verdal competitor research - running now</div>
+          <div class="todo">
+            <div class="done"><span class="box">&#10003;</span> Helper 1 - The Sill: content themes, pricing, SEO gaps</div>
+            <div class="done"><span class="box">&#10003;</span> Helper 2 - Bloomscape: content themes, pricing, SEO gaps</div>
+            <div class="now"><span class="box">&#9654;</span> Helper 3 - Leon and George: content themes, pricing, SEO gaps</div>
+            <div class="done" style="color:var(--muted)"><span class="box">&#9633;</span> Merge findings into one digest, save to projects/</div>
+          </div>
+          <div style="margin-top:14px;font:600 12px/1.4 var(--sans);color:var(--muted)">Three targets researched in parallel. One merged file at the end.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 THE CONTROL CENTER -->
+  <section class="slide" data-notes="This is the payoff idea for the session. Scheduled tasks fill the data. Live artifacts surface it. You pin the dashboard once and it is always current - you just open it on Monday morning. Let this land before moving to the demo.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">The control center</div>
+        <h2>Scheduled tasks plus live artifacts equals a marketing control center that updates itself.</h2>
+        <div class="sub">You set it up once. From then on, you just open it.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">How it connects</div>
+          <div class="todo">
+            <div class="now"><span class="box">&#128197;</span> Sunday 9am - scheduled task runs</div>
+            <div style="margin-left:20px;color:var(--muted);font-size:14px;line-height:1.5">Fetches competitor data, keyword trends, content gaps</div>
+            <div class="now" style="margin-top:10px"><span class="box">&#128200;</span> Data written to projects/weekly-digest.md</div>
+            <div style="margin-left:20px;color:var(--muted);font-size:14px;line-height:1.5">File updated automatically each Sunday</div>
+            <div class="now" style="margin-top:10px"><span class="box">&#128065;</span> You open the pinned dashboard Monday morning</div>
+            <div style="margin-left:20px;color:var(--muted);font-size:14px;line-height:1.5">Live artifact reads the new file and shows fresh data</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 LIVE DEMO -->
+  <section class="slide" data-notes="Switch to Cowork. Paste the prompt, narrate what Cowork does: it builds the live artifact first, shows you the pinned dashboard, then sets up the scheduled task. Open the dashboard and click refresh to show it is live. Key line: one prompt, and Cowork runs this every week from here on.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Live demo - watch this</div>
+        <h2>Build a Verdal dashboard, then schedule a weekly digest.</h2>
+        <div class="code" style="margin-top:18px">
+          <div class="lbl">The prompt</div>
+          <code>Load verdal-marketing/. Build a LIVE ARTIFACT
+showing this week's keyword opportunities and
+competitor activity for Verdal. Then schedule
+a weekly competitor digest every Sunday at
+9am, saved to projects/weekly-digest.md.</code>
+        </div>
+        <span class="pill">It refreshes itself</span>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What comes back</div>
+          <div class="todo">
+            <div class="done"><span class="box">&#10003;</span> Live artifact created and pinned to sidebar</div>
+            <div class="done" style="margin-top:8px"><span class="box">&#10003;</span> Dashboard shows keyword bars and competitor summary</div>
+            <div class="done" style="margin-top:8px"><span class="box">&#10003;</span> Scheduled task set: every Sunday 9am</div>
+            <div class="done" style="margin-top:8px"><span class="box">&#10003;</span> projects/weekly-digest.md will appear each week</div>
+          </div>
+          <div style="margin-top:16px;font:600 12px/1.4 var(--sans);color:var(--muted)">Click the refresh button on the artifact - new data, same dashboard.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 LAB -->
+  <section class="slide lab" data-notes="Attendees work for 45 minutes. Circulate. Two blockers to watch: Artifacts and Code Execution not turned on in settings, and using the word dashboard instead of live artifact. The starter prompt on the right is simple on purpose - they can extend it once the basics work.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Your turn - 45 minutes</div>
+        <h2>Pin an artifact, set a schedule.</h2>
+        <ul class="big" style="margin-top:20px">
+          <li><span class="n">1</span><span>Build a simple Verdal live artifact - keyword tracker or content calendar</span></li>
+          <li><span class="n">2</span><span>Pin it and click refresh to see it update</span></li>
+          <li><span class="n">3</span><span>Create one scheduled task that runs weekly</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Copy this into Cowork</div>
+          <code>Load verdal-marketing/context/. Build a
+LIVE ARTIFACT that tracks Verdal's top 5
+keyword opportunities this week and flags
+any new content from The Sill or Bloomscape.
+Pin it. Then schedule this same research
+task to run every Monday at 8am, saving
+a summary to projects/weekly-brief.md.</code>
+        </div>
+        <div class="foot" style="margin-top:16px">On a shared login? Follow along while the volunteer drives, then set this up at your desk as homework.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 DEBRIEF -->
+  <section class="slide" data-notes="Let a few people answer each question. The goal is to surface what clicked and what did not. The refresh question often leads to the best discussion: people realize they have been re-running prompts manually every week for things Cowork could own.">
+    <div class="kicker">Debrief</div>
+    <ul class="q">
+      <li>What will you put on a live dashboard for your own brand?</li>
+      <li>What weekly job would save you the most time if it ran itself?</li>
+      <li>What surprised you about the refresh?</li>
+    </ul>
+  </section>
+
+  <!-- 13 NEXT + HOMEWORK -->
+  <section class="slide" data-notes="One session left. Safety, sharing, and next steps is about how to use Cowork with a team, what to share, and where the guardrails are. Homework is one scheduled task - their choice of cadence and topic - to bed in the habit before the final session.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Next session and homework</div>
+        <h2>Next: safety, sharing, and next steps - the final session.</h2>
+        <div class="sub">How to use Cowork with a team, what to share, and where the guardrails are.</div>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Homework - before Session 6</div>
+          <code>Pick one recurring task for your own brand.
+Schedule it in Cowork to run weekly.
+Let it run once, open the output, and
+bring it to Session 6 to share.</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 THANK YOU -->
+  <section class="slide title" data-notes="Close. One session left. Build the anticipation for the final wrap on safety and sharing.">
+    <div class="brandbar"></div>
+    <div class="kicker">Thank you</div>
+    <h1>See you in the final session.</h1>
+    <div class="sub">Session 6: Safety, sharing, and next steps.</div>
+  </section>
+
+</div>
+
+<div id="counter">1 / 14</div>
+<div id="hint">Arrows to move &middot; <b>N</b> notes &middot; <b>F</b> fullscreen</div>
+<div id="notes"><div class="nlbl">Speaker notes</div><p id="notetext"></p></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar'),counter=document.getElementById('counter');
+  const notes=document.getElementById('notes'),noteText=document.getElementById('notetext');
+  let i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,x)=>s.classList.toggle('active',x===i));
+    bar.style.width=(i/(slides.length-1)*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    noteText.textContent=slides[i].dataset.notes||'';
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  const next=()=>show(i+1),prev=()=>show(i-1);
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='n')notes.classList.toggle('show');
+    else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  });
+  document.getElementById('deck').addEventListener('click',e=>{(e.clientX<window.innerWidth*0.33)?prev():next()});
+  let tx=0;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next():prev())},{passive:true});
+  addEventListener('hashchange',()=>{const n=parseInt(location.hash.replace('#',''));if(n&&n-1!==i)show(n-1)});
+  show((parseInt(location.hash.replace('#',''))||1)-1);
+</script>
+</body>
+</html>

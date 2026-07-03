@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 3 - Skills and plugins</title>
+<style>
+  :root{
+    --green:#2F6B4F; --green-d:#234f3b; --cream:#F7F4EC; --terra:#C56B47;
+    --ink:#1F2A24; --muted:#5c6b62; --line:#e2ddd0; --white:#fffdf8; --paper:#fbf9f2;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--ink);color:var(--ink);overflow:hidden}
+
+  #bar{position:fixed;top:0;left:0;height:4px;background:var(--terra);width:0;z-index:50;transition:width .3s ease}
+  #counter{position:fixed;bottom:16px;right:20px;z-index:50;font:600 12px/1 var(--sans);color:var(--muted);letter-spacing:.04em}
+  #hint{position:fixed;bottom:16px;left:20px;z-index:50;font:500 11px/1 var(--sans);color:var(--muted);opacity:.75}
+  #hint b{color:var(--green);font-weight:700}
+
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:6.5vh 6vw;background:var(--cream);color:var(--ink)}
+  .slide.active{display:flex;animation:in .4s ease}
+  @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .kicker{font:700 12px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:18px}
+  h1{font-size:clamp(32px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  h2{font-size:clamp(26px,3.6vw,42px);line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  .sub{font-size:clamp(16px,1.9vw,21px);color:var(--muted);margin-top:16px;font-weight:500;max-width:36ch}
+  .foot{margin-top:26px;font-size:14px;color:var(--muted);font-weight:600}
+
+  /* split: point on left, live example on right - fills the slide */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center;width:100%}
+  .split .left h2{max-width:15ch}
+  .split .sub{max-width:30ch}
+
+  /* title */
+  .title{background:var(--green);color:var(--cream);justify-content:center}
+  .title h1{color:#fff}.title .kicker{color:#e7c9b6}.title .sub{color:#d8e6dd;max-width:40ch}
+  .title .brandbar{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--terra)}
+
+  /* generic example panel */
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+    box-shadow:0 14px 36px rgba(35,79,59,.10)}
+  .panel .cap{font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:14px}
+
+  /* window chrome for realism */
+  .win{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 16px 40px rgba(35,79,59,.12)}
+  .win .bar{display:flex;gap:7px;align-items:center;padding:11px 14px;background:#efece2;border-bottom:1px solid var(--line)}
+  .win .bar i{width:11px;height:11px;border-radius:50%;background:#cfc9ba;display:inline-block}
+  .win .bar .t{margin-left:10px;font:600 12px/1 var(--sans);color:var(--muted)}
+  .win .body{padding:18px 20px}
+
+  /* file tree */
+  .tree{font-family:var(--mono);font-size:15px;line-height:1.9;color:var(--ink)}
+  .tree .dir{color:var(--green);font-weight:700}
+  .tree .f{color:var(--ink)}
+  .tree .in{padding-left:22px}.tree .in2{padding-left:44px}
+  .tree .hl{background:#eaf3ee;border-radius:5px;padding:1px 6px}
+
+  /* code / prompt */
+  .code{background:#10201a;border:1px solid #2b4a3c;border-radius:12px;padding:18px 20px}
+  .code .lbl{font:700 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:#7fb79a;margin-bottom:10px}
+  .code code{font-family:var(--mono);font-size:14px;line-height:1.55;color:#e8f3ec;white-space:pre-wrap;display:block}
+
+  /* two cards */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;width:100%;margin-top:6px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 10px 30px rgba(35,79,59,.06)}
+  .card .tag{font:800 15px/1 var(--sans);margin-bottom:12px}
+  .card.chat .tag{color:var(--muted)}.card.cw .tag{color:var(--green)}
+  .card p{font-size:clamp(15px,1.6vw,19px);line-height:1.45}
+  .card .eg{margin-top:14px;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--paper);
+    border:1px dashed var(--line);border-radius:8px;padding:8px 10px}
+  .card.cw{border-color:var(--green);box-shadow:0 12px 34px rgba(47,107,79,.14)}
+
+  /* numbered agenda */
+  ul.big{list-style:none;display:grid;gap:14px}
+  ul.big li{font-size:clamp(17px,1.9vw,21px);font-weight:600;display:flex;gap:14px;align-items:flex-start;line-height:1.25}
+  ul.big li .n{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:var(--green);color:#fff;font:800 15px/30px var(--sans);text-align:center}
+
+  ul.q{list-style:none;display:grid;gap:16px}
+  ul.q li{font-size:clamp(19px,2.4vw,28px);font-weight:700;color:var(--green-d);padding-left:22px;position:relative}
+  ul.q li:before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;border-radius:50%;background:var(--terra)}
+
+  /* steps (task loop) */
+  .todo{font-size:15.5px;line-height:2.15}
+  .todo .done{color:var(--muted)}.todo .now{color:var(--green-d);font-weight:700}
+  .todo .box{display:inline-block;width:20px}
+  .todo .now .box{color:var(--terra)}
+
+  /* file chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .chips span{font:700 13px/1 var(--sans);background:var(--paper);border:1px solid var(--line);color:var(--green-d);padding:9px 13px;border-radius:8px}
+
+  /* permission dialog */
+  .dialog{max-width:320px}
+  .dialog .msg{font-size:15px;line-height:1.5;color:var(--ink)}
+  .dialog .msg b{color:var(--green-d)}
+  .dialog .btns{display:flex;gap:10px;margin-top:16px}
+  .dialog .btns button{font:700 13px/1 var(--sans);padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+  .dialog .btns .allow{background:var(--green);color:#fff;border-color:var(--green)}
+
+  /* output thumbnails */
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .thumbs .th{aspect-ratio:16/10;background:var(--white);border:1px solid var(--line);border-radius:7px;padding:8px;
+    display:flex;flex-direction:column;gap:4px;box-shadow:0 4px 12px rgba(35,79,59,.06)}
+  .thumbs .th .b{height:6px;border-radius:3px;background:#dfe8e2}
+  .thumbs .th .b.g{background:var(--green);width:60%}
+  .thumbs .th .b.t{background:var(--terra);width:40%}
+
+  /* model picker */
+  .picker{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:11px 14px;font:700 14px/1 var(--sans);color:var(--green-d);box-shadow:0 6px 16px rgba(35,79,59,.06)}
+  .picker .dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .picker .ch{color:var(--muted);font-weight:600}
+
+  .quote{background:var(--green-d);color:var(--cream);justify-content:center}
+  .quote .mark{font-size:110px;line-height:.4;color:var(--terra);font-family:Georgia,serif}
+  .quote p{font-size:clamp(24px,3.6vw,42px);line-height:1.25;font-weight:600;max-width:20ch;margin-top:8px}
+
+  .pill{align-self:flex-start;margin-top:18px;background:var(--terra);color:#fff;font:800 14px/1 var(--sans);padding:12px 20px;border-radius:999px}
+  .lab .big-time{margin-top:22px;font-size:clamp(19px,2.4vw,26px);font-weight:800;color:var(--terra)}
+
+  #notes{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(16,25,20,.96);color:#e8f3ec;
+    padding:16px 22px 20px;transform:translateY(110%);transition:transform .3s ease;max-height:42vh;overflow:auto}
+  #notes.show{transform:none}
+  #notes .nlbl{font:800 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#7fb79a;margin-bottom:7px}
+  #notes p{font-size:15px;line-height:1.5;max-width:82ch}
+
+  @media (max-width:860px){.split,.cols{grid-template-columns:1fr;gap:24px}.thumbs{grid-template-columns:repeat(3,1fr)}}
+  @media print{body{overflow:visible;background:#fff}#bar,#counter,#hint,#notes{display:none}
+    .slide{position:relative;display:flex!important;height:100vh;page-break-after:always;inset:auto}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide title" data-notes="Welcome them back. Session 3 of 6. Today we stop typing the same instructions every week and package them as skills that run on command. This is where Cowork starts feeling like a real team member, not just a smart chat.">
+    <div class="brandbar"></div>
+    <div class="kicker">Cowork for the team - Session 3 of 6</div>
+    <h1>Skills and plugins</h1>
+    <div class="sub">Package a workflow once. Run it on command, same quality every time.</div>
+  </section>
+
+  <!-- 2 RECAP + PROMISE -->
+  <section class="slide" data-notes="Quick bridge from Sessions 1 and 2. They have a folder, context files, and projects. Today is about making the work they already repeat reusable. The goal: leave with at least one real skill saved.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Where we are</div>
+        <h2>You have your folder and your context. Today you package the work you repeat.</h2>
+        <div class="sub">A skill is a workflow with a name. One command next week, same result every time.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">A skill in one line</div>
+          <div class="tree" style="font-size:15px;line-height:2.2">
+            <div>You do it once <span style="color:var(--terra)">&#8594;</span> Cowork repeats it on command</div>
+            <div style="margin-top:14px;color:var(--muted);font-size:13.5px">Same prompt. Same quality. No retyping.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 AGENDA -->
+  <section class="slide" data-notes="Three ideas today. We build a real skill in the demo and in the lab. Keep the agenda slide brief - the room wants to get to the practical part.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Today's agenda</div>
+        <ul class="big">
+          <li><span class="n">1</span><span>What a skill is - a saved workflow with a trigger</span></li>
+          <li><span class="n">2</span><span>Build a skill - three ways, Cowork UI only</span></li>
+          <li><span class="n">3</span><span>Plugins - bundle and share your team's toolkit</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Skill anatomy</div>
+          <div class="tree" style="font-size:13px;line-height:1.85">
+            <div class="f">&#128196; SKILL.md</div>
+            <div class="in" style="color:var(--muted)">name: weekly-content-brief</div>
+            <div class="in" style="color:var(--muted)">description: when to use it</div>
+            <div class="in" style="color:var(--muted)">&nbsp;&nbsp;(the trigger)</div>
+            <div class="in" style="color:var(--muted)">---</div>
+            <div class="in" style="color:var(--muted)">workflow steps go here</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 THE PAIN -->
+  <section class="slide" data-notes="This is the hook. Ask: who here has typed the same long instruction more than once this week? The chat window on the right shows what that looks like: the same paragraph, repeated, every Monday. A skill ends that.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">The problem</div>
+        <h2>You retype the same workflow every week.</h2>
+        <div class="sub">Same steps, same context, same structure - retyped from memory each time. One missed detail and the output drifts.</div>
+      </div>
+      <div class="right">
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><span class="t">New chat</span></div>
+          <div class="body">
+            <div style="font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--terra);margin-bottom:10px">Week 1</div>
+            <div style="font:500 12.5px/1.55 var(--mono);color:var(--muted)">"Read brand-voice.md, pick 3 topics for Priya, write the Monday caption and Thursday tip, format for Instagram, save to projects/weekly-w01.md"</div>
+            <div style="font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--terra);margin:14px 0 10px"">Week 2</div>
+            <div style="font:500 12.5px/1.55 var(--mono);color:var(--muted)">"Read brand-voice.md, pick 3 topics for Priya, write the Monday caption and Thursday tip, format for Instagram, save to projects/weekly-w02.md"</div>
+            <div style="font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--terra);margin:14px 0 10px"">Week 3</div>
+            <div style="font:500 12.5px/1.55 var(--mono);color:var(--muted)">"Read brand-voice.md, pick 3 topics..."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 WHAT A SKILL IS -->
+  <section class="slide" data-notes="The description field is the key idea. It is not a label - it is the trigger that tells Cowork when to load and run the skill. Spend a moment on this. The name is for humans; the description is for the model.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">What a skill is</div>
+        <h2>A saved workflow with a name and a description.</h2>
+        <div class="sub">The description is the trigger. Cowork reads it to know when to use the skill.</div>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">weekly-content-brief / SKILL.md</div>
+          <code>name: weekly-content-brief
+description: use when asked for the
+  weekly Verdal content brief
+---
+Read context/, pick 3 topics that
+fit Plant-proud Priya this week,
+write the brief, save to
+projects/.</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 THREE WAYS TO MAKE ONE -->
+  <section class="slide" data-notes="Keep this light. Most people will use option 2 - packaging something they already do. Option 1 is the fastest starting point. Option 3 is for teams ready to build from scratch. You do not need to go deep on all three.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Three ways to build a skill</div>
+        <ul class="big">
+          <li><span class="n">1</span><span>Extend an official skill - start from an Anthropic template</span></li>
+          <li><span class="n">2</span><span>Package a workflow you already do - the fastest path</span></li>
+          <li><span class="n">3</span><span>Build a fresh one - blank canvas, your own steps</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Verdal examples</div>
+          <div style="display:grid;gap:12px;margin-top:2px">
+            <div style="border-left:3px solid var(--green);padding-left:12px">
+              <div style="font:700 12px/1 var(--sans);color:var(--green-d);margin-bottom:4px">Extend official</div>
+              <div style="font:500 13px/1.5 var(--sans);color:var(--muted)">Take the "social-post" template, add Verdal voice rules</div>
+            </div>
+            <div style="border-left:3px solid var(--terra);padding-left:12px">
+              <div style="font:700 12px/1 var(--sans);color:var(--green-d);margin-bottom:4px">Package existing</div>
+              <div style="font:500 13px/1.5 var(--sans);color:var(--muted)">The weekly content brief you already type - make it a skill</div>
+            </div>
+            <div style="border-left:3px solid var(--muted);padding-left:12px">
+              <div style="font:700 12px/1 var(--sans);color:var(--green-d);margin-bottom:4px">Build fresh</div>
+              <div style="font:500 13px/1.5 var(--sans);color:var(--muted)">A "Priya outreach" skill built from scratch for that persona only</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 THE SKILLS LIBRARY -->
+  <section class="slide" data-notes="This is the UI path: Customize then Claude Skills. The skill-creator skill is the one they should add first because it helps them build all the others. Show this in the app if you can - it takes under a minute.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">The skills library</div>
+        <h2>Customize &gt; Claude Skills.</h2>
+        <div class="sub">Add the skill-creator skill first. It builds skills for you - describe what you need and it writes the SKILL.md.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Customize &gt; Claude Skills</div>
+          <div style="display:grid;gap:10px;margin-top:2px">
+            <div style="display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--terra);flex:0 0 auto"></div>
+              <div>
+                <div style="font:700 13px/1 var(--sans);color:var(--green-d)">skill-creator</div>
+                <div style="font:500 11.5px/1.4 var(--sans);color:var(--muted);margin-top:3px">Add this first - it builds skills for you</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex:0 0 auto"></div>
+              <div>
+                <div style="font:700 13px/1 var(--sans);color:var(--green-d)">weekly-content-brief</div>
+                <div style="font:500 11.5px/1.4 var(--sans);color:var(--muted);margin-top:3px">Your Verdal skill</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex:0 0 auto"></div>
+              <div>
+                <div style="font:700 13px/1 var(--sans);color:var(--green-d)">instagram-captions</div>
+                <div style="font:500 11.5px/1.4 var(--sans);color:var(--muted);margin-top:3px">Your Verdal skill</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 PLUGINS -->
+  <section class="slide" data-notes="Plugins are the team-sharing mechanism. A plugin bundles one or more skills plus any connectors into a single installable package. Mention that plugins can be shared inside a team or published. Keep this brief - most of the room will focus on building skills first, not publishing plugins yet.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Plugins</div>
+        <h2>A plugin bundles skills to share.</h2>
+        <div class="sub">Hand your whole Verdal toolkit to a new teammate in one install. No setup, no retraining.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Plugin = one install for the whole toolkit</div>
+          <div style="display:grid;gap:10px;margin-top:4px">
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="min-width:28px;height:28px;border-radius:7px;background:var(--green);color:#fff;font:800 13px/28px var(--sans);text-align:center">S</div>
+              <div style="font:600 14px/1.45 var(--sans);color:var(--ink)">Skills - every workflow you have packaged</div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="min-width:28px;height:28px;border-radius:7px;background:var(--terra);color:#fff;font:800 13px/28px var(--sans);text-align:center">C</div>
+              <div style="font:600 14px/1.45 var(--sans);color:var(--ink)">Connectors - linked tools and data sources</div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="min-width:28px;height:28px;border-radius:7px;background:var(--muted);color:#fff;font:800 13px/28px var(--sans);text-align:center">H</div>
+              <div style="font:600 14px/1.45 var(--sans);color:var(--ink)">Helpers - shared context files and templates</div>
+            </div>
+            <div style="margin-top:6px;font:600 13px/1.4 var(--sans);color:var(--muted);border-top:1px solid var(--line);padding-top:10px">New teammate installs one package, gets everything.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 LIVE DEMO -->
+  <section class="slide" data-notes="Switch to Cowork. Go to Customize > Claude Skills, show skill-creator is installed. Then paste the prompt, narrate what Cowork is doing - reading context, drafting the SKILL.md, showing the Save Skill button. Open the saved skill and show the name and description. Key line: I typed this once. Next week I type one command.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Live demo - watch this</div>
+        <h2>Turn the Verdal weekly brief into a skill.</h2>
+        <div class="code" style="margin-top:18px">
+          <div class="lbl">The prompt</div>
+          <code>Take the weekly content brief workflow
+we just ran and package it as a
+reusable skill called
+weekly-content-brief. Make it
+brand-agnostic - brand context loads
+from context/ at runtime. Then save
+the skill.</code>
+        </div>
+        <span class="pill">Do it once, reuse forever</span>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What comes back</div>
+          <div class="tree" style="font-size:13.5px;line-height:1.9">
+            <div class="dir">Skill created</div>
+            <div class="in f hl">weekly-content-brief</div>
+            <div class="in" style="color:var(--muted)">name: weekly-content-brief</div>
+            <div class="in" style="color:var(--muted)">description: use when asked for...</div>
+            <div class="in" style="color:var(--muted)">--- workflow steps ---</div>
+          </div>
+          <div style="margin-top:14px;background:var(--green);color:#fff;border-radius:8px;padding:9px 14px;font:700 13px/1 var(--sans);display:inline-block">Save Skill (one click)</div>
+          <div style="margin-top:14px;font:600 13px/1.5 var(--sans);color:var(--muted)">Next week: type one command, same quality output. No retyping the workflow.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 LAB -->
+  <section class="slide lab" data-notes="Attendees work on their own laptops. Circulate. The two most common blockers: skill-creator not added yet (go to Customize > Claude Skills first), and writing a skill that has brand details baked in (remind them to keep it brand-agnostic and load context at runtime). The starter prompt on the right is for an Instagram-caption skill.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Your turn - 45 minutes</div>
+        <h2>Build one simple skill.</h2>
+        <ul class="big" style="margin-top:20px">
+          <li><span class="n">1</span><span>Customize &gt; Claude Skills - add skill-creator if not already there</span></li>
+          <li><span class="n">2</span><span>Pick a Verdal task you repeat - a caption, a brief, a report</span></li>
+          <li><span class="n">3</span><span>Ask Cowork to package it as a skill, then save</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Copy this into Cowork</div>
+          <code>Read context/ for Verdal brand rules
+and voice. Package the Instagram
+caption workflow as a skill named
+instagram-captions. Keep it
+brand-agnostic - it should load
+context at runtime, not bake it in.
+Save the skill when done.</code>
+        </div>
+        <div class="foot" style="margin-top:16px">On a shared login? Follow along while the volunteer drives, then build your own skill at your desk as homework.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 DEBRIEF -->
+  <section class="slide" data-notes="Let a few people answer each. The third question is the key one - it surfaces whether they understood that the description is a trigger, not just a label. If they struggle on that one, give the one-liner: the description is what Cowork reads to decide when to run the skill.">
+    <div class="kicker">Debrief</div>
+    <ul class="q">
+      <li>What workflow will you package first for your own brand?</li>
+      <li>What did you write in the description - the trigger?</li>
+      <li>How is a skill different from just saving a prompt?</li>
+    </ul>
+  </section>
+
+  <!-- 12 NEXT + HOMEWORK -->
+  <section class="slide" data-notes="Send them off with momentum. Session 4 is about connectors - linking real tools so Cowork can pull live data and push finished work. The homework is one skill for their own brand, not Verdal, so they start seeing the value in their real workflow.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Next time and homework</div>
+        <h2>Next: connect your tools.</h2>
+        <div class="sub">Cowork linked to your CMS, your calendar, your analytics. Real data in, finished output out.</div>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">Homework - before next session</div>
+          <code>Think of one workflow you repeat for
+your own brand. Open Cowork, load your
+folder, and ask skill-creator to
+package it as a skill. Save it. Next
+session, run it with one command and
+see what comes back.</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 THANK YOU -->
+  <section class="slide title" data-notes="Close with energy. They now know skills exist, how to build them, and have one saved. Session 4 is connectors - the other half of what makes Cowork feel like a real team member.">
+    <div class="brandbar"></div>
+    <div class="kicker">Thank you</div>
+    <h1>See you next session.</h1>
+    <div class="sub">Session 4: Connect your tools.</div>
+  </section>
+
+</div>
+
+<div id="counter">1 / 13</div>
+<div id="hint">Arrows to move &middot; <b>N</b> notes &middot; <b>F</b> fullscreen</div>
+<div id="notes"><div class="nlbl">Speaker notes</div><p id="notetext"></p></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar'),counter=document.getElementById('counter');
+  const notes=document.getElementById('notes'),noteText=document.getElementById('notetext');
+  let i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,x)=>s.classList.toggle('active',x===i));
+    bar.style.width=(i/(slides.length-1)*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    noteText.textContent=slides[i].dataset.notes||'';
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  const next=()=>show(i+1),prev=()=>show(i-1);
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='n')notes.classList.toggle('show');
+    else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  });
+  document.getElementById('deck').addEventListener('click',e=>{(e.clientX<window.innerWidth*0.33)?prev():next()});
+  let tx=0;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next():prev())},{passive:true});
+  addEventListener('hashchange',()=>{const n=parseInt(location.hash.replace('#',''));if(n&&n-1!==i)show(n-1)});
+  show((parseInt(location.hash.replace('#',''))||1)-1);
+</script>
+</body>
+</html>
