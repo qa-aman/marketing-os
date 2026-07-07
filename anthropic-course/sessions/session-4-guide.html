@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 4 Guide - Connect Your Tools</title>
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #63c69a;
+    --accent-soft: #63c69a1f;
+    --code-bg: #141416;
+    --green: #4ade80;
+    --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .pre-label.file { color: var(--blue); }
+  .pre-label.ask { color: var(--accent); }
+  .pattern {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .pattern-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 28px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .method {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 20px 16px;
+    margin: 16px 0;
+  }
+  .method-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 6px;
+    font-weight: 700;
+  }
+  .method-badge {
+    background: var(--accent); color: #000;
+    padding: 2px 10px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .method-badge.b { background: var(--blue); color: #fff; }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  td code { white-space: nowrap; }
+  .checkbox-list { list-style: none; padding-left: 0; }
+  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
+  .checkbox-list li::before {
+    content: "\2610"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-size: 18px;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+  }
+  .tag.green { color: var(--green); border-color: var(--green); }
+  .footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+  hr.divider { border: none; border-top: 1px dashed var(--border); margin: 28px 0; }
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 28px;
+    margin: 24px 0 40px;
+  }
+  .toc h3 { margin-top: 0; color: var(--text); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+  .toc ol { margin: 12px 0 0; }
+  .toc a { border-bottom: none; color: var(--text); }
+  .toc a:hover { color: var(--accent); }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
+  }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a {
+    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
+    font-size: 13.5px; line-height: 1.35; border-bottom: none;
+  }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], section[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+<aside>
+  <div class="toc-h">Session 4</div>
+  <ol>
+    <li><a href="#how-it-works">From your folder to your whole stack</a></li>
+    <li><a href="#connect-a-tool">Connect a tool</a></li>
+    <li><a href="#other-connectors">Other connectors</a></li>
+    <li><a href="#live-data">Pull real data into a deliverable</a></li>
+    <li><a href="#chrome">Claude in Chrome</a></li>
+    <li><a href="#safety">Safety and access</a></li>
+    <li><a href="#wrap">Recap and homework</a></li>
+  </ol>
+</aside>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork for marketers - Session 4 of 6</div>
+  <h1>Connect your tools: from your folder to your whole stack</h1>
+  <p class="lead">For three sessions, Cowork has only known what lived in your local folder. Today that changes. You will connect a live tool such as Gmail or Drive, watch Cowork pull real data from it, and save that data straight into a Verdal file. This handout is your step by step: a little theory, then the exact prompts to paste.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Worked brand: Verdal, a plant care brand. Dataset: <code>verdal-marketing/</code>. Setup help for every tool: <code>../connectors-setup.md</code>. Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">Introduction to Claude Cowork</a>.</p>
+</header>
+
+<div class="callout">
+<strong>What you need before you start.</strong> Claude Desktop with Cowork, the <code>verdal-marketing</code> folder from earlier sessions, and a Gmail or Drive account you can sign in with (or Outlook and OneDrive if your team runs on Microsoft). Nothing here needs code. Every connector turns on with a click in Customize &gt; Connectors.
+</div>
+
+<div class="callout">
+<strong>The one idea for the whole session.</strong> A connector gives Cowork live access to a tool, worked exactly the same as a local file. You click it on, sign in once, and from then on Cowork can read it in any prompt, just like it reads a file in your folder.
+</div>
+
+<div class="toc">
+  <h3>What you will do</h3>
+  <ol>
+    <li><a href="#connect-a-tool">Connect Gmail or Drive and grant read access</a></li>
+    <li><a href="#other-connectors">See what else is in the connector library</a></li>
+    <li><a href="#live-data">Pull a real email into a Verdal file</a></li>
+    <li><a href="#chrome">Try Claude in Chrome on a live website</a></li>
+    <li><a href="#safety">Set access to the minimum a task needs</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<h2 id="how-it-works">From your folder to your whole stack</h2>
+
+<p>So far every task started the same way: Cowork read a file from <code>verdal-marketing/</code> and wrote a file back into it. That covers a lot, but your real marketing work does not live only in one folder. It lives in your inbox, your team's Drive, your calendar, maybe Teams or SharePoint. Connectors close that gap.</p>
+
+<h3>What a connector actually does</h3>
+<p>A connector gives Cowork live access to an external tool, worked exactly the same way as a local file. Nothing about the prompt changes. You still ask Cowork to "read," "find," or "pull from" something, you just point it at a live tool instead of a document in your folder.</p>
+
+<table>
+<thead><tr><th></th><th>Local folder</th><th>Connected tool</th></tr></thead>
+<tbody>
+<tr><td>Where the data lives</td><td>Inside <code>verdal-marketing/</code></td><td>In Gmail, Drive, Calendar, Teams, and so on</td></tr>
+<tr><td>How Cowork gets it</td><td>Reads the file directly</td><td>Reads it live once the connector is on</td></tr>
+<tr><td>Setup</td><td>Load the folder, click Allow</td><td>Turn the connector on in Customize &gt; Connectors, sign in once</td></tr>
+<tr><td>Code required</td><td>None</td><td>None</td></tr>
+</tbody>
+</table>
+
+<p>Everything today happens in one place: <strong>Customize &gt; Connectors</strong>. That menu is where you turn tools on, grant access, and turn them off again later.</p>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<div class="pattern" id="connect-a-tool">
+<span class="pattern-num">STEP 01</span>
+<h2>Connect a tool</h2>
+<p class="lead">Turn on one connector and sign in. This is the only setup step, and it takes a couple of minutes the first time.</p>
+
+<h3>Do this</h3>
+<ol>
+  <li>Open Claude Desktop and go to <strong>Customize &gt; Connectors</strong>.</li>
+  <li>Under <strong>Google Workspace</strong>, turn on <strong>Gmail</strong> or <strong>Drive</strong> (pick whichever you actually use). If your team runs on Microsoft, use <strong>Microsoft 365</strong> instead: Outlook, OneDrive, SharePoint, and Teams each turn on separately.</li>
+  <li>Sign in when prompted. A dialog will ask what Cowork can access.</li>
+  <li>Grant <strong>read access</strong>. That is enough for everything in this session.</li>
+</ol>
+
+<div class="callout">
+<strong>Google Workspace.</strong> Three connectors: Drive (read documents), Gmail (search threads and emails), Calendar (check events). Cowork reads a Drive document as if it were sitting in your local folder, no download needed.
+</div>
+
+<div class="callout">
+<strong>Microsoft 365.</strong> Four connectors: Outlook, OneDrive, SharePoint, Teams. Each turns on separately in the same menu. Files in OneDrive and SharePoint work like local files once connected, and Teams threads become readable context.
+</div>
+
+<p class="muted">First-time sign-in can take two to three minutes and needs browser popups allowed. If the sign-in flow stalls, check that your browser is not blocking the popup.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="other-connectors">
+<span class="pattern-num">STEP 02</span>
+<h2>Other connectors</h2>
+<p class="lead">Google and Microsoft cover most of the room, but the connector library goes further.</p>
+
+<p>Browse the full list in <strong>Customize &gt; Connectors</strong>. Beyond Google Workspace and Microsoft 365, you will find:</p>
+<ul>
+  <li><strong>Web scraping</strong>, to pull competitor posts or pricing pages.</li>
+  <li><strong>Analytics</strong>, to pull live traffic and campaign numbers.</li>
+  <li><strong>Deck builders</strong>, to push finished slides straight into a presentation tool.</li>
+</ul>
+
+<div class="callout">
+<strong>Verdal example.</strong> Scrape The Sill and Bloomscape's product pages for a quick competitor snapshot, no manual copy-paste needed.
+</div>
+
+<p class="muted">The library grows over time, so it is worth a scroll now and then. You do not need to turn any of these on today, just know where to find them.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="live-data">
+<span class="pattern-num">STEP 03</span>
+<h2>Pull real data into a deliverable</h2>
+<p class="lead">The headline moment. Cowork reads a live inbox and a local file in the same task.</p>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">the live data task</span>
+<pre><code>Read my Gmail, find the latest plant-care trends email
+a teammate sent, pull the key points, and add a short
+"this month" section to projects/verdal-newsletter.md.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>Cowork searches Gmail first, and you can watch that step in the to-do list before it touches any file.</li>
+  <li>It finds the right thread and pulls the actual key points, not a generic summary.</li>
+  <li>It opens <code>projects/verdal-newsletter.md</code> and adds a new "this month" section without rewriting the rest of the file.</li>
+  <li>The new section matches Verdal's brand voice from <code>context/</code>, and cites where the point came from.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>Open <code>verdal-newsletter.md</code> after it runs. If the new section reads generic or does not reference the email, check that Gmail is connected and try again with: <em>"search Gmail specifically, do not guess at trends."</em></p>
+
+<p class="muted">Say this out loud while it runs: "this prompt just touched a live inbox and a local file in the same task. That is what a connector unlocks."</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="chrome">
+<span class="pattern-num">STEP 04</span>
+<h2>Claude in Chrome</h2>
+<p class="lead">Different from a connector: this gives Cowork an actual browser.</p>
+
+<p>Claude in Chrome lets Cowork click, read, and capture what it finds on a live website. Use it when the thing you need is not stored anywhere as a document, for example checking how a brand shows up in search results, reading a competitor's current product page, or grabbing live pricing.</p>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">a Chrome browsing task</span>
+<pre><code>Check if Verdal shows up when people search for AI for
+plant food. Screenshot the top three results and save
+them to projects/search-audit.md.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>Cowork actually visits a search results page rather than guessing from memory.</li>
+  <li>The screenshots or summary land in <code>projects/search-audit.md</code>, not just in the chat panel.</li>
+</ul>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="safety">
+<span class="pattern-num">STEP 05</span>
+<h2>Safety and access</h2>
+<p class="lead">Sixty seconds that matter before you connect anything for your own brand.</p>
+
+<div class="callout">
+<strong>The rule.</strong> Grant the minimum access a tool asks for. Read-only is usually enough for marketing work: Cowork needs to read your Gmail or Drive, not send emails or edit documents on your behalf. You can revoke any connector at any time in Customize &gt; Connectors, and Cowork asks before doing anything outside your folder or beyond what you granted.
+</div>
+
+<p class="muted">If a permission dialog offers a narrower option than the default, take it. You can always widen access later if a task actually needs it.</p>
+</div>
+
+<!-- ============================================ -->
+<h2 id="wrap">Recap and homework</h2>
+
+<p>If you followed along, you have:</p>
+<ul class="checkbox-list">
+  <li>Turned on a connector in Customize &gt; Connectors and signed in <span class="tag green">connect</span></li>
+  <li>Seen where the wider connector library lives <span class="tag green">library</span></li>
+  <li>Pulled a real email into a Verdal file <span class="tag green">the big win</span></li>
+  <li>Tried Claude in Chrome on a live search result <span class="tag green">chrome</span></li>
+  <li>Set access to read-only, the minimum a task needs <span class="tag green">safety</span></li>
+</ul>
+
+<div class="callout">
+<strong>Homework before Session 5.</strong> Connect one tool you use for your own brand, Gmail, Drive, Outlook, or anything else in the connector library. Ask Cowork to pull one real piece of content and save it to your own <code>projects/</code> folder using your brand voice rules. Arrive at Session 5 with at least one connector already working.
+</div>
+
+<h3>What is next</h3>
+<p>Session 5 is <strong>Bigger outputs and automation</strong>: live dashboards and scheduled jobs, so Cowork can run tasks without you sitting at the keyboard.</p>
+
+<div class="footer">
+  <p>Course: Claude Cowork for marketers. Worked brand: Verdal.<br>
+  Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">anthropic.skilljar.com</a><br>
+  Setup help for every tool: <code>../connectors-setup.md</code> in the workshop folder.</p>
+</div>
+
+</div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
+</body>
+</html>

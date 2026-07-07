@@ -60,7 +60,7 @@ This is the headline moment for this session. Follow these steps exactly.
 
 Say while it runs: "This prompt touched a live inbox and a local file in the same task. That is what connectors unlock. You are not copy-pasting from Gmail any more."
 
-If the demo is slow or the connector sign-in fails, switch to the recorded backup clip (Phase 5 deliverable). Keep narrating.
+If the demo is slow or the connector sign-in fails, fall back to the offline version: point Cowork at `reference/plant-care-trend-email.md` instead of a live Gmail, so the task still runs. Keep narrating.
 
 ## 0:55 - 1:00  Break
 
@@ -92,6 +92,16 @@ Ask three questions: Which tool did you connect? What did Cowork pull in? What w
 Preview Session 5: "Next time we go bigger - live dashboards and scheduled jobs. Cowork runs tasks without you sitting at the keyboard."
 
 Homework (5 minutes): connect one tool for their own brand and ask Cowork to pull one real piece of content into their projects folder using their own brand voice rules. They should arrive at Session 5 with at least one connector already working.
+
+---
+
+## Knowledge check (send 1-2 days after the session)
+
+- Q: What does a connector let Cowork do? A: Reach into an external tool like Gmail or Drive and use what it finds there, live, without you copy-pasting.
+- Q: What is Claude in Chrome for? A: Giving Cowork a browser so it can visit and read a live website, like a competitor's product page.
+- Q: What access should you grant a connector? A: The minimum it asks for, and read-only where that option is available.
+
+Send these by message or a quick form 1-2 days after the session. Retrieval a day or two later is what makes it stick.
 
 ---
 

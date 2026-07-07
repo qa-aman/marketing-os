@@ -42,7 +42,7 @@ Analogy that lands: "Chat is a smart colleague on a phone call. Cowork is that c
 
 ## 0:30 - 0:55  Demo - strategy deck from Verdal
 
-This is the headline "wow". Follow the demo script exactly (see `session-1-demo-script.md`, to be built in Phase 3). High level:
+This is the headline "wow". The steps below are your demo script. Run them in order:
 
 1. Open Cowork. Load the Verdal marketing folder. Point out the permission prompt and grant it.
 2. Show the `context/` files quickly so the room sees Cowork has real brand knowledge to work from.
@@ -52,7 +52,7 @@ This is the headline "wow". Follow the demo script exactly (see `session-1-demo-
 
 Say while it runs: "I did not paste any brand details. It knew them because they live in the folder. That is the whole idea."
 
-If the demo is slow, keep talking through the task loop; do not sit in silence. If it fails, switch to the recorded backup clip (Phase 5 deliverable).
+If the demo is slow, keep talking through the task loop; do not sit in silence. If it fails, fall back to a finished deck you generated in `projects/` during your dry run, and walk the room through that instead.
 
 ## 0:55 - 1:00  Break
 
@@ -60,7 +60,7 @@ If the demo is slow, keep talking through the task loop; do not sit in silence. 
 
 Attendees work on their own laptops with their own Verdal copy. Walk the room.
 
-The lab worksheet (Phase 3 deliverable) has the exact steps. High level:
+The attendee handout is `session-1-guide.html` (their step-by-step guide, with the exact prompt to copy). High level:
 1. Open Cowork, load your Verdal folder, grant access.
 2. Hand Cowork a first task, for example: "Read the brand context and write three on-brand Instagram captions about repotting, saved to the projects folder."
 3. Watch the task loop. Open the file it saved.
@@ -68,7 +68,7 @@ The lab worksheet (Phase 3 deliverable) has the exact steps. High level:
 
 Login note: if some attendees are on a common ID, they follow along while the volunteer drives, and do the real task as homework. Confirm this before the session.
 
-Circulate. The two most common blockers: folder access not granted, and looking for output in the chat instead of the folder. The FAQ sheet (Phase 4) has fixes.
+Circulate. The two most common blockers, and their fixes: folder access not granted (re-open the folder and click Allow on the permission prompt), and looking for output in the chat instead of the folder (open the `projects/` folder, the file is there).
 
 ## 1:45 - 1:55  Debrief and Q&A
 
@@ -79,6 +79,16 @@ Ask three questions: What surprised you? Where did it save the file? How was thi
 Preview Session 2: "Next time we make Cowork yours, so it remembers your brand and your rules without you repeating them."
 
 Homework (5 minutes): hand Cowork one more task on Verdal, any task you like, and see what it makes.
+
+---
+
+## Knowledge check (send 1-2 days after the session)
+
+- Q: What does Cowork do differently from Chat? A: It works locally on your files in a folder and saves finished output there, not just text in a chat window.
+- Q: Where does Cowork save the files it makes? A: In the folder you loaded, under projects/.
+- Q: What does the task loop show you while Cowork works? A: A step by step to-do list you can watch and steer, not one big black box.
+
+Send these by message or a quick form 1-2 days after the session. Retrieval a day or two later is what makes it stick.
 
 ---
 

@@ -93,6 +93,16 @@ Homework: think of one workflow you repeat for your own brand (not Verdal) and p
 
 ---
 
+## Knowledge check (send 1-2 days after the session)
+
+- Q: What are the two parts of a skill's SKILL.md? A: A name, for humans, and a description, the trigger Cowork reads to know when to run it.
+- Q: What is the difference between a skill and a saved prompt? A: A skill loads and runs automatically when its trigger description matches; a saved prompt you have to paste yourself each time.
+- Q: What does a plugin bundle together? A: Skills, connectors, and shared helpers into one installable package.
+
+Send these by message or a quick form 1-2 days after the session. Retrieval a day or two later is what makes it stick.
+
+---
+
 ## Facilitator prep checklist
 
 - [ ] Cowork installed and signed in on the demo machine

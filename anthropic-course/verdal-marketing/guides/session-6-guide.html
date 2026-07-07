@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 6 Guide - Safety, Sharing, and Next Steps</title>
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #63c69a;
+    --accent-soft: #63c69a1f;
+    --code-bg: #141416;
+    --green: #4ade80;
+    --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .pre-label.file { color: var(--blue); }
+  .pre-label.ask { color: var(--accent); }
+  .pattern {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .pattern-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 28px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .method {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 20px 16px;
+    margin: 16px 0;
+  }
+  .method-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 6px;
+    font-weight: 700;
+  }
+  .method-badge {
+    background: var(--accent); color: #000;
+    padding: 2px 10px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .method-badge.b { background: var(--blue); color: #fff; }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  td code { white-space: nowrap; }
+  .checkbox-list { list-style: none; padding-left: 0; }
+  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
+  .checkbox-list li::before {
+    content: "\2610"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-size: 18px;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+  }
+  .tag.green { color: var(--green); border-color: var(--green); }
+  .footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+  hr.divider { border: none; border-top: 1px dashed var(--border); margin: 28px 0; }
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 28px;
+    margin: 24px 0 40px;
+  }
+  .toc h3 { margin-top: 0; color: var(--text); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+  .toc ol { margin: 12px 0 0; }
+  .toc a { border-bottom: none; color: var(--text); }
+  .toc a:hover { color: var(--accent); }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
+  }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a {
+    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
+    font-size: 13.5px; line-height: 1.35; border-bottom: none;
+  }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], section[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+<aside>
+  <div class="toc-h">Session 6</div>
+  <ol>
+    <li><a href="#last-mile">The last mile</a></li>
+    <li><a href="#working-safely">Working safely</a></li>
+    <li><a href="#validate-skill">Validate a skill before you share it</a></li>
+    <li><a href="#share-team">Share with the team</a></li>
+    <li><a href="#check-output">Check the output</a></li>
+    <li><a href="#course-recap">Course recap</a></li>
+    <li><a href="#where-next">Where next</a></li>
+    <li><a href="#wrap">You finished the course</a></li>
+  </ol>
+</aside>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork for marketers - Session 6 of 6</div>
+  <h1>Safety, sharing, and next steps</h1>
+  <p class="lead">This is the final session. You have built real things across five sessions: skills, connected tools, a live artifact, a scheduled job. Today you make sure it is all safe to run, package one skill so a teammate can use it in one step, and leave with a plan for the first real task you will run on your own brand this week.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Worked brand: Verdal, a plant care brand. Dataset: <code>verdal-marketing/</code>. Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">Introduction to Claude Cowork</a>.</p>
+</header>
+
+<div class="callout">
+<strong>What you need before you start.</strong> Claude Desktop with Cowork, the <code>verdal-marketing</code> folder, and a packaged <code>weekly-content-brief.skill</code> already sitting in <code>templates/</code> from an earlier session. If you do not have that skill yet, ask your facilitator for a copy before you start this lab.
+</div>
+
+<div class="callout">
+<strong>The one idea for the whole session.</strong> Cowork is powerful because it takes action - it reads files, writes files, and can trigger connectors. That is exactly why review matters. Today locks in the habit of checking before anything ships, and the habit of handing your work to someone else without them having to rebuild it.
+</div>
+
+<div class="toc">
+  <h3>What you will do</h3>
+  <ol>
+    <li><a href="#working-safely">Set permissions and build the review habit</a></li>
+    <li><a href="#validate-skill">Run a skill once and check the output before sharing it</a></li>
+    <li><a href="#share-team">Package a skill so a colleague can install it in one step</a></li>
+    <li><a href="#check-output">Trace every claim before you publish, and know what to keep off Cowork entirely</a></li>
+    <li><a href="#course-recap">Recap everything across all six sessions</a></li>
+    <li><a href="#where-next">Plan where to go after this workshop</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<h2 id="last-mile">The last mile</h2>
+
+<p>Five sessions in, you already know how to hand Cowork a task, set standing context, build a skill, connect a tool, and schedule a job. That is the whole toolkit. What is left is the last mile: working safely, sharing what you built, and planning your first real use.</p>
+
+<h3>Three things today</h3>
+<ol>
+  <li><strong>Work safely.</strong> Permissions, reviewing output before it ships, and keeping sensitive data out of the folder.</li>
+  <li><strong>Share your tools.</strong> Validate a skill, then package it so a teammate can run it without any setup.</li>
+  <li><strong>Plan your first real task.</strong> Pick one thing you do manually every week and write the Cowork prompt for it.</li>
+</ol>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<div class="pattern" id="working-safely">
+<span class="pattern-num">STEP 01</span>
+<h2>Working safely</h2>
+<p class="lead">Cowork only ever sees the folder you point it at. Inside that boundary, three habits keep you in control: the right permission mode, a review before anything ships, and keeping sensitive data out in the first place.</p>
+
+<div class="callout">
+<strong>You are always in control.</strong> Cowork does not send your files anywhere unless you use a connector that does, and it asks permission before it touches a new folder. The folder you grant is the boundary. Nothing leaves it until you approve.
+</div>
+
+<h3>Before anything ships, do this</h3>
+<ul class="checkbox-list">
+  <li>Read what Cowork changed. The to-do list shows every step it took.</li>
+  <li>Open the folder and check the output file looks right.</li>
+  <li>Approve it, or redirect and re-run if something is off.</li>
+</ul>
+
+<h3>Permission modes</h3>
+<p>In <strong>Settings &gt; Permissions</strong> you choose how much Cowork can do without asking:</p>
+<table>
+<thead><tr><th>Mode</th><th>What it does</th><th>When to use it</th></tr></thead>
+<tbody>
+<tr><td>Ask every time</td><td>Cowork checks in before it touches a file</td><td>Default. Start here, always.</td></tr>
+<tr><td>Allow within this folder</td><td>Cowork works without asking, inside one folder only</td><td>Only after a workflow has run correctly at least three times</td></tr>
+</tbody>
+</table>
+
+<h3>Sensitive data</h3>
+<p>The rule is simple: the folder you open is the folder it sees. Do not open a folder that contains customer PII, financial data, passwords, or API keys. When a connector asks for access, grant only what the task needs. If it asks for a whole Google Drive and only needs one folder, say not now and point it at that folder instead.</p>
+
+<div class="callout">
+<strong>Verdal's folder is a safe example.</strong> It contains brand context and templates only, no customer data. That is why it is safe to use as your practice folder across all six sessions.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="validate-skill">
+<span class="pattern-num">STEP 02</span>
+<h2>Validate a skill before you share it</h2>
+<p class="lead">A skill that works on your machine can still produce off-brand output on someone else's, if their context files look different. Before you hand a skill over, run it once and check it.</p>
+
+<h3>Validate before sharing, in order</h3>
+<ul class="checkbox-list">
+  <li>Run it once on a real Verdal example.</li>
+  <li>Check the output is on brand.</li>
+  <li>Confirm it saved to the right folder.</li>
+  <li>Only then, package and share.</li>
+</ul>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">validate the weekly brief</span>
+<pre><code>Run the weekly-content-brief skill once on Verdal, show
+me the output, and if it looks good, package it so I can
+share it with the team.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>Cowork reads the skill definition and pulls brand context before it runs anything.</li>
+  <li>The output lands in <code>projects/</code>, for example <code>weekly-content-brief.md</code>, and it sounds like Verdal.</li>
+  <li>If the output is right, Cowork moves to packaging without you having to ask twice.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>Open the saved brief. If it reads generic or the wrong facts show up, do not package yet. Fix the skill or the context files first, run it again, and only package once the output checks out.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="share-team">
+<span class="pattern-num">STEP 03</span>
+<h2>Share with the team</h2>
+<p class="lead">Once a skill is validated, package it into one file. A colleague installs it in one step and gets the exact same output you get, every time.</p>
+
+<h3>How it works</h3>
+<p>Use the Skill Creator panel in the app to package your skill into a single distributable file, for example <code>weekly-content-brief.skill</code>. Hand that file to a teammate any way you like: Slack, email, a shared drive. They drag it into their own Skills panel and it installs, no configuration needed.</p>
+
+<span class="pre-label file">share flow</span>
+<pre class="file"><code>your skill
+  -> package via Skill Creator
+  -> weekly-content-brief.skill (one file)
+  -> teammate drags it into their Skills panel
+  -> same output, same brand, no setup</code></pre>
+
+<div class="callout">
+<strong>One thing to agree on first.</strong> A packaged skill still needs a folder structure to read from. If your teammate's folder does not have the same layout as yours (<code>context/</code>, <code>templates/</code>, <code>projects/</code>), the skill will still run but may not find the brand files. Agree on a standard layout before you share, the Verdal layout is a good default.
+</div>
+
+<h3>Test it</h3>
+<p>Ask a teammate to install the packaged skill and run it once on their own copy of the folder. If the output matches what you got, the share worked cleanly.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="check-output">
+<span class="pattern-num">STEP 04</span>
+<h2>Check the output</h2>
+<p class="lead">Cowork writes in a confident voice whether or not the fact is true. Before you publish anything, trace every fact, stat, or quote back to the file it should have come from. If it cannot point to one, it made it up.</p>
+
+<div class="callout">
+<strong>The rule.</strong> Never trust a confident-sounding claim for anything you did not give Cowork the source for. If a draft says "plant food sales are up 40 percent," ask which file says that. If it is not in your files, it made it up.
+</div>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">trace every claim</span>
+<pre><code>Read projects/weekly-content-brief.md. For every
+claim or number in it, tell me which file in context/
+or data/ it came from. Flag anything you cannot trace
+to a file, I will not publish those.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>Cowork lists each claim next to the file it pulled it from.</li>
+  <li>Anything it cannot trace, it flags instead of defending.</li>
+  <li>You still make the call. Cowork's job is to show its work, not to decide what is safe to publish.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>Pick a draft with at least one stat or quote in it and run the prompt above. If Cowork traces every claim to a real file, it passes. If it cannot name a source for something and still asks you to trust it, that claim does not go out.</p>
+
+<h3>When not to hand it to Cowork at all</h3>
+<ul class="checkbox-list">
+  <li>A real, verified human quote or attribution.</li>
+  <li>Anything needing legal or compliance sign-off.</li>
+  <li>Anything where a wrong fact has real cost - pricing, medical-style claims, competitor facts you will publish.</li>
+  <li>Anything involving real customer personal data.</li>
+</ul>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="course-recap">
+<span class="pattern-num">STEP 05</span>
+<h2>Course recap</h2>
+<p class="lead">Six sessions, six real capabilities. Every one of these is something you did on Verdal in this workshop. Now you do the same thing on your own brand.</p>
+
+<ul class="checkbox-list">
+  <li>Hand Cowork a task and watch it work <span class="tag green">session 1</span></li>
+  <li>Set standing context and projects, so Cowork remembers your brand <span class="tag green">session 2</span></li>
+  <li>Build and run a skill <span class="tag green">session 3</span></li>
+  <li>Connect your tools <span class="tag green">session 4</span></li>
+  <li>Build a live artifact and schedule a job <span class="tag green">session 5</span></li>
+  <li>Share safely with the team <span class="tag green">session 6</span></li>
+</ul>
+
+<div class="callout">
+<strong>Say this out loud.</strong> Which one of these changed how you work the most? That is the one to go build first, on your own brand, this week.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="where-next">
+<span class="pattern-num">STEP 06</span>
+<h2>Where next</h2>
+<p class="lead">This workshop covered the core. If you want to go deeper or need the credential, there is a free next step.</p>
+
+<p><strong>Introduction to Claude Cowork</strong> is Anthropic's own free, self-paced course. It covers everything in this workshop and more, with video lessons, exercises, and a shareable certificate you can put on your profile when you finish. It takes about three hours.</p>
+
+<div class="callout">
+<strong>Enroll here.</strong> <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">anthropic.skilljar.com/introduction-to-claude-cowork</a>
+</div>
+
+<h3>Your first real task</h3>
+<p>Before you go, pick one task you do manually every week, something that takes more than 30 minutes and involves writing or researching. Write it as a Cowork prompt using this shape:</p>
+
+<span class="pre-label ask">your prompt template</span>
+<pre><code>Read [which folder holds your context], then [what the
+task is]. Save the result to [where the output should
+land].</code></pre>
+
+<p class="muted">On a shared login today? Write your prompt now and run it at your own desk once you have your own Cowork access.</p>
+</div>
+
+<!-- ============================================ -->
+<h2 id="wrap">You finished the course</h2>
+
+<p>You built something real across six sessions. A Verdal skill that runs, a connected tool, a scheduled job, a packaged workflow that a teammate can install in one step. Now take that same pattern and rebuild it on your own brand, your own folders, your own context. That is where it stops being an exercise and becomes your system.</p>
+
+<div class="footer">
+  <p>Course: Claude Cowork for marketers. Worked brand: Verdal.<br>
+  Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">anthropic.skilljar.com</a><br>
+  Setup help for every tool: <code>../connectors-setup.md</code> in the workshop folder.</p>
+</div>
+
+</div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
+</body>
+</html>

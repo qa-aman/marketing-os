@@ -38,3 +38,6 @@ Thumbs.db
 
 # Playwright MCP temp output
 .playwright-mcp/
+.claude/
+# Packaged play kit (regenerate from the folder with: zip -r verdal-marketing.zip verdal-marketing)
+anthropic-course/*.zip

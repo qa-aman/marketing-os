@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 3 Guide - Skills and Plugins</title>
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #63c69a;
+    --accent-soft: #63c69a1f;
+    --code-bg: #141416;
+    --green: #4ade80;
+    --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .pre-label.file { color: var(--blue); }
+  .pre-label.ask { color: var(--accent); }
+  .pattern {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .pattern-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 28px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .method {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 20px 16px;
+    margin: 16px 0;
+  }
+  .method-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 6px;
+    font-weight: 700;
+  }
+  .method-badge {
+    background: var(--accent); color: #000;
+    padding: 2px 10px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .method-badge.b { background: var(--blue); color: #fff; }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  td code { white-space: nowrap; }
+  .checkbox-list { list-style: none; padding-left: 0; }
+  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
+  .checkbox-list li::before {
+    content: "\2610"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-size: 18px;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+  }
+  .tag.green { color: var(--green); border-color: var(--green); }
+  .footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+  hr.divider { border: none; border-top: 1px dashed var(--border); margin: 28px 0; }
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 28px;
+    margin: 24px 0 40px;
+  }
+  .toc h3 { margin-top: 0; color: var(--text); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+  .toc ol { margin: 12px 0 0; }
+  .toc a { border-bottom: none; color: var(--text); }
+  .toc a:hover { color: var(--accent); }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
+  }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a {
+    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
+    font-size: 13.5px; line-height: 1.35; border-bottom: none;
+  }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], section[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+<aside>
+  <div class="toc-h">Session 3</div>
+  <ol>
+    <li><a href="#what-is-a-skill">Package what you repeat</a></li>
+    <li><a href="#skill-anatomy">What a skill is</a></li>
+    <li><a href="#three-ways">Three ways to build a skill</a></li>
+    <li><a href="#build-skill">Build a skill</a></li>
+    <li><a href="#plugins">Plugins</a></li>
+    <li><a href="#wrap">Recap and homework</a></li>
+  </ol>
+</aside>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork for marketers - Session 3 of 6</div>
+  <h1>Skills and plugins: package a workflow</h1>
+  <p class="lead">You have your folder and your context. Today you stop retyping the same instructions every week. A skill is a saved workflow with a name and a trigger description, so Cowork runs it on command with the same quality every time. By the end of this session you will build and save at least one real skill.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Worked brand: Verdal, a plant care brand. Dataset: <code>verdal-marketing/</code>. Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">Introduction to Claude Cowork</a>.</p>
+</header>
+
+<div class="callout">
+<strong>What you need before you start.</strong> Cowork installed and signed in, with your <code>verdal-marketing</code> folder (or your own brand folder) loaded. Everything today happens in the Cowork UI, under <strong>Customize &gt; Claude Skills</strong>. Nobody touches a terminal.
+</div>
+
+<div class="callout">
+<strong>The one idea for the whole session.</strong> A saved prompt is static text you paste again. A skill is loaded by Cowork automatically when its description matches what you asked. One is manual, the other is automatic.
+</div>
+
+<div class="toc">
+  <h3>What you will do</h3>
+  <ol>
+    <li><a href="#skill-anatomy">Learn what a skill actually is, and why the description matters</a></li>
+    <li><a href="#three-ways">See the three ways to build one</a></li>
+    <li><a href="#build-skill">Package a real workflow into a saved skill</a></li>
+    <li><a href="#plugins">Understand plugins as the team-sharing layer</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<h2 id="what-is-a-skill">Package what you repeat</h2>
+
+<p>Think about the instruction you have typed more than once this week. Same steps, same context, same structure, retyped from memory each time. One missed detail and the output drifts.</p>
+
+<p>A skill ends that. It is a saved workflow that Cowork runs on command, with the same quality every time you run it. A plugin goes one step further: it bundles several skills together so you can hand your whole toolkit to a colleague in one install.</p>
+
+<h3>Why this matters</h3>
+<p>You do the workflow once, carefully. Cowork repeats it on command after that. Same prompt, same quality, no retyping.</p>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<div class="pattern" id="skill-anatomy">
+<span class="pattern-num">STEP 01</span>
+<h2>What a skill is</h2>
+<p class="lead">A skill is a file called <code>SKILL.md</code> with two parts: a name, and a description. The description is the part that matters most.</p>
+
+<h3>The two parts</h3>
+<ul>
+  <li><strong>Name</strong> - for humans. It is how you and your team refer to the skill.</li>
+  <li><strong>Description</strong> - for Cowork. This is the trigger. Cowork reads it to decide when to load and run the skill, without you asking for it by name.</li>
+</ul>
+
+<p>Here is what a real one looks like:</p>
+<span class="pre-label file">weekly-content-brief/SKILL.md</span>
+<pre class="file"><code>name: weekly-content-brief
+description: Use when asked for the weekly Verdal content brief.
+
+Workflow:
+1. Read context/ for Verdal brand rules, voice, and ICP.
+2. Pick 3 topics for Priya (the content lead) based on
+   what is happening in plant care this week.
+3. Write the brief in Verdal's voice.
+4. Save it to projects/.</code></pre>
+
+<div class="callout">
+<strong>Why this matters.</strong> The description is not a label, it is a trigger. Get it right and the skill fires automatically the next time you ask for something that matches it. Get it vague and Cowork will not know to reach for it.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="three-ways">
+<span class="pattern-num">STEP 02</span>
+<h2>Three ways to create a skill</h2>
+<p class="lead">You do not need to start from a blank page every time.</p>
+
+<ol>
+  <li><strong>Extend an official skill</strong> - start from an Anthropic template and adapt it.</li>
+  <li><strong>Package a workflow you already do</strong> - the fastest path, and the most common one. This is what you will do in the lab.</li>
+  <li><strong>Build a fresh one</strong> - a blank canvas, your own steps, for something nobody has templated yet.</li>
+</ol>
+
+<h3>Do this first</h3>
+<p>Open Cowork and go to <strong>Customize &gt; Claude Skills</strong>. Add the <strong>skill-creator</strong> skill if it is not already there. This is the one skill you need before you can build any others: describe what you want packaged, and it writes the <code>SKILL.md</code> for you.</p>
+
+<div class="callout">
+<strong>Most people in the room will use option 2.</strong> You already have a workflow you repeat. Today you just package it.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="build-skill">
+<span class="pattern-num">STEP 03</span>
+<h2>Build a skill</h2>
+<p class="lead">Turn the Verdal weekly content brief into a reusable skill. Two ways to see it: ask Cowork to build it (Method A), or read the result it saves (Method B).</p>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">Method A - package the workflow</span>
+<pre><code>Take the weekly content brief workflow we just ran and
+package it as a reusable skill called weekly-content-brief.
+Make it brand-agnostic - brand context loads from context/
+at runtime. Then save the skill.</code></pre>
+</div>
+
+<div class="method">
+<div class="method-head"><span class="method-badge b">Result</span></div>
+<span class="pre-label file">Method B - the saved SKILL.md</span>
+<pre class="file"><code>name: weekly-content-brief
+description: Use when asked for the weekly content brief.
+
+Workflow:
+1. Read context/ for brand rules, voice, and ICP (works for
+   any brand folder, not just Verdal).
+2. Pick 3 topics based on what is relevant this week.
+3. Write the brief in the brand's voice.
+4. Save it to projects/.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>Cowork reads your context files before it writes the skill, not just before it runs the workflow.</li>
+  <li>The <code>SKILL.md</code> has a clear name and a description that reads like a trigger, not a title.</li>
+  <li>Nothing brand-specific is hardcoded inside the skill. It says "read context/", it does not paste Verdal's voice rules directly into the file.</li>
+  <li>A <strong>Save Skill</strong> button appears. Click it, then open the saved skill and check the name and description.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>Next time, do not retype the workflow. Just ask for the weekly content brief in a few words and see if Cowork reaches for the skill on its own. If it does not fire, the description was too vague, go back and make it more specific about when to use it.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="plugins">
+<span class="pattern-num">STEP 04</span>
+<h2>Plugins</h2>
+<p class="lead">A plugin bundles skills, so you can share your whole toolkit in one install.</p>
+
+<p>A plugin is Skills (every workflow you have packaged) plus Connectors (linked tools and data sources) plus Helpers (shared context files and templates). A new teammate installs one package and gets everything, no setup, no retraining.</p>
+
+<div class="callout">
+<strong>Why this matters.</strong> Skills are for you. Plugins are for the team. Once you have packaged a few skills you use often, bundling them into a plugin is how you hand your whole Verdal toolkit to someone new in one step.
+</div>
+</div>
+
+<!-- ============================================ -->
+<h2 id="wrap">Recap and homework</h2>
+
+<p>If you followed along, you have:</p>
+<ul class="checkbox-list">
+  <li>Learned what a skill is: a name plus a trigger description <span class="tag green">skill anatomy</span></li>
+  <li>Added the skill-creator skill under Customize &gt; Claude Skills <span class="tag green">setup</span></li>
+  <li>Packaged a real workflow into a saved skill <span class="tag green">the big win</span></li>
+  <li>Kept the skill brand-agnostic, loading context at runtime <span class="tag green">brand-agnostic</span></li>
+  <li>Learned what a plugin is and why it matters for a team <span class="tag green">plugins</span></li>
+</ul>
+
+<div class="callout">
+<strong>Homework before Session 4.</strong> Think of one workflow you repeat for your own brand, not Verdal. Open Cowork, load your folder, and ask skill-creator to package it as a skill. Save it. Next session, run it with one command and see what comes back.
+</div>
+
+<h3>What is next</h3>
+<p>Session 4 is <strong>Connect your tools</strong>: Cowork linked to your CMS, your calendar, your analytics, so real data goes in and finished work comes out.</p>
+
+<div class="footer">
+  <p>Course: Claude Cowork for marketers. Worked brand: Verdal.<br>
+  Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">anthropic.skilljar.com</a><br>
+  Setup help for every tool: <code>../connectors-setup.md</code> in the workshop folder.</p>
+</div>
+
+</div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
+</body>
+</html>

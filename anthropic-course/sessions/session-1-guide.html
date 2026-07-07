@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 1 Guide - Meet Claude Cowork</title>
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #63c69a;
+    --accent-soft: #63c69a1f;
+    --code-bg: #141416;
+    --green: #4ade80;
+    --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .pre-label.file { color: var(--blue); }
+  .pre-label.ask { color: var(--accent); }
+  .pattern {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .pattern-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 28px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .method {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 20px 16px;
+    margin: 16px 0;
+  }
+  .method-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 6px;
+    font-weight: 700;
+  }
+  .method-badge {
+    background: var(--accent); color: #000;
+    padding: 2px 10px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .method-badge.b { background: var(--blue); color: #fff; }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  td code { white-space: nowrap; }
+  .checkbox-list { list-style: none; padding-left: 0; }
+  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
+  .checkbox-list li::before {
+    content: "\2610"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-size: 18px;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+  }
+  .tag.green { color: var(--green); border-color: var(--green); }
+  .footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+  hr.divider { border: none; border-top: 1px dashed var(--border); margin: 28px 0; }
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 28px;
+    margin: 24px 0 40px;
+  }
+  .toc h3 { margin-top: 0; color: var(--text); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+  .toc ol { margin: 12px 0 0; }
+  .toc a { border-bottom: none; color: var(--text); }
+  .toc a:hover { color: var(--accent); }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
+  }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a {
+    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
+    font-size: 13.5px; line-height: 1.35; border-bottom: none;
+  }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], section[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+<aside>
+  <div class="toc-h">Session 1</div>
+  <ol>
+    <li><a href="#how-it-works">How Cowork works</a></li>
+    <li><a href="#setup">Set up and load your folder</a></li>
+    <li><a href="#task-loop">The task loop and permissions</a></li>
+    <li><a href="#first-task">Your first task</a></li>
+    <li><a href="#strategy-deck">The headline build: a strategy deck</a></li>
+    <li><a href="#model-picker">The model picker</a></li>
+    <li><a href="#wrap">Recap and homework</a></li>
+  </ol>
+</aside>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork for marketers - Session 1 of 6</div>
+  <h1>Meet Claude Cowork: hand it your first real task</h1>
+  <p class="lead">Cowork is a local desktop agent. You give it a folder, it reads your files, does multi-step work, and saves finished files back. By the end of this session you will load a real brand folder, hand Cowork a task, and watch it save a finished file. This handout is your step by step: a little theory, then the exact prompts to paste.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Worked brand: Verdal, a plant care brand. Dataset: <code>verdal-marketing/</code>. Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">Introduction to Claude Cowork</a>.</p>
+</header>
+
+<div class="callout">
+<strong>What you need before you start.</strong> Claude Desktop installed and signed in, with Cowork in the sidebar. The <code>verdal-marketing</code> folder copied onto your computer. If you do not have Cowork yet, install it first, then come back. A shared login works for watching, but for the hands-on parts you want your own login.
+</div>
+
+<div class="callout">
+<strong>The one idea for the whole session.</strong> Claude Chat hands you text that you copy out yourself. Claude Cowork hands you finished files, saved into your own folder. That difference is the point.
+</div>
+
+<div class="toc">
+  <h3>What you will do</h3>
+  <ol>
+    <li><a href="#setup">Load the Verdal folder and grant access</a></li>
+    <li><a href="#first-task">Hand Cowork its first task and watch the loop</a></li>
+    <li><a href="#strategy-deck">Have it build a 12-slide strategy deck</a></li>
+    <li><a href="#model-picker">Try the model picker</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<h2 id="how-it-works">How Cowork works</h2>
+
+<p>Two things make Cowork different from the chat box, and both matter for the rest of the course.</p>
+
+<h3>Chat vs Cowork</h3>
+<table>
+<thead><tr><th></th><th>Claude Chat</th><th>Claude Cowork</th></tr></thead>
+<tbody>
+<tr><td>Where it runs</td><td>In the cloud</td><td>On your computer, in a folder you choose</td></tr>
+<tr><td>What you get</td><td>Text to copy and paste</td><td>Finished files, saved into your folder</td></tr>
+<tr><td>What it can read</td><td>Only what you paste in</td><td>Every file in the folder you give it</td></tr>
+<tr><td>Best for</td><td>Quick thinking and drafting</td><td>Getting the actual work done</td></tr>
+</tbody>
+</table>
+
+<h3>The task loop</h3>
+<p>When you hand Cowork a task, it does not answer in one shot. It works in a loop you can watch:</p>
+<ol>
+  <li><strong>Makes a plan</strong> and shows it as a to-do list.</li>
+  <li><strong>Works step by step</strong>, ticking items off as it goes.</li>
+  <li><strong>Saves the finished file</strong> into your folder.</li>
+</ol>
+<p>You can watch the to-do list and stop or redirect it at any point. That is what makes it safe to give it longer jobs.</p>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<div class="pattern" id="setup">
+<span class="pattern-num">STEP 01</span>
+<h2>Set up and load your folder</h2>
+<p class="lead">Point Cowork at the Verdal folder. This is the workspace for every demo and lab today.</p>
+
+<h3>Do this</h3>
+<ol>
+  <li>Open Claude Desktop and click <strong>Cowork</strong> in the sidebar.</li>
+  <li>Load the <code>verdal-marketing</code> folder.</li>
+  <li>When it asks for permission, click <strong>Allow</strong>. This lets Cowork read and edit files in that one folder, and nowhere else.</li>
+</ol>
+
+<p>Here is what is inside the folder, so you know what Cowork can see:</p>
+<span class="pre-label file">verdal-marketing/</span>
+<pre class="file"><code>context/                 who Verdal is - Cowork reads this first
+  brand-context.md
+  brand-voice.md
+  ideal-customer-profile.md
+templates/
+  strategy-deck-outline.md
+  carousel-design-system.md
+data/                    real numbers for later sessions
+brand-photos/            images for the strategy deck
+projects/                your finished work is saved here</code></pre>
+
+<div class="callout">
+<strong>Why this matters.</strong> Everything Cowork makes today will sound like Verdal because the brand lives in <code>context/</code>. You never paste brand rules into the chat. Cowork reads them from the folder every time.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="task-loop">
+<span class="pattern-num">STEP 02</span>
+<h2>The task loop and permissions</h2>
+<p class="lead">Before you hand over a real task, know what you are watching and what Cowork can touch.</p>
+
+<h3>What you will see</h3>
+<p>As Cowork works, a to-do list appears. For the strategy deck coming up, it looks like this:</p>
+<span class="pre-label">cowork to-do list</span>
+<pre><code>[x] Read brand context
+[x] Research plant-care trends
+[>] Build the 12-slide outline
+[ ] Generate slides
+[ ] Save to projects/</code></pre>
+
+<div class="callout">
+<strong>You are in control.</strong> Cowork only touches the folder you pointed it at, and it asked permission the first time. If a task ever tries to do something you did not expect, you can stop it. Start cautious, and review what it changed before you rely on it.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="first-task">
+<span class="pattern-num">STEP 03</span>
+<h2>Your first task</h2>
+<p class="lead">A small, safe task so you can watch the loop end to end and find the saved file.</p>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">your first task</span>
+<pre><code>Read the brand context in context/ and write three
+on-brand Instagram captions about repotting a plant.
+Save them to projects/repotting-captions.md</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>Cowork reads the context files before it writes anything.</li>
+  <li>The captions sound warm and plain, and lead with the plant, not the product (that is Verdal's voice).</li>
+  <li>A new file appears at <code>projects/repotting-captions.md</code>. Open it.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>Open the file in <code>projects/</code>. If the captions read like generic AI, the brand voice file was not read. Try again and add: <em>"follow context/brand-voice.md exactly."</em></p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="strategy-deck">
+<span class="pattern-num">STEP 04</span>
+<h2>The headline build: a strategy deck</h2>
+<p class="lead">The big one. Cowork reads the brand, follows a template, uses real photos, and saves a finished deck. This is the demo that shows what Cowork can really do.</p>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">the strategy deck</span>
+<pre><code>Load my verdal-marketing folder. Read the brand context
+in context/, then build a 12-slide on-brand marketing
+strategy deck using templates/strategy-deck-outline.md
+and the images in brand-photos/. Save it to projects/.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>It follows the 12-slide template, one idea per slide.</li>
+  <li>The strategy is tailored to Verdal, with real positioning, not generic advice.</li>
+  <li>It uses the brand photos, and green is an accent, not a flood.</li>
+  <li>A <code>.pptx</code> lands in <code>projects/</code>.</li>
+</ul>
+
+<div class="callout">
+<strong>The first draft is a draft.</strong> A photo may need repositioning. That is normal. The win is a strong, on-brand starting point in minutes, not a perfect final deck. Say what to fix and it will redo that slide.
+</div>
+
+<p class="muted">Say this while it runs, out loud: "I did not paste any brand details. It knew them because they live in the folder." That is the lesson of the session.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="model-picker">
+<span class="pattern-num">STEP 05</span>
+<h2>The model picker</h2>
+<p class="lead">One small control worth knowing on day one.</p>
+
+<p>Next to the prompt box is a model picker. You can switch which model runs a task: a heavier model for hard thinking like strategy, a faster one for simple jobs like a quick caption. Most of the time the default is fine.</p>
+
+<h3>Try it</h3>
+<p>Rerun your captions task with a different model and notice the difference in speed and depth. There is no wrong choice here, this is just so you know the control exists.</p>
+</div>
+
+<!-- ============================================ -->
+<h2 id="wrap">Recap and homework</h2>
+
+<p>If you followed along, you have:</p>
+<ul class="checkbox-list">
+  <li>Loaded a real brand folder and granted access <span class="tag green">setup</span></li>
+  <li>Handed Cowork a task and watched the loop <span class="tag green">task loop</span></li>
+  <li>Found a finished file in <code>projects/</code> <span class="tag green">files</span></li>
+  <li>Built a 12-slide strategy deck from the brand <span class="tag green">the big win</span></li>
+  <li>Tried the model picker <span class="tag green">model picker</span></li>
+</ul>
+
+<div class="callout">
+<strong>Homework before Session 2.</strong> Hand Cowork one more task on Verdal, any task you like, and see what it makes. For example: <em>"Read context/ and draft a short weekly plant-care email for Verdal. Save it to projects/weekly-email.md"</em>
+</div>
+
+<h3>What is next</h3>
+<p>Session 2 is <strong>Make Cowork yours</strong>: global instructions and projects, so Cowork remembers your brand and your rules without you repeating them.</p>
+
+<div class="footer">
+  <p>Course: Claude Cowork for marketers. Worked brand: Verdal.<br>
+  Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">anthropic.skilljar.com</a><br>
+  Setup help for every tool: <code>../connectors-setup.md</code> in the workshop folder.</p>
+</div>
+
+</div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
+</body>
+</html>

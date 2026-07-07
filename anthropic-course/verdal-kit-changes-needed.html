@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdal kit - what to add and why</title>
+<style>
+  :root {
+    --bg: #0D0D0D; --panel: #1a1a1d; --panel-2: #232327; --border: #2e2e33;
+    --text: #ececec; --muted: #9a9aa0; --accent: #63c69a; --accent-soft: #63c69a1f;
+    --code-bg: #141416; --green: #4ade80; --blue: #3b82f6;
+    --high: #ef6f6f; --med: #e6b450; --low: #7f8a85;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.65; font-size: 16px; }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow { color: var(--accent); font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 13.5px; background: var(--code-bg);
+    border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; color: #f4d6a8; }
+  pre { background: var(--code-bg); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 6px; padding: 16px 20px; overflow-x: auto; font-size: 13px; line-height: 1.55; white-space: pre-wrap; }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label { display: inline-block; font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted); background: var(--panel-2); border: 1px solid var(--border); border-bottom: none;
+    border-radius: 4px 4px 0 0; padding: 4px 10px; margin-bottom: -1px; }
+  .pre-label.file { color: var(--blue); }
+  .pattern { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; margin: 32px 0; }
+  .pattern-num { display: inline-block; background: var(--accent); color: #000; font-weight: 700; padding: 4px 12px;
+    border-radius: 4px; font-size: 13px; letter-spacing: 1px; margin-bottom: 12px; }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 26px; }
+  .callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; margin: 18px 0; border-radius: 4px; }
+  .callout strong { color: var(--accent); }
+  ul, ol { padding-left: 22px; } ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  .field { margin: 14px 0; }
+  .field .k { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 2px; }
+  .pill { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; padding: 2px 10px; border-radius: 4px; color: #000; }
+  .pill.high { background: var(--high); } .pill.med { background: var(--med); } .pill.low { background: var(--low); color: #fff; }
+  .status { font-weight: 700; } .status.ok { color: var(--green); } .status.miss { color: var(--high); } .status.conn { color: var(--med); }
+  .footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside { position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel); }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a { display: block; padding: 9px 10px; border-radius: 6px; color: var(--text); font-size: 13.5px; line-height: 1.35; border-bottom: none; }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+<aside>
+  <div class="toc-h">Kit changes</div>
+  <ol>
+    <li><a href="#summary">The verdict</a></li>
+    <li><a href="#scorecard">Readiness scorecard</a></li>
+    <li><a href="#c1">Carousel project folder</a></li>
+    <li><a href="#c2">Weekly-brief skill file</a></li>
+    <li><a href="#c3">Sample trends email</a></li>
+    <li><a href="#c4">Weekly-brief example output</a></li>
+    <li><a href="#c5">Search-audit example</a></li>
+    <li><a href="#c6">Put the spare data to work</a></li>
+    <li><a href="#apply">How to apply</a></li>
+  </ol>
+</aside>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Verdal kit - readiness audit</div>
+  <h1>What to add to the verdal-marketing folder, and why</h1>
+  <p class="lead">An end to end check: every "Paste into Cowork" prompt in the six guides, run against the actual files in the kit. Where a marketer would paste a prompt and Cowork could not respond properly, this report says exactly what to add, why it is needed, and what value it brings.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Scope: <code>anthropic-course/verdal-marketing/</code> and its six <code>guides/</code>. Six changes below, ordered by priority.</p>
+</header>
+
+<div class="callout" style="border-left-color: var(--green);">
+<strong style="color: var(--green);">Resolved.</strong> All six changes below are now applied to the kit and re-audited against the real files. Every prompt passes. This report is kept as the record of what was changed and why. See the After-fix column in the scorecard.
+</div>
+
+<div class="callout">
+<strong>The short version.</strong> Of 10 concrete prompts across the guides, <strong>6 worked as they stood</strong>. <strong>4 needed a fix</strong>: three broke on missing data (Sessions 2, 3, 6), and one needed a connector with no offline fallback (Session 4). None required rewriting the guides. Each was a small file or folder added to the kit, now done.
+</div>
+
+<!-- SUMMARY -->
+<h2 id="summary">The verdict</h2>
+<p>A non-technical marketer loads the kit, opens a guide, and pastes prompts. Here is what happens today:</p>
+<ul>
+  <li><span class="status ok">Works (6):</span> Session 1 captions, Session 1 strategy deck, Session 1 homework email, Session 5 live-artifact dashboard, Session 5 parallel research, Session 5 scheduled digest (from local fallback).</li>
+  <li><span class="status miss">Breaks on missing data (3):</span> Session 2 carousel project, Session 3 package-the-workflow, Session 6 validate-the-skill.</li>
+  <li><span class="status conn">Needs a connector, no fallback (1):</span> Session 4 Gmail task. Plus one inherently-live Chrome task that would benefit from a worked example.</li>
+</ul>
+<p>The three "breaks" are the important ones: they are the flagship hands-on moments of their sessions, and they fail on the first step.</p>
+
+<!-- SCORECARD -->
+<h2 id="scorecard">Readiness scorecard</h2>
+<p class="muted">The <strong>Before</strong> column is the original audit. The <strong>After fix</strong> column is the re-audit run once all six changes were added to the kit, verified against the actual files.</p>
+<table>
+<thead><tr><th>Session</th><th>Prompt</th><th>References</th><th>Before</th><th>After fix</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Three repotting captions</td><td><code>context/</code>, <code>projects/</code></td><td><span class="status ok">Works</span></td><td><span class="status ok">Works</span></td></tr>
+<tr><td>1</td><td>12-slide strategy deck</td><td><code>templates/strategy-deck-outline.md</code>, <code>brand-photos/</code></td><td><span class="status ok">Works</span></td><td><span class="status ok">Works</span></td></tr>
+<tr><td>1</td><td>Weekly email (homework)</td><td><code>context/</code></td><td><span class="status ok">Works</span></td><td><span class="status ok">Works</span></td></tr>
+<tr><td>2</td><td>Build a carousel project</td><td><code>carousel-design-system/</code> folder</td><td><span class="status miss">Missing</span></td><td><span class="status ok">Works</span></td></tr>
+<tr><td>3</td><td>Package the weekly-brief skill</td><td>"the workflow we just ran"</td><td><span class="status miss">Missing</span></td><td><span class="status ok">Works</span></td></tr>
+<tr><td>4</td><td>Add "this month" from Gmail</td><td>Gmail, <code>projects/verdal-newsletter.md</code></td><td><span class="status conn">Connector</span></td><td><span class="status ok">Works, fallback</span></td></tr>
+<tr><td>4</td><td>Search-audit in Chrome</td><td>Claude in Chrome</td><td><span class="status conn">Connector</span></td><td><span class="status ok">Works, fallback</span></td></tr>
+<tr><td>5</td><td>Live-artifact dashboard</td><td><code>data/keyword-opportunities.csv</code>, <code>data/competitor-posts.csv</code></td><td><span class="status ok">Works</span></td><td><span class="status ok">Works</span></td></tr>
+<tr><td>5</td><td>Scheduled competitor digest</td><td><code>reference/competitors.md</code></td><td><span class="status ok">Works</span></td><td><span class="status ok">Works</span></td></tr>
+<tr><td>5</td><td>Parallel competitor research</td><td><code>reference/competitors.md</code></td><td><span class="status ok">Works</span></td><td><span class="status ok">Works</span></td></tr>
+<tr><td>6</td><td>Validate + share the skill</td><td><code>templates/weekly-content-brief/SKILL.md</code></td><td><span class="status miss">Missing</span></td><td><span class="status ok">Works</span></td></tr>
+</tbody>
+</table>
+<div class="callout" style="border-left-color: var(--green);">
+<strong style="color: var(--green);">Re-audit result: all gaps closed.</strong> After the six changes, every prompt works from local data. The two connector tasks now have offline fallbacks, so Gmail and Chrome are optional upgrades, not requirements. 11 of 11 prompts pass.
+</div>
+
+<!-- CHANGE 1 -->
+<div class="pattern" id="c1">
+<span class="pattern-num">CHANGE 01</span> <span class="pill high">High</span>
+<h2>Add a real carousel-design-system project folder</h2>
+<div class="field"><div class="k">What to add</div>
+<span class="pre-label file">verdal-marketing/carousel-design-system/</span>
+<pre class="file"><code>carousel-design-system/
+  context/                  copy of the three brand context files
+  reference/
+    carousel-examples.md    copy of reference/carousel-examples.md
+  output/                   empty, the project saves carousels here
+  README.md                 what this project is for</code></pre>
+</div>
+<div class="field"><div class="k">Unblocks</div><p>Session 2, the carousel project build. The guide tells the marketer to "create a project from your carousel-design-system folder."</p></div>
+<div class="field"><div class="k">Why it is needed</div><p>Today the kit has only a <em>file</em>, <code>templates/carousel-design-system.md</code>, not a <em>folder</em>. When the marketer goes to pick the folder, there is nothing to select. Session 2's flagship "big win" exercise fails on the first click.</p></div>
+<div class="field"><div class="k">Value</div><p>Session 2 becomes runnable exactly as written, with no edit to the guide. The marketer sees a real project with its own context and reference, which is the whole point of the projects lesson.</p></div>
+</div>
+
+<!-- CHANGE 2 -->
+<div class="pattern" id="c2">
+<span class="pattern-num">CHANGE 02</span> <span class="pill high">High</span>
+<h2>Ship the weekly-content-brief skill file</h2>
+<div class="field"><div class="k">What to add</div>
+<span class="pre-label file">verdal-marketing/templates/weekly-content-brief/SKILL.md</span>
+<pre class="file"><code>---
+name: weekly-content-brief
+description: Use when asked for the weekly Verdal content brief.
+---
+Read context/. Pick three topics for Plant-proud Priya this
+week. Write a short brief for each (angle, hook, format).
+Save to projects/weekly-content-brief.md. Follow brand-voice.md.</code></pre>
+</div>
+<div class="field"><div class="k">Unblocks</div><p>Session 6, validate and share the skill. Its own prerequisite callout says this file should already be in the kit.</p></div>
+<div class="field"><div class="k">Why it is needed</div><p>Session 6 opens by running <code>weekly-content-brief</code>, but no skill file exists anywhere in the kit. If a marketer did not complete Session 3, or saved the skill to Cowork's own panel instead of this folder, Session 6 has nothing to run.</p></div>
+<div class="field"><div class="k">Value</div><p>Session 6 works standalone, independent of whether Session 3 succeeded. It also gives Session 3 a correct reference to check their own version against.</p></div>
+</div>
+
+<!-- CHANGE 3 -->
+<div class="pattern" id="c3">
+<span class="pattern-num">CHANGE 03</span> <span class="pill high">High</span>
+<h2>Seed a sample "plant-care trend" email</h2>
+<div class="field"><div class="k">What to add</div>
+<span class="pre-label file">verdal-marketing/reference/plant-care-trend-email.md</span>
+<pre class="file"><code>A realistic email a teammate might send, for example:
+"Adobe's plant-care category report - winter watering
+searches up 40%, 'why are my leaves yellow' is the top
+query, people want less-is-more advice." Two or three
+paragraphs, so Cowork has something real to pull from.</code></pre>
+</div>
+<div class="field"><div class="k">Unblocks</div><p>Session 4, the Gmail live-data task ("find the latest plant-care trends email and add a this-month section to the newsletter").</p></div>
+<div class="field"><div class="k">Why it is needed</div><p>Verdal is fictional, so no attendee's real inbox has this email. With no seeded source, the exercise either stalls or invents a "this month" section from nothing, which defeats the "read a live source" lesson.</p></div>
+<div class="field"><div class="k">Value</div><p>Every attendee can complete the exercise offline by pointing Cowork at the file. Facilitators who want the full live version get a ready script to plant in a demo inbox. The guide gets a one-line note: "no Gmail? point Cowork at reference/plant-care-trend-email.md instead."</p></div>
+</div>
+
+<!-- CHANGE 4 -->
+<div class="pattern" id="c4">
+<span class="pattern-num">CHANGE 04</span> <span class="pill med">Medium</span>
+<h2>Add a prior weekly-brief example</h2>
+<div class="field"><div class="k">What to add</div>
+<span class="pre-label file">verdal-marketing/projects/weekly-content-brief-example.md</span>
+<pre class="file"><code>A finished example of the weekly content brief: three
+topics for Priya with angle, hook, and format each,
+in Verdal's voice. This is the "workflow we just ran"
+that Session 3 asks the marketer to package.</code></pre>
+</div>
+<div class="field"><div class="k">Unblocks</div><p>Session 3, package-the-workflow. The prompt says "the weekly content brief workflow we just ran."</p></div>
+<div class="field"><div class="k">Why it is needed</div><p>Nothing earlier in the kit shows that workflow, so Cowork has to improvise what it is packaging. Results vary run to run and the lesson lands weakly.</p></div>
+<div class="field"><div class="k">Value</div><p>The skill-creation demo becomes consistent and repeatable. The skill-creator has a concrete example to generalize from, instead of inventing one on the spot.</p></div>
+</div>
+
+<!-- CHANGE 5 -->
+<div class="pattern" id="c5">
+<span class="pattern-num">CHANGE 05</span> <span class="pill low">Low</span>
+<h2>Add a worked search-audit example</h2>
+<div class="field"><div class="k">What to add</div>
+<span class="pre-label file">verdal-marketing/reference/search-audit-example.md</span>
+<pre class="file"><code>A mock of what a finished AI-search audit looks like:
+the three prompts checked, whether Verdal appeared, the
+top brands cited, and one gap. So people without Claude
+in Chrome can still see the expected shape.</code></pre>
+</div>
+<div class="field"><div class="k">Unblocks</div><p>Session 4, the Claude in Chrome task (a live-web task with no full offline substitute).</p></div>
+<div class="field"><div class="k">Why it is needed</div><p>Participants without Chrome enabled have nothing to compare their attempt against, and the facilitator cannot demo the output shape if the connector is not working in the room.</p></div>
+<div class="field"><div class="k">Value</div><p>The session still teaches the idea and the output format even when the live connector is unavailable.</p></div>
+</div>
+
+<!-- CHANGE 6 -->
+<div class="pattern" id="c6">
+<span class="pattern-num">CHANGE 06</span> <span class="pill low">Low</span>
+<h2>Put the spare data files to work (or label them)</h2>
+<div class="field"><div class="k">What to change</div><p>Two of the four data files, <code>data/last-month-metrics.csv</code> and <code>data/content-planner.csv</code>, are never named by any guide. Either add a prompt that uses them, or note in the kit README that they are bonus material for self-directed practice.</p></div>
+<div class="field"><div class="k">Why it is needed</div><p>Right now half the <code>data/</code> folder is decorative. A facilitator opening the folder wonders what they are for.</p></div>
+<div class="field"><div class="k">Value</div><p>Nothing is wasted. Either the data earns its place in a lab (a quick KPI review or a content-calendar task), or people know it is optional practice fuel.</p>
+<p class="muted">Suggested use: a Session 5 or bonus prompt like "Read data/last-month-metrics.csv and tell me which channel to double down on next month, with one reason."</p></div>
+</div>
+
+<!-- APPLY -->
+<h2 id="apply">How to apply</h2>
+<p>All six changes are additive. Nothing in the kit needs to be removed, and no guide needs rewriting. Priority order:</p>
+<ol>
+  <li><strong>High:</strong> the carousel project folder, the weekly-brief skill file, the sample trends email. These unblock three broken labs.</li>
+  <li><strong>Medium:</strong> the weekly-brief example output.</li>
+  <li><strong>Low:</strong> the search-audit example, and putting the two spare CSVs to use.</li>
+</ol>
+<div class="callout">
+<strong>After adding these, the kit is fully self-contained.</strong> Every prompt in every guide will produce a real result from local data, with connectors becoming an optional upgrade rather than a requirement. That matters for a room where not everyone has logins and tools wired up on day one.
+</div>
+
+<div class="footer">
+  <p>Audit scope: the six session guides in <code>verdal-marketing/guides/</code> against the data in <code>verdal-marketing/</code>.<br>
+  Result after fixes: all prompts pass from local data. Connectors are now optional upgrades, not requirements.</p>
+</div>
+
+</div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
+</body>
+</html>

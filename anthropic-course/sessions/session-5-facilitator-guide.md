@@ -127,6 +127,16 @@ Homework: pick one recurring task for their own brand, schedule it in Cowork to 
 
 ---
 
+## Knowledge check (send 1-2 days after the session)
+
+- Q: What phrase must be in your prompt to get a live artifact instead of a static file? A: "Live artifact," said explicitly.
+- Q: What four fields define a scheduled task? A: Name, folder, frequency, and status.
+- Q: What does asking Cowork to "research in parallel" do? A: It spins up separate helpers for each target and merges their findings into one result.
+
+Send these by message or a quick form 1-2 days after the session. Retrieval a day or two later is what makes it stick.
+
+---
+
 ## Facilitator prep checklist
 
 - [ ] Cowork installed and signed in on the demo machine

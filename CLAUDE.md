@@ -42,3 +42,13 @@ If a skill needs `knowledge/icp/personas.md` and it does not exist, do NOT inven
 - Specific over vague. Numbers, examples, concrete details.
 - Short paragraphs. No corporate speak.
 - Match the voice in `brand/voice.md` exactly.
+
+## Training courses (`workshop/` and `anthropic-course/`)
+
+These two folders are self-contained training material, separate from the core marketing-os skills and the `knowledge/` layer. They do not follow the `knowledge/` contract above.
+
+- `workshop/` is a self-paced "Claude Cowork for Marketers" course.
+- `anthropic-course/` is an instructor-led Claude Cowork team-enablement workshop (six 2-hour sessions). Each session has a slide deck (`session-N.html`) and a step-by-step lab guide (`session-N-guide.html`).
+- It uses a fictional example brand, **Verdal**, on purpose, so it can be taught to any team. Keep it generic. Do not add real company or client brand context here. A real, brand-specific kit is a separate future deliverable for a closer group.
+- `anthropic-course/verdal-marketing/` is the distributable "play kit" the team loads into Claude Cowork. `verdal-marketing.zip` is the packaged version to send.
+- **Keep the course and kit date-free.** No session dates or timestamps anywhere, since start dates are not fixed. For these two folders only, this overrides the DD-MM-YYYY rule above.

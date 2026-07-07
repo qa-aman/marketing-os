@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From workshop to AI-native - a 10x review</title>
+<style>
+  :root {
+    --bg: #0D0D0D; --panel: #1a1a1d; --panel-2: #232327; --border: #2e2e33;
+    --text: #ececec; --muted: #9a9aa0; --accent: #63c69a; --accent-soft: #63c69a1f;
+    --code-bg: #141416; --green: #4ade80; --blue: #3b82f6;
+    --high: #ef6f6f; --med: #e6b450; --low: #7f8a85;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.65; font-size: 16px; }
+  .container { max-width: 940px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow { color: var(--accent); font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  h1 { font-size: 38px; margin: 0 0 12px; line-height: 1.15; }
+  h2 { font-size: 27px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 19px; color: var(--muted); line-height: 1.55; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 13.5px; background: var(--code-bg);
+    border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; color: #f4d6a8; }
+  .callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; margin: 18px 0; border-radius: 4px; }
+  .callout strong { color: var(--accent); }
+  .callout.warn { background: #ef6f6f14; border-left-color: var(--high); } .callout.warn strong { color: var(--high); }
+  .pattern { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 26px 30px; margin: 28px 0; }
+  .pattern-num { display: inline-block; background: var(--accent); color: #000; font-weight: 700; padding: 4px 12px; border-radius: 4px; font-size: 13px; letter-spacing: 1px; margin-bottom: 12px; }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 24px; }
+  ul, ol { padding-left: 22px; } ul li, ol li { margin: 7px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  .imp-h { color: var(--green); font-weight: 700; } .imp-m { color: var(--med); font-weight: 700; }
+  .eff-l { color: var(--green); } .eff-m { color: var(--med); } .eff-h { color: var(--high); }
+  .pill { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; padding: 2px 9px; border-radius: 4px; color: #000; }
+  .pill.high { background: var(--high); color: #fff; } .pill.med { background: var(--med); } .pill.low { background: var(--low); color: #fff; }
+  .big5 { counter-reset: b; list-style: none; padding-left: 0; }
+  .big5 li { counter-increment: b; position: relative; padding: 14px 16px 14px 56px; margin: 10px 0; background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; }
+  .big5 li::before { content: counter(b); position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; background: var(--accent); color: #000; font-weight: 800; border-radius: 7px; text-align: center; line-height: 28px; }
+  .ladder { border-left: 2px solid var(--border); margin: 20px 0 20px 8px; padding-left: 0; }
+  .rung { position: relative; padding: 4px 0 20px 28px; }
+  .rung::before { content: ""; position: absolute; left: -7px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+  .rung .lv { font: 700 12px/1 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+  .rung h4 { margin: 6px 0 4px; text-transform: none; letter-spacing: 0; font-size: 16px; }
+  .footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 290px 1fr; min-height: 100vh; align-items: start; }
+  aside { position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel); }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a { display: block; padding: 9px 10px; border-radius: 6px; color: var(--text); font-size: 13.5px; line-height: 1.35; border-bottom: none; }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 900px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 75vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+<aside>
+  <div class="toc-h">From workshop to AI-native</div>
+  <ol>
+    <li><a href="#diagnosis">The diagnosis</a></li>
+    <li><a href="#strong">What is already strong</a></li>
+    <li><a href="#gaps">The five gaps that cap it</a></li>
+    <li><a href="#fixnow">Fix before you deliver</a></li>
+    <li><a href="#five">If you only do five things</a></li>
+    <li><a href="#t1">10x - Transfer to real work</a></li>
+    <li><a href="#t2">10x - Make it stick</a></li>
+    <li><a href="#t3">10x - A team asset that lasts</a></li>
+    <li><a href="#t4">10x - Real-world ready</a></li>
+    <li><a href="#ladder">The AI-native ladder</a></li>
+    <li><a href="#plan">Do this next</a></li>
+  </ol>
+</aside>
+<div class="container">
+
+<header>
+  <div class="eyebrow">BECAUSE - Cowork course review</div>
+  <h1>From a great workshop to an AI-native team</h1>
+  <p class="lead">A deep review of the whole Cowork course through four lenses: learning design, adoption, content, and operating it inside BECAUSE. The materials are top tier. The opportunity is everything around them. This is how you make it 10x.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Reviewed: the six sessions (decks, guides, facilitator scripts), the design docs, and the Verdal kit. This file lives outside the kit, so it is not shipped to the team.</p>
+</header>
+
+<div class="callout">
+<strong>The one sentence.</strong> You have built one of the best Cowork training packages I have seen. It is also engineered to end at Session 6, on a fictional brand, with no way to know if anyone changed how they work. A workshop makes people <em>aware</em>. A system makes them <em>AI-native</em>. You have the workshop. The 10x is the system around it.
+</div>
+
+<!-- DIAGNOSIS -->
+<h2 id="diagnosis">The diagnosis</h2>
+<p>Four independent reviews converged on the same thing. The craft is not the problem. Every session has a deck, a step-by-step guide, a facilitator script, and a real dataset to practice on. That is rare and genuinely good.</p>
+<p>The problem is that the course is structured to stop at the exact moment it would start to matter. Five of six sessions run entirely on a fictional plant-care brand. There is no assessment, so no one knows what landed. Homework is never checked. The last touchpoint is Session 6, after which the training literature says an un-reinforced skill decays in two to four weeks. And nothing produces a lasting team asset: no shared skill library, no owner, no measure of whether it worked.</p>
+<p>So the gap is not "teach more Cowork". It is the distance between the room and Monday morning. Close that distance and the same content produces an AI-native team instead of twelve people who once attended a good workshop.</p>
+
+<!-- STRONG -->
+<h2 id="strong">What is already strong (keep these)</h2>
+<ul>
+  <li><strong>The session shape is a real scaffold.</strong> Recap, teach, demo, break, lab, debrief, homework, identical every week. Non-technical learners spend their attention on the content, not on decoding the format.</li>
+  <li><strong>Verdal removes the blank-page problem.</strong> A complete, realistic, pre-built dataset means labs fail on prompt quality, not on missing setup. Learning on safe fake data before real data is the right sequence.</li>
+  <li><strong>Four polished artifacts per session, all built.</strong> 24 files, consistent format, minute-by-minute run of show, and a "if the demo fails, do X" fallback. This is a real deliverable, not an outline.</li>
+  <li><strong>It mirrors Anthropic's official Cowork course.</strong> Credibility with skeptics, plus a certificate path.</li>
+  <li><strong>Safety is taught as a habit, not a rule.</strong> "Read what changed, open it, approve or redirect" is a behavior, not a compliance checkbox.</li>
+  <li><strong>Session 6 already reaches for the bridge.</strong> The closing "write a prompt for one real task you own" is the single best adoption instinct in the design. It just needs to be pulled forward and followed up.</li>
+</ul>
+
+<!-- GAPS -->
+<h2 id="gaps">The five gaps that cap it at "good workshop"</h2>
+<p>Every lens, when you cluster the findings, points at these five.</p>
+<table>
+<thead><tr><th>Gap</th><th>What it means</th><th>Why it caps the outcome</th></tr></thead>
+<tbody>
+<tr><td><strong>1. The fictional-brand trap</strong></td><td>Everything is practiced on Verdal. Transfer to real BECAUSE work is one homework line and one closing prompt.</td><td>People get fluent at running curated Verdal prompts and never practice the harder skill: writing a prompt against their own messy, real client files, in the room, with help.</td></tr>
+<tr><td><strong>2. No retention loop</strong></td><td>No assessment except a quiz that is not built. Homework is never checked. The copy-paste prompt scaffold never fades.</td><td>Spaced practice without a check-and-correct step barely works. And handing a full prompt every lab trains prompt-copying, not prompt-writing, which is the actual transferable skill.</td></tr>
+<tr><td><strong>3. The course ends, nothing continues</strong></td><td>Session 6 is the last touchpoint. No follow-up, no manager involvement, no measurement, no social system.</td><td>What gets checked gets done. With no manager asking and no metric, use dies with the training. This is the textbook fade pattern.</td></tr>
+<tr><td><strong>4. No team asset that outlives the cohort</strong></td><td>Skills are shared one-to-one over Slack. No shared library, no owner, no governance, no self-paced path for new joiners.</td><td>Individual skill does not compound into team capability. Two people build a "weekly-brief" skill of different quality, same name, and nobody knows which is current.</td></tr>
+<tr><td><strong>5. Not yet ready for real client work</strong></td><td>Safety is calibrated to Verdal's no-data folder. Nothing teaches evaluating AI output, prompting as a skill, when not to use AI, or client-data rules.</td><td>An agency's real risk is client-confidential data and publishing a wrong AI-drafted fact. The course does not prepare anyone for their actual first real task.</td></tr>
+</tbody>
+</table>
+
+<!-- FIX NOW -->
+<h2 id="fixnow">Fix before you deliver (hygiene, not strategy)</h2>
+<p>These are small but would embarrass a live delivery. Do them first, they are quick.</p>
+<div class="callout warn">
+<strong>Broken pointers in the facilitator guides.</strong> The guides tell the facilitator to "follow the demo script (see <code>session-1-demo-script.md</code>, to be built in Phase 3)" and "the lab worksheet (Phase 3 deliverable) has the exact steps". Those files do not exist. A facilitator following the script live hits a dead reference. The phrase appears about five times across Sessions 1 and 4. Either build those two documents (most of the content is already inline) or replace the pointers with the inline steps.
+</div>
+<div class="callout warn">
+<strong>The kit's <code>connectors-setup.md</code> is the wrong document, and it is now inside the kit you are shipping.</strong> Sessions 4 and 5 link to it for setup help, but it is a setup hub for a much broader Claude Code course: it covers install scripts, MCP, sub-agents, n8n, Gemini, and Perplexity, tools this course explicitly puts out of scope ("we start with Cowork, not Claude Code"). An attendee who opens it finds instructions for a tool the course says not to use. Rewrite it scoped to only what this course needs: Google Workspace, Microsoft 365, Claude in Chrome, and the handful of connectors the demos use.
+</div>
+<div class="callout warn">
+<strong>A hardcoded model name and unverified UI paths.</strong> Session 1's deck shows "Opus 4.8" in the model-picker mock. Genericize it, a wrong version number on slide one dents credibility. Session 5's own facilitator guide flags two UI locations (the pin button, the scheduled-tasks panel) as unverified. Every specific menu path (Settings &gt; Cowork, Customize &gt; Connectors, Preferences &gt; Features) goes stale fastest. Add a standard "verify these paths the morning of" line, and check them in the dry run.
+</div>
+
+<!-- BIG 5 -->
+<h2 id="five">If you only do five things</h2>
+<p>Ranked by leverage. Each is drawn from a different lens, and together they close all five gaps.</p>
+<ol class="big5">
+  <li><strong>Build a real <code>because-marketing/</code> kit and use it in the room.</strong> Mirror Verdal's structure exactly with BECAUSE's real brand voice, ICP, and one real template. This is the single point where "we did an exercise" becomes "we have a working system."</li>
+  <li><strong>Add the retention loop.</strong> A 3 to 5 question retrieval quiz sent after every session (not just Session 6), and homework that gets dropped in a shared channel and gets one line of feedback before the next session.</li>
+  <li><strong>Name an owner and stand up a shared skill library.</strong> One person owns keeping it current, triaging new skills, and onboarding new joiners. Every skill built lands in one shared, named place, not a Slack DM.</li>
+  <li><strong>Pull the manager in, and add a 30-day graduation session on real work.</strong> Managers get a 15-minute brief and one question to ask in 1:1s. Thirty days out, the team reconvenes with the real task they actually ran, not Verdal.</li>
+  <li><strong>Write real client-data rules, and teach how to check AI output.</strong> One page: what data may enter a Cowork session, per-client isolation, who signs off. Plus a 10-minute segment on catching a confident-but-wrong claim before it ships.</li>
+</ol>
+<p class="muted">The rest of this report is the full move set behind these five, grouped by the outcome each drives.</p>
+
+<!-- THEME 1 -->
+<div class="pattern" id="t1">
+<span class="pattern-num">THEME 01</span>
+<h2>Make it transfer to real work</h2>
+<p>The biggest single risk in the course: five sessions on a fictional brand, then "go do it on your real work" as unsupervised homework. Engineer the transfer instead of assuming it.</p>
+<table>
+<thead><tr><th>Move</th><th>Why it makes them AI-native</th><th>Impact</th><th>Effort</th></tr></thead>
+<tbody>
+<tr><td>Build a real <code>because-marketing/</code> kit (real voice, ICP, one template, a real client as the worked case)</td><td>Turns practice into a working system they keep. Muscle memory transfers 1:1 because the structure matches Verdal.</td><td class="imp-h">High</td><td class="eff-m">Medium</td></tr>
+<tr><td>Add a 10-minute "now do it on your own brand" to every lab, from Session 1</td><td>The actual transfer bridge. Failure gets caught in the room with the facilitator circulating, not alone at a desk on Monday.</td><td class="imp-h">High</td><td class="eff-h">Med-High</td></tr>
+<tr><td>Fade the prompt scaffold: full prompt (S1-2), fill-in-the-blank (S3-4), goal-only (S5-6)</td><td>Trains prompt-authoring, not prompt-copying. Writing your own prompt for messy real files is the core AI-native skill.</td><td class="imp-h">High</td><td class="eff-m">Medium</td></tr>
+<tr><td>Ship a "bring your own brand" starter kit: a folder template plus 3 pre-written prompts for real BECAUSE tasks</td><td>Closes the leap from a safe fictional brand to a higher-stakes client deck. Removes the blank-page excuse.</td><td class="imp-m">Medium</td><td class="eff-m">Medium</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- THEME 2 -->
+<div class="pattern" id="t2">
+<span class="pattern-num">THEME 02</span>
+<h2>Make it stick (retention and habit)</h2>
+<p>Learning without retrieval and reinforcement fades in weeks. Right now there is neither an in-course check nor an after-course loop.</p>
+<table>
+<thead><tr><th>Move</th><th>Why it makes them AI-native</th><th>Impact</th><th>Effort</th></tr></thead>
+<tbody>
+<tr><td>Per-session retrieval quiz, 3 to 5 questions, sent 1 to 2 days after each session</td><td>The testing effect is the most reliable lever for durable retention. Currently zero instances before Session 6.</td><td class="imp-h">High</td><td class="eff-l">Low-Med</td></tr>
+<tr><td>Homework becomes a checked artifact: drop the file in a shared channel, get one line of feedback</td><td>Practice without correction consolidates whatever the learner did, right or wrong. The feedback loop is what makes spacing work.</td><td class="imp-h">High</td><td class="eff-l">Low</td></tr>
+<tr><td>30-day graduation session on real work: everyone brings the task they actually ran</td><td>Converts "I wrote a prompt" into "I ran it and got feedback". Closes the loop the course leaves open.</td><td class="imp-h">High</td><td class="eff-l">Low</td></tr>
+<tr><td>Manager brief before Session 1 plus one 1:1 question: "what did you use Cowork for this week"</td><td>What gets checked gets done. The highest-leverage habit lever, and it is nearly free.</td><td class="imp-h">High</td><td class="eff-l">Low</td></tr>
+<tr><td>Written 2-minute retrieval warm-up and an "entry ticket" (last session's saved file) to start each session</td><td>Strengthens the prior skill and diagnoses who fell behind before you build on top of it.</td><td class="imp-m">Med-High</td><td class="eff-l">Low</td></tr>
+<tr><td>Name the anxiety out loud: this removes the grind, it is not here to replace you, using it well is recognized</td><td>Unaddressed fear quietly caps usage even among people who passed the quiz.</td><td class="imp-m">Medium</td><td class="eff-l">Low</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- THEME 3 -->
+<div class="pattern" id="t3">
+<span class="pattern-num">THEME 03</span>
+<h2>Build a team asset that outlives the cohort</h2>
+<p>Individual skill does not compound unless it lands somewhere shared and owned. This is what turns one workshop into a growing capability.</p>
+<table>
+<thead><tr><th>Move</th><th>Why it makes them AI-native</th><th>Impact</th><th>Effort</th></tr></thead>
+<tbody>
+<tr><td>Name a Skill Librarian / Cowork owner now, as a committed role, not "optionally later"</td><td>Workshops without an owner decay within a quarter. Cheapest, highest-leverage sustainability fix there is.</td><td class="imp-h">High</td><td class="eff-l">Low</td></tr>
+<tr><td>Stand up a shared, version-controlled skills library plus an AI channel, seeded on day one</td><td>Every skill built compounds into team capability instead of a one-off DM. The channel is where wins get shown and copied.</td><td class="imp-h">High</td><td class="eff-l">Low-Med</td></tr>
+<tr><td>Build a prioritized use-case backlog of 10 to 15 real BECAUSE workflows before Session 6</td><td>Gives the team a shared target instead of twelve disconnected guesses. Session 6's lab picks from it.</td><td class="imp-h">High</td><td class="eff-m">Medium</td></tr>
+<tr><td>Instrument light adoption metrics: a week-1, week-4, month-3 pulse plus a time-saved log</td><td>Without a number, no one knows if it worked or can justify investing further. Measuring also signals the org expects use.</td><td class="imp-h">High</td><td class="eff-l">Low</td></tr>
+<tr><td>Commit the self-paced / recorded version as a Phase-3 deliverable, not a Phase-6 afterthought</td><td>Absentees and new joiners currently have no path back in until the whole course is over. A day-one recording fixes it.</td><td class="imp-m">Medium</td><td class="eff-l">Low-Med</td></tr>
+<tr><td>Publish a capability ladder beyond Cowork (skills library, real connectors, Claude Code for the technical few)</td><td>Gives ambitious people somewhere to go and gives leadership a reason to keep funding it past one workshop.</td><td class="imp-m">Medium</td><td class="eff-l">Low</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- THEME 4 -->
+<div class="pattern" id="t4">
+<span class="pattern-num">THEME 04</span>
+<h2>Make it ready for real client work</h2>
+<p>The content is complete for a demo on a safe fictional brand. It is not yet complete for a marketer publishing real claims on real client data.</p>
+<table>
+<thead><tr><th>Move</th><th>Why it makes them AI-native</th><th>Impact</th><th>Effort</th></tr></thead>
+<tbody>
+<tr><td>Write real client data-handling rules (what may enter a session, per-client isolation, sign-off, incident path), reviewed by whoever owns client confidentiality</td><td>An agency's real risk is client data, not the Verdal folder. This is what prepares someone for their actual first real task.</td><td class="imp-h">High</td><td class="eff-m">Medium</td></tr>
+<tr><td>Add a 10-minute "evaluate what Cowork gives you" segment: check facts against source files, ask it to cite the file a claim came from, never trust confident output you did not provide the source for</td><td>The team is about to publish AI-drafted stats and competitor facts. They need truth review, not just process review.</td><td class="imp-h">High</td><td class="eff-l">Low</td></tr>
+<tr><td>Write a BECAUSE-specific connectors doc naming the real CMS, Notion workspace, DAM, analytics, and who provisions access</td><td>Generic connector docs get skimmed and forgotten. A doc naming their actual tools gets used the same week.</td><td class="imp-h">High</td><td class="eff-m">Low-Med</td></tr>
+<tr><td>Add "when not to use AI" and a short prompting-as-a-skill segment (specificity, examples, iterate)</td><td>Aspirational-only training produces enthusiasm without judgment. Prompting is the skill; teach it explicitly.</td><td class="imp-m">Medium</td><td class="eff-l">Low</td></tr>
+<tr><td>Trim the two densest risks: Session 4 (two connector setups in 2 hours) and Session 5 (three deep concepts plus a feature-flag)</td><td>The sessions most likely to run over are where hands-on time gets lost. Cut "other connectors" to a mention.</td><td class="imp-m">Medium</td><td class="eff-l">Low</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- LADDER -->
+<h2 id="ladder">The AI-native maturity ladder</h2>
+<p>"10x" is not a bigger workshop. It is moving the whole team up this ladder. The course as built gets people to Level 1. The moves above get them to Level 3.</p>
+<div class="ladder">
+  <div class="rung"><div class="lv">Level 0</div><h4>Attended</h4><p class="muted">Sat through six sessions. Can describe what Cowork does. No behavior change guaranteed. This is where an un-reinforced workshop leaves people.</p></div>
+  <div class="rung"><div class="lv">Level 1</div><h4>Can do it on demand</h4><p class="muted">Can run a task on Verdal, and with help on their own brand. Where the current course lands its best attendees.</p></div>
+  <div class="rung"><div class="lv">Level 2</div><h4>Uses it by default on real work</h4><p class="muted">Reaches for Cowork first on the workflows in the backlog. Pulls from and contributes to the shared skill library. Their manager expects it. This is what the retention and adoption moves buy.</p></div>
+  <div class="rung"><div class="lv">Level 3</div><h4>AI-native</h4><p class="muted">The team's default operating system. New work is scoped assuming AI does the first draft. The library compounds, new joiners onboard into it, and time saved is measured and reinvested. Self-sustaining without the instructor.</p></div>
+</div>
+
+<!-- PLAN -->
+<h2 id="plan">Do this next</h2>
+<p>Sequenced so nothing blocks the first delivery, and the system gets built around it.</p>
+<h3>This week (before you deliver)</h3>
+<ul>
+  <li>Fix the broken Phase-3/4/5 pointers in the facilitator guides.</li>
+  <li>Rewrite the kit's <code>connectors-setup.md</code> scoped to this course only.</li>
+  <li>Genericize the "Opus 4.8" slide and verify the UI paths in a dry run.</li>
+  <li>Name the owner. One person, on the record.</li>
+</ul>
+<h3>Before Session 1</h3>
+<ul>
+  <li>Build the real <code>because-marketing/</code> kit (or at least a minimal one: voice, ICP, one template).</li>
+  <li>15-minute manager brief plus the one 1:1 question.</li>
+  <li>Stand up the shared skill library folder and the AI channel.</li>
+  <li>Draft the client data-handling one-pager.</li>
+</ul>
+<h3>During the course</h3>
+<ul>
+  <li>Per-session quiz and checked homework from Session 1.</li>
+  <li>Fade the prompt scaffold across the six sessions.</li>
+  <li>Add the "evaluate the output" and "when not to use AI" segments.</li>
+  <li>Build the use-case backlog by Session 5, use it in Session 6.</li>
+</ul>
+<h3>After the course</h3>
+<ul>
+  <li>30-day graduation session on real work.</li>
+  <li>Adoption pulse at week 1, week 4, month 3, plus the time-saved log.</li>
+  <li>Publish the capability ladder and the roadmap beyond Cowork.</li>
+</ul>
+
+<div class="callout">
+<strong>The point.</strong> None of this rewrites the course. It wraps a system around a workshop that is already excellent. The training makes the team capable. The system around it makes them AI-native, and keeps them there after you stop running the sessions.
+</div>
+
+<div class="footer">
+  <p>Review method: four independent lenses (learning design, adoption and behavior change, content completeness, operating it at BECAUSE), synthesized.<br>
+  Scope: the anthropic-course folder. This file sits outside verdal-marketing, so it is not part of the team kit.</p>
+</div>
+
+</div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
+</body>
+</html>

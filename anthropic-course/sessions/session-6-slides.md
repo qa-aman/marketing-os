@@ -72,7 +72,23 @@ Right panel: the Verdal folder tree including templates/weekly-content-brief.ski
 
 **Notes:** The packaged skill is a single file. A teammate installs it from the Skills panel - nothing to configure. The Skill Creator in the app handles packaging. Walk through this briefly, then show it live in the demo.
 
-## Slide 9 - Course recap
+## Slide 9 - Check the output
+**On screen:**
+- Cowork can sound confident and be wrong.
+- Before you publish anything, trace every fact, stat, or quote back to the file it should have come from.
+- Right: prompt "Which file in my folder says plant food sales are up 40 percent?" Below it, the rule: if it is not in your files, Cowork made it up. Never publish a claim you did not give it the source for.
+
+**Notes:** This is the habit that matters most before anything ships. Cowork writes in a confident voice whether or not the fact is true. The fix is simple and repeatable: for any fact, stat, or quote, ask Cowork which file it came from. If it cannot point to a file, it made it up and you do not publish it. This applies to every draft, every time, no exceptions.
+
+## Slide 10 - When not to use AI
+**On screen:**
+- Some things stay human.
+- A short list of tasks to keep off Cowork's plate entirely.
+- Right panel "Keep these off Cowork": 1 a real, verified human quote or attribution, 2 anything needing legal or compliance sign-off, 3 facts where a wrong answer has real cost - pricing, medical-style claims, competitor facts you will publish, 4 anything involving real customer personal data.
+
+**Notes:** Balance the last slide with a clear boundary. This is not about distrust, it is about knowing where the cost of a wrong answer is too high to risk. Read the four items out loud. Ask the room if they can think of a fifth from their own work.
+
+## Slide 11 - Course recap
 **On screen:**
 - What you can do now.
 - Six sessions. Six real capabilities.
@@ -80,17 +96,17 @@ Right panel: the Verdal folder tree including templates/weekly-content-brief.ski
 
 **Notes:** Let this land. Run through each item out loud. Ask the room: which one changed how you work most? This is the moment to celebrate what they have built across six sessions.
 
-## Slide 10 - Live demo
+## Slide 12 - Live demo
 **On screen:**
 - Live demo - watch this
 - Validate and share a Verdal skill.
 - Prompt: "Run the weekly-content-brief skill once on Verdal, show me the output, and if it looks good, package it so I can share it with the team."
 - Pill: "Test, then share"
-- Right panel "What comes back": projects/weekly-brief-03-07-2026.md (test output), templates/weekly-content-brief.skill (ready to share). Caption: on-brand output confirmed.
+- Right panel "What comes back": projects/weekly-content-brief.md (test output), templates/weekly-content-brief.skill (ready to share). Caption: on-brand output confirmed.
 
 **Notes:** Switch to Cowork. Run the weekly-content-brief skill on Verdal, narrate what comes back, confirm it looks right, then use the Skill Creator to package it. Key line: one command and now a teammate can run this exact workflow without any setup.
 
-## Slide 11 - Your turn (lab)
+## Slide 13 - Your turn (lab)
 **On screen:**
 - Quiz, then plan your first real task.
 - 1 Take the short knowledge check; 2 Pick one real task you will run this week; 3 Write it as a Cowork prompt.
@@ -98,7 +114,7 @@ Right panel: the Verdal folder tree including templates/weekly-content-brief.ski
 
 **Notes:** Quiz first: 3-5 quick questions on a shared screen, hands up or a short form. Then prompt planning: they pick one real task and write a Cowork prompt for it. Walk the room.
 
-## Slide 12 - Where next
+## Slide 14 - Where next
 **On screen:**
 - Go deeper and get the certificate.
 - Anthropic's free Cowork course covers everything in this workshop and more, with a shareable certificate when you finish.
@@ -106,7 +122,7 @@ Right panel: the Verdal folder tree including templates/weekly-content-brief.ski
 
 **Notes:** The official Anthropic Cowork course has video lessons, exercises, and a shareable certificate. It takes about three hours and is self-paced. This is the right next step for anyone who wants to go deeper or needs the credential.
 
-## Slide 13 - Course complete (title)
+## Slide 15 - Course complete (title)
 **On screen:**
 - Session 6 of 6 - complete
 - You finished the course.

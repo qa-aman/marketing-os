@@ -111,6 +111,16 @@ Homework (can be done in five minutes): set one global instruction in Settings, 
 
 ---
 
+## Knowledge check (send 1-2 days after the session)
+
+- Q: What is the difference between global instructions and a project? A: Global instructions apply to every session and every folder; a project is one reusable workspace with its own instructions and memory.
+- Q: Where do you set global instructions? A: Settings > Cowork > Global instructions.
+- Q: What does a project remember between sessions? A: Its brand context, project instructions, reference files, and every piece of output it has produced.
+
+Send these by message or a quick form 1-2 days after the session. Retrieval a day or two later is what makes it stick.
+
+---
+
 ## Demo prep - day-of checklist
 
 - [ ] Cowork installed and signed in on the demo machine

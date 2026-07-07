@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 5 Guide - Bigger Outputs and Automation</title>
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #63c69a;
+    --accent-soft: #63c69a1f;
+    --code-bg: #141416;
+    --green: #4ade80;
+    --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .pre-label.file { color: var(--blue); }
+  .pre-label.ask { color: var(--accent); }
+  .pattern {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .pattern-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 28px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .method {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 20px 16px;
+    margin: 16px 0;
+  }
+  .method-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 6px;
+    font-weight: 700;
+  }
+  .method-badge {
+    background: var(--accent); color: #000;
+    padding: 2px 10px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .method-badge.b { background: var(--blue); color: #fff; }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  td code { white-space: nowrap; }
+  .checkbox-list { list-style: none; padding-left: 0; }
+  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
+  .checkbox-list li::before {
+    content: "\2610"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-size: 18px;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+  }
+  .tag.green { color: var(--green); border-color: var(--green); }
+  .footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+  hr.divider { border: none; border-top: 1px dashed var(--border); margin: 28px 0; }
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 28px;
+    margin: 24px 0 40px;
+  }
+  .toc h3 { margin-top: 0; color: var(--text); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+  .toc ol { margin: 12px 0 0; }
+  .toc a { border-bottom: none; color: var(--text); }
+  .toc a:hover { color: var(--accent); }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
+  }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a {
+    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
+    font-size: 13.5px; line-height: 1.35; border-bottom: none;
+  }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], section[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+<aside>
+  <div class="toc-h">Session 5</div>
+  <ol>
+    <li><a href="#build-things">Build things that keep working</a></li>
+    <li><a href="#live-artifacts">Live artifacts: a dashboard that refreshes</a></li>
+    <li><a href="#scheduled-tasks">Scheduled tasks: set a recurring job</a></li>
+    <li><a href="#control-center">The control center</a></li>
+    <li><a href="#parallel-research">Parallel and research workflows</a></li>
+    <li><a href="#wrap">Recap and homework</a></li>
+  </ol>
+</aside>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork for marketers - Session 5 of 6</div>
+  <h1>Bigger outputs and automation</h1>
+  <p class="lead">So far you have made one thing at a time: a brief, a draft, a report. Each one was useful, then done the moment it finished. Today is different. You build outputs that stay alive: a dashboard that refreshes itself, and a job that runs every week without anyone pressing a button.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Worked brand: Verdal, a plant care brand. Dataset: <code>verdal-marketing/</code>. Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">Introduction to Claude Cowork</a>.</p>
+</header>
+
+<div class="callout">
+<strong>What you need before you start.</strong> Claude Desktop installed and signed in, with Cowork in the sidebar. The <code>verdal-marketing</code> folder loaded. Artifacts and Code Execution turned on in Cowork settings (Preferences - Features). If you skip that setting, none of today's builds will work.
+</div>
+
+<div class="callout">
+<strong>The one idea for the whole session.</strong> A static file is done the moment it is written. A live artifact stays alive: you pin it, you click refresh, and it pulls new data. Pair that with a scheduled task that fills the data every week, and you have a marketing control center that updates itself.
+</div>
+
+<div class="toc">
+  <h3>What you will do</h3>
+  <ol>
+    <li><a href="#live-artifacts">Build a live artifact and pin it</a></li>
+    <li><a href="#scheduled-tasks">Create a scheduled task that runs weekly</a></li>
+    <li><a href="#control-center">Connect the two into a control center</a></li>
+    <li><a href="#parallel-research">Try a parallel research prompt</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<h2 id="build-things">Build things that keep working</h2>
+
+<p>Sessions 1 through 4 covered single tasks: one brief, one draft, one report. You wrote a prompt, Cowork produced a file, and that was the end of it. Today the output does not end when the file is saved.</p>
+
+<h3>Two ideas that change how you use Cowork</h3>
+<table>
+<thead><tr><th></th><th>A static file</th><th>A live artifact</th></tr></thead>
+<tbody>
+<tr><td>What it is</td><td>A finished document</td><td>A small interactive dashboard</td></tr>
+<tr><td>How it updates</td><td>You re-run the prompt</td><td>You click refresh</td></tr>
+<tr><td>Where it lives</td><td><code>projects/</code></td><td>Pinned in your sidebar</td></tr>
+</tbody>
+</table>
+
+<p>Add a scheduled task on top: a job you set up once, that Cowork runs on its own every week and saves into your folder. Put the two together and you get a control center: the scheduled task fills the data, the live artifact shows it, and you just open it on Monday morning.</p>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<div class="pattern" id="live-artifacts">
+<span class="pattern-num">STEP 01</span>
+<h2>Live artifacts: a dashboard that refreshes</h2>
+<p class="lead">Build a Verdal dashboard that pulls fresh keyword and competitor data every time you click refresh, not just once.</p>
+
+<h3>Do this</h3>
+<ol>
+  <li>Open Cowork settings (Preferences - Features) and turn on <strong>Artifacts</strong> and <strong>Code Execution</strong>. Both must be on.</li>
+  <li>Use the exact words <strong>"live artifact"</strong> somewhere in your prompt. This is the phrase that tells Cowork to build something interactive instead of a plain file.</li>
+  <li>Paste the prompt below into Cowork.</li>
+  <li>When it appears, <strong>pin it</strong> to your sidebar.</li>
+  <li>Click <strong>refresh</strong> and watch the "last refreshed" timestamp update.</li>
+</ol>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">the Verdal dashboard</span>
+<pre><code>Load verdal-marketing/. Build a LIVE ARTIFACT showing this
+week's keyword opportunities and competitor activity for
+Verdal, using data/keyword-opportunities.csv and
+data/competitor-posts.csv. Pin it and show a "last refreshed"
+timestamp.</code></pre>
+</div>
+
+<div class="callout">
+<strong>Say the words, or you get a static file.</strong> If your prompt says "dashboard" without the phrase "live artifact," Cowork will write a plain markdown file that never updates. The words "live artifact" are what turn it into something you can refresh.
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>A dashboard appears with a chart of keyword opportunities and a competitor activity summary, pulled from the two CSV files.</li>
+  <li>A pin option is visible, usually in the top-right corner of the artifact panel.</li>
+  <li>A "last refreshed" timestamp is shown somewhere on the dashboard.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>Pin the artifact, then click refresh. If the timestamp changes but nothing else happens, that is fine, it means it is reading the same data again. If refresh does nothing at all, check that Artifacts and Code Execution are both switched on in settings, then try again.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="scheduled-tasks">
+<span class="pattern-num">STEP 02</span>
+<h2>Scheduled tasks: set a recurring job</h2>
+<p class="lead">Some work should just happen. Set it up once, and Cowork runs it on the schedule you pick, saving the result into your folder every time.</p>
+
+<h3>Do this</h3>
+<ol>
+  <li>Open the scheduled tasks panel in Cowork.</li>
+  <li>Give it a <strong>name</strong>: Verdal weekly competitor digest.</li>
+  <li>Paste the prompt below as the task.</li>
+  <li>Set the <strong>folder</strong> to <code>verdal-marketing/projects/</code>.</li>
+  <li>Set the <strong>frequency</strong> to every Sunday at 9am.</li>
+  <li>Confirm the <strong>status</strong> shows Active.</li>
+</ol>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">the scheduled digest</span>
+<pre><code>Every Sunday at 9am, research Verdal's competitors and
+write a short weekly competitor digest. Save it to
+projects/weekly-digest.md.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>The task appears in the scheduled tasks panel with the right name, folder, frequency, and status Active.</li>
+  <li>Recurring, predictable, data-driven work is what belongs here: a weekly content brief, a weekly competitor digest, a monthly performance report. Save creative strategy and one-off work for prompted sessions.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>If the task does not show up in the panel after saving, close and reopen the project in Cowork. That refresh usually surfaces it.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="control-center">
+<span class="pattern-num">STEP 03</span>
+<h2>The control center</h2>
+<p class="lead">A live artifact on its own is useful. A scheduled task on its own is useful. Together, they run themselves.</p>
+
+<p>Here is how the two connect:</p>
+<span class="pre-label">how it connects</span>
+<pre><code>Sunday 9am: scheduled task runs
+  -> writes fresh data to projects/weekly-digest.md
+Monday morning: you open the pinned dashboard
+  -> live artifact reads the new file
+  -> you click refresh and see this week's numbers</code></pre>
+
+<p>You set this up once. From then on, you just open it. That is the marketing control center: the scheduled task fills the data, the live artifact surfaces it, and nobody has to re-prompt anything.</p>
+
+<div class="callout">
+<strong>Try it end to end.</strong> Point your live artifact from Step 01 at <code>projects/weekly-digest.md</code>, the file your scheduled task from Step 02 writes to. Next Sunday, the file updates on its own. Next time you open the dashboard, refresh pulls it in.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="parallel-research">
+<span class="pattern-num">STEP 04</span>
+<h2>Parallel and research workflows</h2>
+<p class="lead">For big research jobs, Cowork can work on several things at once instead of one at a time.</p>
+
+<p>Use the phrase "research [targets] in parallel" and Cowork spins up a helper for each target, then merges the findings into one report. For a competitor scan across three brands, that is three research jobs running at the same time instead of three separate prompts run back to back.</p>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">parallel competitor research</span>
+<pre><code>Load reference/competitors.md. Research The Sill,
+Bloomscape, and Leon and George in parallel. Merge the
+findings into a single competitor summary and save it
+to projects/competitor-summary.md.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>The to-do list shows separate helper tasks running for each competitor, marked done as they finish.</li>
+  <li>A final "merge findings" step combines them into one report.</li>
+  <li>You get three competitors' worth of research in roughly the time of one.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>If Cowork researches the three targets one after another instead of at the same time, add "in parallel" more explicitly, for example: "research these three in parallel, not one at a time."</p>
+</div>
+
+<!-- ============================================ -->
+<h2 id="wrap">Recap and homework</h2>
+
+<p>If you followed along, you have:</p>
+<ul class="checkbox-list">
+  <li>Built a live artifact and pinned it to your sidebar <span class="tag green">live artifacts</span></li>
+  <li>Clicked refresh and watched the data update <span class="tag green">refresh</span></li>
+  <li>Created a scheduled task that runs every Sunday at 9am <span class="tag green">scheduled tasks</span></li>
+  <li>Connected a scheduled task to a live artifact into a control center <span class="tag green">control center</span></li>
+  <li>Tried a parallel research prompt across several competitors <span class="tag green">parallel research</span></li>
+</ul>
+
+<div class="callout">
+<strong>Homework before Session 6.</strong> Pick one recurring task for your own brand and schedule it in Cowork to run weekly. Let it run once, open the output, and bring it to Session 6 to share. A weekly content brief or a weekly competitor check is enough.
+</div>
+
+<h3>What is next</h3>
+<p>Session 6 is <strong>Safety, sharing, and next steps</strong>: how to use Cowork with a team, what is safe to share, and where the guardrails are.</p>
+
+<div class="footer">
+  <p>Course: Claude Cowork for marketers. Worked brand: Verdal.<br>
+  Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">anthropic.skilljar.com</a><br>
+  Setup help for every tool: <code>../connectors-setup.md</code> in the workshop folder.</p>
+</div>
+
+</div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
+</body>
+</html>

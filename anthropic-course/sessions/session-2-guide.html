@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 2 Guide - Make Cowork Yours</title>
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #63c69a;
+    --accent-soft: #63c69a1f;
+    --code-bg: #141416;
+    --green: #4ade80;
+    --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .pre-label.file { color: var(--blue); }
+  .pre-label.ask { color: var(--accent); }
+  .pattern {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .pattern-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 28px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .method {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 20px 16px;
+    margin: 16px 0;
+  }
+  .method-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 6px;
+    font-weight: 700;
+  }
+  .method-badge {
+    background: var(--accent); color: #000;
+    padding: 2px 10px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .method-badge.b { background: var(--blue); color: #fff; }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  td code { white-space: nowrap; }
+  .checkbox-list { list-style: none; padding-left: 0; }
+  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
+  .checkbox-list li::before {
+    content: "\2610"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-size: 18px;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+  }
+  .tag.green { color: var(--green); border-color: var(--green); }
+  .footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+  hr.divider { border: none; border-top: 1px dashed var(--border); margin: 28px 0; }
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 28px;
+    margin: 24px 0 40px;
+  }
+  .toc h3 { margin-top: 0; color: var(--text); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+  .toc ol { margin: 12px 0 0; }
+  .toc a { border-bottom: none; color: var(--text); }
+  .toc a:hover { color: var(--accent); }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
+  }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a {
+    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
+    font-size: 13.5px; line-height: 1.35; border-bottom: none;
+  }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], section[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+<aside>
+  <div class="toc-h">Session 2</div>
+  <ol>
+    <li><a href="#why-standing-context">Why standing context</a></li>
+    <li><a href="#global-instructions">Global instructions</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#carousel-project">Build a Verdal carousel project</a></li>
+    <li><a href="#global-vs-projects">Global instructions vs projects</a></li>
+    <li><a href="#wrap">Recap and homework</a></li>
+  </ol>
+</aside>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork for marketers - Session 2 of 6</div>
+  <h1>Make Cowork yours: standing context and projects</h1>
+  <p class="lead">Last session you handed Cowork a task and it saved a finished file. But you still had to explain your brand before it could start. Today you set that up once: a short set of rules Cowork reads before every task, and a project that remembers its own brand, its own instructions, and its own past work. By the end you will never re-explain your brand to Cowork again.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Worked brand: Verdal, a plant care brand. Dataset: <code>verdal-marketing/</code>. Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">Introduction to Claude Cowork</a>.</p>
+</header>
+
+<div class="callout">
+<strong>What you need before you start.</strong> Cowork installed and signed in. The <code>verdal-marketing</code> folder loaded on your computer. Session 1 done, so you have already run at least one task and seen the loop.
+</div>
+
+<div class="callout">
+<strong>The one idea for the whole session.</strong> Set your brand and your rules once. Never repeat them. Global instructions and projects are the two ways Cowork remembers, so you stop re-teaching it the same things every session.
+</div>
+
+<div class="toc">
+  <h3>What you will do</h3>
+  <ol>
+    <li><a href="#global-instructions">Set global instructions once, in Settings</a></li>
+    <li><a href="#projects">Understand what a project remembers</a></li>
+    <li><a href="#carousel-project">Build a Verdal carousel project from scratch</a></li>
+    <li><a href="#global-vs-projects">Know when to use which</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<h2 id="why-standing-context">Why standing context</h2>
+
+<p>Without standing context, every Cowork session starts blank. You paste your brand rules, your folder conventions, your voice, and Cowork re-learns what it already knew yesterday. Multiply that across every task, every week, and it adds up to a lot of repeated typing for no reason.</p>
+
+<p>Standing context fixes this two ways:</p>
+<ul>
+  <li><strong>Global instructions</strong> - a short block of rules Cowork reads before every task, in every session, no matter the folder.</li>
+  <li><strong>Projects</strong> - a reusable workspace with its own instructions, its own context, and a memory of everything it has already made.</li>
+</ul>
+
+<p>They work together. Global rules still apply inside a project. A project just adds a second, more specific layer on top, for one workflow you run again and again.</p>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<div class="pattern" id="global-instructions">
+<span class="pattern-num">STEP 01</span>
+<h2>Global instructions</h2>
+<p class="lead">A short block of text you write once in Settings. Cowork reads it before every task, in every session, no matter which folder you point it at. Think of it as a standing briefing, not a per-task paste.</p>
+
+<h3>Do this</h3>
+<ol>
+  <li>Open Claude Desktop, click the gear icon (bottom left) for Settings.</li>
+  <li>Go to <strong>Settings &gt; Cowork &gt; Global instructions</strong>.</li>
+  <li>Type your rules into the one text field, then save. One or two lines is enough. Save the detail for project instructions.</li>
+</ol>
+
+<span class="pre-label file">example global instructions</span>
+<pre class="file"><code>Always read context/ before any task. Save output to projects/.
+Match brand-voice.md. No em dashes, no emojis.</code></pre>
+
+<div class="callout">
+<strong>Keep it short.</strong> Under 100 words is plenty. Only put in what should apply to everything: voice, folder conventions, output format, what to avoid. Anything specific to one workflow belongs in a project's own instructions, not here.
+</div>
+
+<h3>Test it</h3>
+<p>Hand Cowork any small task without pasting brand rules. If it still reads <code>context/</code> and matches your voice on its own, the global instruction is working.</p>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="projects">
+<span class="pattern-num">STEP 02</span>
+<h2>Projects</h2>
+<p class="lead">A project is a named workspace inside Cowork. It has its own folder, its own instructions, and its own memory of past work. Unlike global instructions, a project is built for one repeatable workflow, not everything you do.</p>
+
+<h3>What a project remembers</h3>
+<ul>
+  <li>The folder you pointed it at, and everything inside it.</li>
+  <li>The project instructions you wrote for it.</li>
+  <li>Reference examples you loaded in.</li>
+  <li>Every piece of work it has already produced.</li>
+  <li>Feedback you gave it on past runs.</li>
+</ul>
+
+<p>Open the project again next week and none of that is gone. It still knows the brand, the design rules, and what it made last time, the same way a dedicated Slack channel keeps its pinned context and history for one campaign.</p>
+
+<div class="callout">
+<strong>Global vs a project, in one line.</strong> Global instructions are the rules every new colleague reads on day one. A project is the dedicated workspace for one recurring job, with its own memory.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="carousel-project">
+<span class="pattern-num">STEP 03</span>
+<h2>Build a Verdal carousel project</h2>
+<p class="lead">The hands-on build. Turn the <code>carousel-design-system</code> folder into a real project, with its brand context and reference examples already loaded, so every future carousel run starts here.</p>
+
+<h3>Do this</h3>
+<ol>
+  <li>In Cowork, create a new project from your <code>carousel-design-system</code> folder.</li>
+  <li>Confirm it can see <code>context/</code> (brand files) and <code>reference/</code> (example carousels).</li>
+  <li>Paste the prompt below.</li>
+</ol>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">build the carousel project</span>
+<pre><code>Create a project from my carousel-design-system folder.
+Read the reference examples and brand context, then write
+a brand style guide and a carousel design system file, and
+save them in the project.</code></pre>
+</div>
+
+<h3>What good looks like</h3>
+<ul>
+  <li>Cowork reads <code>reference/carousel-examples.md</code> and <code>context/</code> before writing anything.</li>
+  <li>A <code>brand-style-guide.md</code> and a <code>carousel-design-system.md</code> land in the project's output folder.</li>
+  <li>Both files sound like Verdal: warm, expert, plain, with green and terracotta named as the palette.</li>
+  <li>You did not paste a single brand detail into the prompt. It came from the folder and your global instructions.</li>
+</ul>
+
+<h3>Test it</h3>
+<p>Close the project, reopen it, and ask it to draft one more carousel slide. If it still follows the design system without you re-explaining it, the project's memory is working.</p>
+
+<div class="callout">
+<strong>Set it up once, reuse forever.</strong> This project now has everything a carousel run needs: brand context, design rules, and reference examples. Next time, skip the setup and just ask for the carousel.
+</div>
+</div>
+
+<!-- ============================================ -->
+<div class="pattern" id="global-vs-projects">
+<span class="pattern-num">STEP 04</span>
+<h2>Global instructions vs projects</h2>
+<p class="lead">Same idea, standing context, but a different scope. Use this table to decide which one a new rule belongs in.</p>
+
+<table>
+<thead><tr><th></th><th>Global instructions</th><th>Projects</th></tr></thead>
+<tbody>
+<tr><td>Scope</td><td>Every task, every session, every folder</td><td>One repeatable workflow</td></tr>
+<tr><td>Where it lives</td><td>Settings &gt; Cowork &gt; Global instructions</td><td>Its own folder, with its own instructions file</td></tr>
+<tr><td>What it holds</td><td>Voice, folder conventions, output format, what to avoid</td><td>Brand context, reference examples, past output, feedback</td></tr>
+<tr><td>Good example</td><td>"No em dashes, no emojis, save to projects/"</td><td>"Verdal carousel", with its own design system and history</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>Use both together.</strong> Global rules for what should always be true. A project for the workflow you run again and again. Global instructions still apply inside a project.
+</div>
+</div>
+
+<!-- ============================================ -->
+<h2 id="wrap">Recap and homework</h2>
+
+<p>If you followed along, you have:</p>
+<ul class="checkbox-list">
+  <li>Set a global instruction in Settings <span class="tag green">global instructions</span></li>
+  <li>Learned what a project remembers between runs <span class="tag green">projects</span></li>
+  <li>Built a Verdal carousel project with its own context and memory <span class="tag green">the big win</span></li>
+  <li>Learned when to use a global rule vs a project <span class="tag green">global vs projects</span></li>
+</ul>
+
+<div class="callout">
+<strong>Homework before Session 3.</strong> Set one global instruction on your own brand's rules. Create one project on your own brand's folder, add a project instruction, and run one task. Note what it saves, and where.
+</div>
+
+<h3>What is next</h3>
+<p>Session 3 is <strong>Skills and plugins</strong>: package a workflow so Cowork repeats it the same way every time, on any brand, without you re-explaining the steps.</p>
+
+<div class="footer">
+  <p>Course: Claude Cowork for marketers. Worked brand: Verdal.<br>
+  Official course: <a href="https://anthropic.skilljar.com/introduction-to-claude-cowork">anthropic.skilljar.com</a><br>
+  Setup help for every tool: <code>../connectors-setup.md</code> in the workshop folder.</p>
+</div>
+
+</div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
+</body>
+</html>

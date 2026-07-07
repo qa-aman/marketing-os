@@ -105,8 +105,10 @@ marketing-os/
 ├── output/                         # GITIGNORED. generated deliverables.
 ├── scripts/
 │   └── ingest.py                   # converts pdf/docx/pptx/csv/zip -> markdown
-└── setup/
-    └── QUICKSTART.md
+├── setup/
+│   └── QUICKSTART.md
+├── workshop/                       # self-paced "Cowork for Marketers" course
+└── anthropic-course/               # instructor-led Cowork team workshop + play kit
 ```
 
 ## The contract every skill follows
@@ -141,6 +143,13 @@ This is what makes the OS portable across companies and verticals.
 - Send emails, post to LinkedIn, run ads, or take actions on external systems. It produces deliverables you publish.
 - Replace your brand strategist, designer, or growth analyst. It handles the production layer of marketing, not the strategy layer.
 - Work without context. Skills produce generic output if `knowledge/` is empty. Run `/onboard` first.
+
+## Training material
+
+Beyond the skills, this repo carries two Claude Cowork training courses.
+
+- **`workshop/`** - a self-paced "Claude Cowork for Marketers" course. Numbered lessons and tutor commands a learner works through on their own.
+- **`anthropic-course/`** - an instructor-led team-enablement workshop: six 2-hour sessions, each with a slide deck to present and a step-by-step lab guide. It teaches a marketing team to use Claude Cowork, practicing on a fictional brand called **Verdal** so it stays generic and shareable. The `anthropic-course/verdal-marketing/` folder is a self-contained "play kit" (brand context, templates, sample data, real photos, guides) that attendees load into Cowork to do every exercise. `becoming-ai-native.html` is a review of how to take the workshop further.
 
 ## Contributing
 
