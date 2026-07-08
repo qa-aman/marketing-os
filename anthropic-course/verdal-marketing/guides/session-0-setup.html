@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 0 - Setup before we start</title>
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #63c69a;
+    --accent-soft: #63c69a1f;
+    --code-bg: #141416;
+    --green: #4ade80;
+    --blue: #3b82f6;
+    --amber: #f0b866;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .pre-label.file { color: var(--blue); }
+  .pre-label.ask { color: var(--accent); }
+  .step {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 32px 28px;
+    margin: 24px 0;
+  }
+  .step-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .step h2 { margin: 0 0 6px; padding-top: 0; border-top: none; font-size: 22px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .callout.warn { background: #f0b8661f; border-left-color: var(--amber); }
+  .callout.warn strong { color: var(--amber); }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  .checkbox-list { list-style: none; padding-left: 0; }
+  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
+  .checkbox-list li::before {
+    content: "\2610"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-size: 18px;
+  }
+  .footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork workshop - before Session 1</div>
+  <h1>Session 0 - Get set up</h1>
+  <p class="lead">Fifteen minutes on your own, before we meet. Do this and Session 1 starts with real work instead of installs.</p>
+</header>
+
+<div class="callout">
+<strong>Why this matters.</strong> Cowork is only as good as the folder you give it. If everyone arrives installed, signed in, and pointing at the Verdal folder, we spend Session 1 building a strategy deck, not watching a progress bar. If you get stuck, message the group before the session, not during it.
+</div>
+
+<h2 style="margin-top: 40px; padding-top: 0; border-top: none;">What you need</h2>
+<ul>
+  <li>A Claude account on a plan that includes <strong>Cowork</strong>, the desktop app (not just the browser chat).</li>
+  <li>A laptop, Mac or Windows.</li>
+  <li>The <strong>Verdal kit</strong> folder (the facilitator will share it, a folder called <code>verdal-marketing</code>).</li>
+  <li>Fifteen minutes.</li>
+</ul>
+
+<div class="callout warn">
+<strong>Read this first: can you install apps?</strong> This workshop needs the Claude desktop app on your machine. If your work laptop is locked down or IT has to approve installs, request approval now so it clears before Session 1. If you are not sure, ask IT today. This is the single most common reason someone cannot take part on day one.
+</div>
+
+<div class="step">
+<span class="step-num">STEP 1</span>
+<h2>Install Claude Desktop with Cowork</h2>
+<p>Download Claude Desktop from your account, sign in, and confirm you can see <strong>Cowork</strong> in the left sidebar. Cowork is the mode that works with local folders on your computer. Chat is the cloud mode that only hands you text. We use Cowork the whole way through.</p>
+<p class="muted">If Cowork is not in your sidebar, your plan may not include it yet. Flag this in the group so the facilitator can sort it before we start.</p>
+</div>
+
+<div class="step">
+<span class="step-num">STEP 2</span>
+<h2>Put the Verdal kit on your computer</h2>
+<p>Save the <code>verdal-marketing</code> folder the facilitator shared somewhere easy to find, like your Desktop or Documents. Do not rename it. Inside it you should see these folders:</p>
+<span class="pre-label file">verdal-marketing/</span>
+<pre class="file"><code>context/     brand knowledge Cowork reads before every task
+templates/   reusable structures (deck outlines, carousel rules)
+data/        sample spreadsheets (metrics, competitors, planner)
+projects/    example finished work
+guides/      these guides, including this one
+brand-photos/ real product photos to use in demos</code></pre>
+<p>This is the sandbox for every demo and lab. It is fictional and safe to experiment in, so you can try anything without touching real client work.</p>
+</div>
+
+<div class="step">
+<span class="step-num">STEP 3</span>
+<h2>Point Cowork at the folder</h2>
+<p>Open Cowork. Click the folder icon in the top left, find your <code>verdal-marketing</code> folder, and select it. Cowork now reads and saves files inside that folder. When you open a new task, this is the workspace it works in.</p>
+<p class="muted">Nothing to type yet. You just want to confirm you can point Cowork at the folder and see the files listed.</p>
+</div>
+
+<div class="step">
+<span class="step-num">STEP 4</span>
+<h2>Set your global instructions</h2>
+<p>In Claude Desktop, open <strong>Settings &gt; Cowork &gt; Global Instructions</strong>. These are rules that apply to every session, set once. Keep them short. Too much detail here just boxes Claude in.</p>
+<span class="pre-label ask">paste this</span>
+<pre><code>Always scan for a context/ folder before starting a task and read
+everything in it. Save finished work into the projects/ folder.
+Use sentence case, no em dashes, no emojis.</code></pre>
+<p>Two lines is plenty. Save and close.</p>
+</div>
+
+<h2>What good looks like</h2>
+<ul class="checkbox-list">
+  <li>Cowork appears in your sidebar and you can open it.</li>
+  <li>You confirmed you can install apps on your laptop, or IT approval is in progress.</li>
+  <li>Your <code>verdal-marketing</code> folder is on your computer with <code>context/</code>, <code>templates/</code>, <code>data/</code>, and <code>projects/</code> inside.</li>
+  <li>You pointed Cowork at that folder and can see the files.</li>
+  <li>Your global instructions are saved and one or two lines long.</li>
+</ul>
+
+<h2>Common mistakes</h2>
+<ul>
+  <li><strong>Using Chat instead of Cowork.</strong> Chat cannot read or save to your folders. Make sure you are in Cowork before Session 1.</li>
+  <li><strong>Leaving the install too late.</strong> If IT has to approve it, a same-day request will not clear in time. Ask now.</li>
+  <li><strong>Writing a novel in global instructions.</strong> Long rules make Claude rigid. Keep it to a couple of lines.</li>
+  <li><strong>Renaming or reorganising the kit folder.</strong> The demos and labs reference these exact folder names. Leave them as they are.</li>
+</ul>
+
+<div class="footer">
+  <p>Bring your laptop set up like this to Session 1. If anything above did not work, say so in the group before we meet, with a screenshot if you can, so we can fix it ahead of time. The one-page <code>cowork-cheat-sheet.html</code> in this folder is a good next read once you are installed.</p>
+</div>
+
+</div>
+</body>
+</html>

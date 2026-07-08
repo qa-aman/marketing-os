@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdal recipe library</title>
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #63c69a;
+    --accent-soft: #63c69a1f;
+    --code-bg: #141416;
+    --green: #4ade80;
+    --blue: #3b82f6;
+    --amber: #f0b866;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
+  }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a {
+    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
+    font-size: 13.5px; line-height: 1.35; border-bottom: none;
+  }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .container { max-width: 900px; margin: 0; padding: 48px 40px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 32px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 34px; margin: 0 0 12px; line-height: 1.2; }
+  h3 { font-size: 17px; margin: 20px 0 8px; color: var(--accent); }
+  h4 { font-size: 13px; margin: 18px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--accent);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .recipe {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 30px 28px;
+    margin: 28px 0;
+    scroll-margin-top: 20px;
+  }
+  .recipe-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .recipe h2 { font-size: 22px; margin: 0 0 6px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .good { background: #4ade8014; border-left: 3px solid var(--green); padding: 10px 16px; margin: 14px 0 0; border-radius: 4px; font-size: 14.5px; }
+  .good strong { color: var(--green); }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+    letter-spacing: 0.3px;
+  }
+  .tag.green { color: var(--green); border-color: var(--green); }
+  .tag.amber { color: var(--amber); border-color: var(--amber); }
+  .footer {
+    margin-top: 56px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .container { margin: 0 auto; padding: 32px 24px 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<button class="menu-toggle" onclick="document.querySelector('aside').classList.toggle('open')">Recipes &#9662;</button>
+
+<aside>
+  <div class="toc-h">The recipes</div>
+  <ol>
+    <li><a href="#r1">Repurpose one post into 7 assets</a></li>
+    <li><a href="#r2">Carousels at scale from the planner</a></li>
+    <li><a href="#r3">Ad creative briefs for five campaigns</a></li>
+    <li><a href="#r4">SEO blog draft, structured for search</a></li>
+    <li><a href="#r5">Weekly competitor read</a></li>
+    <li><a href="#r6">Schedule the whole engine</a></li>
+  </ol>
+</aside>
+
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork for marketers</div>
+  <h1>Verdal recipe library</h1>
+  <p class="lead">Six real marketing jobs, each as one copy-paste prompt. Built for the Verdal kit, so the file paths are already correct. Change the topic, run it, review the output.</p>
+</header>
+
+<div class="callout">
+<strong>How to use these.</strong> Open Cowork with your <code>verdal-marketing</code> folder loaded. Copy a prompt, paste it, and let Cowork work. Everything lands in <code>projects/</code>. The output is a strong draft, not a finished post, so read every file before you use it. Once a recipe works for Verdal, swap the paths for your own brand folder and it works there too.
+</div>
+
+<div class="recipe" id="r1">
+<span class="recipe-num">RECIPE 1</span>
+<span class="tag green">Cowork only</span>
+<h2>Repurpose one post into 7 assets</h2>
+<p>Turn a single blog post into three Instagram captions, a newsletter section, and three LinkedIn posts, all in Verdal's voice, in one run. Drop your source post into <code>projects/repurpose/input/</code> first (name it <code>source-post.md</code>).</p>
+<span class="pre-label">paste into cowork</span>
+<pre><code>Read context/brand-voice.md and context/ideal-customer-profile.md.
+Then read projects/repurpose/input/source-post.md.
+
+Using only the ideas in that post, generate:
+
+1. Three Instagram captions. Each: a one-line hook (not a question),
+   one concrete tip from the post, a soft CTA to the Care Box or a
+   product, 100-150 words, warm and expert tone.
+
+2. One newsletter section: a two-sentence intro naming the problem,
+   three specific bullet takeaways, one closing line linking to the post.
+
+3. Three LinkedIn posts: one educational, one story-led, one contrarian.
+   150-200 words each. Professional but not stiff.
+
+Save to projects/repurpose/output/ as:
+- instagram-captions.md
+- newsletter-section.md
+- linkedin-posts.md</code></pre>
+<div class="good"><strong>Good looks like:</strong> captions that name a specific number or signal, a newsletter section that reads like a real email, and three LinkedIn posts that actually feel different from each other. If one format is off, say so in the same chat and ask for a rewrite of just that file.</div>
+</div>
+
+<div class="recipe" id="r2">
+<span class="recipe-num">RECIPE 2</span>
+<span class="tag green">Cowork only</span>
+<h2>Carousels at scale from the planner</h2>
+<p>Produce a full on-brand carousel for every topic in your planner, in one pass, using the Verdal design system. The planner ships in your kit at <code>data/content-planner.csv</code>.</p>
+<span class="pre-label">paste into cowork</span>
+<pre><code>You are running the Verdal carousel production workflow.
+
+Load first:
+- templates/carousel-design-system.md (visual and structural rules)
+- context/brand-voice.md (tone and language)
+- context/ideal-customer-profile.md (audience)
+- data/content-planner.csv (the production queue)
+
+Task:
+1. Read every row in the planner where format is "carousel" and
+   status is "planned".
+2. For each, generate a carousel following the design system exactly:
+   a hook slide, a context slide, four content slides, a CTA slide.
+3. Save each as projects/output/carousels/<topic-slug>.md, with slide
+   number, headline, body copy, and a one-line image direction per slide.
+4. Return a summary table: topic, status, and output path for each.
+
+Voice: warm, expert, plain. No hype. Colors: botanical green, cream,
+terracotta. Reference those colours in the image direction notes.</code></pre>
+<div class="good"><strong>Good looks like:</strong> a hook slide that names the pain in under eight words, each middle slide doing exactly one thing, and image notes specific enough to hand to a designer ("overhead shot of a waterlogged pot on cream linen" beats "nice plant photo").</div>
+</div>
+
+<div class="recipe" id="r3">
+<span class="recipe-num">RECIPE 3</span>
+<span class="tag green">Cowork only</span>
+<span class="tag amber">visuals need an image connector</span>
+<h2>Ad creative briefs for five campaigns</h2>
+<p>Generate a structured creative brief per campaign: audience insight, three hooks, primary text, headline, CTAs, and visual direction. The brief is the single source of truth every ad traces back to. List your campaigns in a file at <code>projects/ads/ad-campaigns.md</code> (campaign, product, goal, platform, audience).</p>
+<span class="pre-label">paste into cowork</span>
+<pre><code>You are a paid social strategist for Verdal.
+
+Read context/brand-context.md, context/brand-voice.md, and
+context/ideal-customer-profile.md.
+Then read projects/ads/ad-campaigns.md and read each campaign row.
+
+For each campaign, write a creative brief and save it to
+projects/ads/<campaign-name>/brief.md. Each brief includes:
+- Campaign overview: product, goal, platform, audience (2-3 sentences)
+- Audience insight: one specific pain or desire this campaign addresses
+- Hook options: 3 hooks under 10 words (curiosity, result, problem)
+- Primary text: 50-80 words, leads with the hook, ends with the CTA
+- Headline: under 7 words, benefit first
+- CTA text: 3 options
+- Visual direction: scene, mood, colour cues in 2-3 sentences
+
+Voice: warm, expert, plain. No corporate speak. No em dashes.
+Work through all campaigns in parallel. Confirm when every brief is saved.</code></pre>
+<div class="good"><strong>Good looks like:</strong> a brief whose audience insight names a real, specific pain, not "wants healthy plants". The visual direction step (generating actual images) needs an image connector, which you set up in the connectors session. Until then, the briefs alone are usable.</div>
+</div>
+
+<div class="recipe" id="r4">
+<span class="recipe-num">RECIPE 4</span>
+<span class="tag green">Cowork only</span>
+<span class="tag amber">publishing needs a CMS connector</span>
+<h2>SEO blog draft, structured for search</h2>
+<p>Write a full, structured SEO post in Verdal's voice from a target keyword, ready for a human to review and publish. Pick a keyword from <code>data/keyword-opportunities.csv</code>.</p>
+<span class="pre-label">paste into cowork</span>
+<pre><code>Read context/brand-context.md and context/brand-voice.md.
+Read data/keyword-opportunities.csv and pick the highest-opportunity
+keyword we have not written yet.
+
+Write a complete SEO blog post for Verdal on that keyword:
+- Title: 55-65 characters, includes the keyword
+- Meta description: 145-155 characters, one clear promise
+- Intro: 80-100 words, answers the core query in the first paragraph
+- Table of contents: linked H2 headings
+- Body: 4-6 H2 sections, 150-250 words each, bullets where they help
+- Key takeaways box near the end: 3-5 scannable bullets
+- Conclusion: 60-80 words, no new info, soft CTA
+
+Use the keyword naturally, not forced. Voice: warm, practical, plain.
+Save as projects/seo-blog/DRAFT-<slug>.md.
+Report word count and where the keyword appears.</code></pre>
+<div class="good"><strong>Good looks like:</strong> the intro answers the question in the first two sentences, the keyword sits in the title and first paragraph, and no sentence sounds like "maximise your botanical investments". Pushing the draft into a CMS like WordPress is a connector step for later; the draft itself needs nothing but Cowork.</div>
+</div>
+
+<div class="recipe" id="r5">
+<span class="recipe-num">RECIPE 5</span>
+<span class="tag green">Cowork only</span>
+<h2>Weekly competitor read</h2>
+<p>Turn the competitor data in your kit into a short, useful read: what each rival posted, what worked, and one thing Verdal should try. Uses <code>data/competitor-posts.csv</code>, which ships in the kit.</p>
+<span class="pre-label">paste into cowork</span>
+<pre><code>Read data/competitor-posts.csv and context/brand-context.md.
+
+Write a one-page competitor digest for the Verdal marketing lead:
+1. A three-bullet summary: what The Sill, Bloomscape, and Leon and
+   George each leaned into this period.
+2. The single highest-engagement post across all competitors, with the
+   format and a one-line guess at why it worked.
+3. Two content ideas for Verdal inspired by the gaps, each with a format
+   (carousel, reel, single) and a one-line hook.
+4. One thing to avoid, based on a post that clearly underperformed.
+
+Keep it under 300 words. Plain language, no hype.
+Save to projects/competitor-digest.md.</code></pre>
+<div class="good"><strong>Good looks like:</strong> ideas tied to a real number from the data, not generic "post more reels". This is the recipe to put on a schedule later (see Recipe 6) so it lands every week on its own.</div>
+</div>
+
+<div class="recipe" id="r6">
+<span class="recipe-num">RECIPE 6</span>
+<span class="tag green">Cowork only</span>
+<h2>Schedule the whole engine</h2>
+<p>Once a recipe works by hand, put it on a repeat so it runs without you. In Cowork, type <code>/schedule</code>, set a recurrence, and paste an instruction like the one below. Test the recipe manually once before you schedule it.</p>
+<span class="pre-label">paste when cowork asks what to run</span>
+<pre><code>Run the weekly Verdal content check.
+
+1. Read data/content-planner.csv. Find every row where status is "planned".
+2. For each, load context/brand-voice.md and the relevant audience file,
+   then draft the piece named in the topic column, in its format.
+3. Save each draft to projects/output/ named
+   DD-MM-YYYY-<format>-<topic-slug>.md
+4. Update that row: set status to "draft ready" and fill output_file.
+5. Write a short run summary: how many drafted, anything skipped and why,
+   anything that needs a human eye.
+
+Do not publish anything. Draft and update the planner only.</code></pre>
+<div class="callout"><strong>One thing to know.</strong> Cowork scheduled tasks are not cloud jobs. They run only while Claude Desktop is open and the project is loaded. If your laptop is closed when the task is due, the run is skipped, it does not queue for later. Keep the app open, or set a reminder to open it.</div>
+<div class="good"><strong>Good looks like:</strong> you open your laptop and the week's drafts are already in <code>projects/output/</code> with the planner updated, waiting for your review. Automation does the production. You keep the sign-off.</div>
+</div>
+
+<div class="footer">
+  <p>These recipes read your brand context at runtime, so they stay on-brand without you re-explaining Verdal each time. Never paste brand rules directly into a prompt, keep them in <code>context/</code> so there is one source of truth. The one-page <code>cowork-cheat-sheet.html</code> in this folder is the quick reference that sits behind all of these.</p>
+</div>
+
+</div>
+</div>
+
+<script>
+  var links = Array.prototype.slice.call(document.querySelectorAll('aside a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var i = sections.indexOf(e.target);
+        links.forEach(function (l) { l.classList.remove('active'); });
+        if (i > -1) links[i].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(function (s) { if (s) obs.observe(s); });
+</script>
+</body>
+</html>

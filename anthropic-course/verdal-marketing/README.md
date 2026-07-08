@@ -44,9 +44,11 @@ verdal-marketing/
   projects/         where your finished work is saved
     verdal-newsletter.md
     weekly-content-brief-example.md a finished brief to package in Session 3
-  guides/           the six session guides plus a cheat sheet - open in a browser, for you not Cowork
+  guides/           the guides - open in a browser, for you not Cowork
+    session-0-setup.html            do this before Session 1: install, folder, global instructions
     session-1-guide.html ... session-6-guide.html
     cowork-cheat-sheet.html         the whole course on one page, keep it at your desk
+    recipe-library.html             six real marketing jobs as copy-paste Cowork prompts
   connectors-setup.md   how to connect each tool, with official documentation links
 ```
 
