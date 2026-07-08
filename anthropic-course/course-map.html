@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cowork for the team - course map</title>
+<style>
+  :root{ --bg:#0D0D0D; --panel:#1a1a1d; --panel-2:#232327; --border:#2e2e33; --text:#ececec;
+    --muted:#9a9aa0; --accent:#63c69a; --accent-soft:#63c69a1f; --code-bg:#141416; --blue:#7cb0ff; --amber:#f0b866; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6;font-size:15px;}
+  .container{max-width:1000px;margin:0 auto;padding:48px 32px 96px;}
+  header{border-bottom:2px solid var(--accent);padding-bottom:24px;margin-bottom:28px;}
+  .eyebrow{color:var(--accent);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:8px;}
+  h1{font-size:34px;margin:0 0 12px;line-height:1.2;}
+  h2{font-size:14px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin:40px 0 4px;}
+  .lead{font-size:18px;color:var(--muted);}
+  p{margin:12px 0;} .muted{color:var(--muted);}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);}
+  a:hover{border-bottom-style:solid;}
+  code{font-family:"SF Mono",Menlo,monospace;font-size:12.5px;background:var(--code-bg);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:#f4d6a8;}
+  .callout{background:var(--accent-soft);border-left:3px solid var(--accent);padding:14px 18px;margin:20px 0;border-radius:4px;}
+  .callout strong{color:var(--accent);}
+  .phase{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px 26px 8px;margin:14px 0 26px;}
+  .phase-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:6px;}
+  .phase-head h3{margin:0;font-size:21px;}
+  .badge{font-size:11.5px;font-weight:700;letter-spacing:.5px;padding:3px 10px;border-radius:20px;}
+  .b1{background:#4ade8022;color:#6ee7a8;border:1px solid #4ade80;}
+  .b2{background:#f0b86622;color:var(--amber);border:1px solid var(--amber);}
+  .b3{background:#f0736b22;color:#ff9a92;border:1px solid #f0736b;}
+  .phase-head .lead{font-size:14px;flex:1;min-width:200px;}
+  .sess{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:start;padding:16px 0;border-bottom:1px solid #26262b;}
+  .sess:last-child{border-bottom:none;}
+  .sess .num{width:40px;height:40px;border-radius:9px;background:var(--panel-2);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:var(--accent);}
+  .sess .t{font-weight:700;font-size:16px;margin-bottom:2px;}
+  .sess .d{color:var(--muted);font-size:13.5px;}
+  .sess .lk{display:flex;flex-direction:column;gap:6px;text-align:right;white-space:nowrap;font-size:13px;}
+  .prework{background:var(--panel-2);border:1px dashed var(--border);border-radius:10px;padding:16px 22px;margin:8px 0 24px;}
+  .shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:12px;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+  .card .ct{font-weight:700;margin-bottom:4px;}
+  .card .cd{color:var(--muted);font-size:13px;}
+  .footer{margin-top:48px;padding-top:22px;border-top:1px solid var(--border);color:var(--muted);font-size:13.5px;}
+  @media(max-width:620px){.sess{grid-template-columns:40px 1fr;}.sess .lk{grid-column:1/-1;text-align:left;flex-direction:row;gap:16px;}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork workshop</div>
+  <h1>Course map</h1>
+  <p class="lead">Six 2-hour sessions, grouped into three phases by difficulty. All hands-on in the Claude Cowork desktop app. No terminal, no code.</p>
+</header>
+
+<div class="callout">
+<strong>Scope in one line.</strong> This workshop teaches Claude Cowork, and pairs it with browser tools like Perplexity and Gemini where useful. The only thing left out is Claude Code (terminal work), because it is too technical for this group. See <a href="video-coverage-map.html">the coverage map</a> for exactly what is in and what is out.
+</div>
+
+<div class="prework">
+<strong>Start here &middot; Session 0 (pre-work, ~15 min at home)</strong>
+<p class="muted" style="margin:6px 0 0">Install Cowork, load the Verdal folder, set your global instructions. Do this before Session 1 so no session is lost to installs. &rarr; <a href="verdal-marketing/guides/session-0-setup.html">Session 0 setup guide</a></p>
+</div>
+
+<h2>Phase 1</h2>
+<div class="phase">
+  <div class="phase-head">
+    <h3>Beginner - get working</h3>
+    <span class="badge b1">No experience needed</span>
+    <span class="lead">Meet the tool and make it yours. By the end you hand Cowork a real task and it remembers your brand.</span>
+  </div>
+  <div class="sess">
+    <div class="num">1</div>
+    <div><div class="t">Meet Claude Cowork</div><div class="d">The task loop, setup and permissions, real files, the model picker. First task on Verdal.</div></div>
+    <div class="lk"><a href="sessions/session-1.html">Deck &rarr;</a><a href="sessions/session-1-guide.html">Lab guide &rarr;</a></div>
+  </div>
+  <div class="sess">
+    <div class="num">2</div>
+    <div><div class="t">Standing context &amp; projects</div><div class="d">Global instructions, Projects with memory, and letting Cowork interview you to build your brand files.</div></div>
+    <div class="lk"><a href="sessions/session-2.html">Deck &rarr;</a><a href="sessions/session-2-guide.html">Lab guide &rarr;</a></div>
+  </div>
+  <p class="muted" style="padding:12px 0 4px;font-size:13.5px">Full phase overview &rarr; <a href="phases/beginner.html">Beginner phase</a></p>
+</div>
+
+<h2>Phase 2</h2>
+<div class="phase">
+  <div class="phase-head">
+    <h3>Intermediate - build &amp; connect</h3>
+    <span class="badge b2">After phase 1</span>
+    <span class="lead">Turn repeat work into reusable skills, and connect Cowork to the tools you already use.</span>
+  </div>
+  <div class="sess">
+    <div class="num">3</div>
+    <div><div class="t">Skills &amp; plugins</div><div class="d">When to build a skill, how to build one, and installing the official Anthropic marketing plugin for day-one tools.</div></div>
+    <div class="lk"><a href="sessions/session-3.html">Deck &rarr;</a><a href="sessions/session-3-guide.html">Lab guide &rarr;</a></div>
+  </div>
+  <div class="sess">
+    <div class="num">4</div>
+    <div><div class="t">Connect your tools</div><div class="d">Connectors and the native&gt;official&gt;community safety order, Claude in Chrome, Notion, and Apify for competitor scraping.</div></div>
+    <div class="lk"><a href="sessions/session-4.html">Deck &rarr;</a><a href="sessions/session-4-guide.html">Lab guide &rarr;</a></div>
+  </div>
+  <p class="muted" style="padding:12px 0 4px;font-size:13.5px">Full phase overview &rarr; <a href="phases/intermediate.html">Intermediate phase</a></p>
+</div>
+
+<h2>Phase 3</h2>
+<div class="phase">
+  <div class="phase-head">
+    <h3>Advanced - automate &amp; combine</h3>
+    <span class="badge b3">After phase 2</span>
+    <span class="lead">Bigger outputs, automation, and pairing Claude with other tools. Ends on working safely and where to go next.</span>
+  </div>
+  <div class="sess">
+    <div class="num">5</div>
+    <div><div class="t">Bigger outputs &amp; automation</div><div class="d">Live artifacts, scheduled tasks, parallel agents, polished decks with Gamma, and research with Perplexity.</div></div>
+    <div class="lk"><a href="sessions/session-5.html">Deck &rarr;</a><a href="sessions/session-5-guide.html">Lab guide &rarr;</a></div>
+  </div>
+  <div class="sess">
+    <div class="num">6</div>
+    <div><div class="t">Safety, sharing &amp; next steps</div><div class="d">Permission modes, sharing a skill, human-in-the-loop, using two models together, and what lies beyond Cowork.</div></div>
+    <div class="lk"><a href="sessions/session-6.html">Deck &rarr;</a><a href="sessions/session-6-guide.html">Lab guide &rarr;</a></div>
+  </div>
+  <p class="muted" style="padding:12px 0 4px;font-size:13.5px">Full phase overview &rarr; <a href="phases/advanced.html">Advanced phase</a></p>
+</div>
+
+<h2>Keep at your desk</h2>
+<div class="shelf">
+  <div class="card"><div class="ct"><a href="verdal-marketing/guides/cowork-cheat-sheet.html">Cheat sheet</a></div><div class="cd">The whole course on one page.</div></div>
+  <div class="card"><div class="ct"><a href="verdal-marketing/guides/recipe-library.html">Recipe library</a></div><div class="cd">Real marketing jobs as copy-paste prompts.</div></div>
+  <div class="card"><div class="ct"><a href="video-coverage-map.html">Coverage map</a></div><div class="cd">What is covered, and what is out of scope.</div></div>
+  <div class="card"><div class="ct"><a href="becoming-ai-native.html">Becoming AI-native</a></div><div class="cd">How to take this further after the workshop.</div></div>
+</div>
+
+<div class="footer">
+  <p>Facilitator: present each session's deck, run the lab from its guide. Attendees keep the guides, cheat sheet, and recipe library. Everyone works in the shared Verdal kit, so nobody touches real client work while learning.</p>
+</div>
+
+</div>
+</body>
+</html>

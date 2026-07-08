@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video coverage map</title>
+<style>
+  :root {
+    --bg: #0D0D0D; --panel: #1a1a1d; --panel-2: #232327; --border: #2e2e33;
+    --text: #ececec; --muted: #9a9aa0; --accent: #63c69a; --accent-soft: #63c69a1f;
+    --code-bg: #141416; --green: #4ade80; --blue: #3b82f6; --amber: #f0b866; --red: #f0736b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.6; font-size: 15px; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 32px; }
+  header .eyebrow { color: var(--accent); font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  h1 { font-size: 34px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 24px; margin: 48px 0 14px; padding-top: 28px; border-top: 1px solid var(--border); }
+  h3 { font-size: 17px; margin: 22px 0 8px; color: var(--accent); }
+  p { margin: 12px 0; }
+  .lead { font-size: 18px; color: var(--muted); }
+  .muted { color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 12.5px; background: var(--code-bg);
+    border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; color: #f4d6a8; }
+  .callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; margin: 18px 0; border-radius: 4px; }
+  .callout strong { color: var(--accent); }
+  .callout.warn { background: #f0b8661f; border-left-color: var(--amber); }
+  .callout.warn strong { color: var(--amber); }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 13.5px; }
+  th, td { border: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; position: sticky; top: 0; }
+  tbody tr:nth-child(even) { background: #161618; }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+  .pill.cov { background: #4ade8022; color: var(--green); border: 1px solid var(--green); }
+  .pill.part { background: #f0b86622; color: var(--amber); border: 1px solid var(--amber); }
+  .pill.add { background: #3b82f622; color: #7cb0ff; border: 1px solid var(--blue); }
+  .pill.beyond { background: #f0736b22; color: var(--red); border: 1px solid var(--red); }
+  .pill.cowork { background: var(--panel-2); color: var(--green); border: 1px solid var(--border); }
+  .pill.cc { background: var(--panel-2); color: var(--red); border: 1px solid var(--border); }
+  .pill.web { background: var(--panel-2); color: #7cb0ff; border: 1px solid var(--border); }
+  ol.flow { margin: 4px 0; padding-left: 18px; }
+  ol.flow li { margin: 2px 0; }
+  ul { padding-left: 20px; } ul li { margin: 5px 0; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 16px 0; font-size: 13px; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13.5px; }
+  .scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Cowork workshop - source coverage</div>
+  <h1>Video coverage map</h1>
+  <p class="lead">All 13 source videos, what each teaches, and whether the workshop covers it, where, or why it sits outside scope.</p>
+</header>
+
+<div class="callout warn">
+<strong>The one thing to know before reading.</strong> Only one tool is out of scope: <strong>Claude Code</strong> (terminal commands, <code>/agents</code>, <code>.mcp.json</code>, remote control). It is too technical for this non-technical, Cowork-first workshop, so videos 2, 3, 5 and 7 are marked "Beyond scope" and named in one place so nobody thinks they were missed. Everything else is fair game: <strong>Claude Cowork</strong>, <strong>Claude Chat</strong>, and pairing Claude with <strong>Gemini</strong> or <strong>Perplexity</strong> all stay in, since none of them need a terminal. The multi-tool videos (11, 13) are taught in the Advanced phase.
+</div>
+
+<div class="legend">
+  <span><span class="pill cov">Covered</span> already taught, with a hands-on lab</span>
+  <span><span class="pill part">Partial</span> core idea covered, a concept still to add</span>
+  <span><span class="pill add">To add</span> in scope, not yet in the workshop</span>
+  <span><span class="pill beyond">Beyond scope</span> Claude Code / multi-model, awareness only</span>
+</div>
+<div class="legend">
+  <span><span class="pill cowork">Cowork</span> runs in the desktop app, no code</span>
+  <span><span class="pill cc">Claude Code</span> needs terminal / technical setup - excluded</span>
+  <span><span class="pill web">Web tools</span> Chat, Perplexity, Gemini - browser, no code</span>
+</div>
+
+<h2>The 13 videos at a glance</h2>
+<div class="scroll">
+<table>
+<thead>
+<tr>
+  <th style="width:4%">#</th>
+  <th style="width:15%">What it teaches (concept &amp; flow)</th>
+  <th style="width:8%">Tool</th>
+  <th style="width:9%">Difficulty</th>
+  <th style="width:9%">Status</th>
+  <th style="width:16%">Where in our workshop</th>
+  <th style="width:23%">Gap to close / what to add</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+  <td><a href="https://youtu.be/qiqw-_6TUZ0">1</a></td>
+  <td>The full Cowork-for-marketing arc: set up context folder + global instructions, let Claude interview you to build brand files, strategy deck from files+photos, Projects with memory, connectors, live artifacts, skills, plugins, browser use, scheduled tasks.</td>
+  <td><span class="pill cowork">Cowork</span></td>
+  <td>Beginner</td>
+  <td><span class="pill cov">Covered</span></td>
+  <td>The workshop spine: <code>sessions/session-1..6.html</code> + <code>verdal-marketing/guides/recipe-library.html</code></td>
+  <td>Add: <strong>Gamma</strong> (S5), <strong>Apify</strong> (S4), <strong>let-Claude-interview-you to build context</strong> (S2), <strong>official marketing plugin</strong> (S3/S6), <strong>live-artifact gotchas</strong> (S5).</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/Ph-maUAiSU8">2</a></td>
+  <td>A marketing skills stack in Claude Code: brand / function / specialty skill types, the Claude Design tool, a campaign-manager agent built in the terminal, and a Notion skill library synced on a schedule.</td>
+  <td><span class="pill cc">Claude Code</span></td>
+  <td>Advanced</td>
+  <td><span class="pill beyond">Beyond scope</span></td>
+  <td>Excluded (too technical)</td>
+  <td>Terminal + agent commands + Claude Design = technical, so not taught. One transferable idea for S3: <strong>the brand / function / specialty skill taxonomy</strong> as a way to organise skills.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/yLXLHnD4fco">3</a></td>
+  <td>A full AI marketing team in Claude Code: 12 skills grouped into 5 subagents, MCP wired via <code>.mcp.json</code>, a Notion task board, and mobile/remote control of a session.</td>
+  <td><span class="pill cc">Claude Code</span></td>
+  <td>Advanced</td>
+  <td><span class="pill beyond">Beyond scope</span></td>
+  <td>Excluded (too technical)</td>
+  <td>Explicitly technical (VS Code, terminal, JSON, subagents). Not taught. Named in the "Beyond Cowork" note so nobody thinks it was missed.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/l1y3IeC_eJ0">4</a></td>
+  <td>A content system in Cowork: three layers (context, skills, orchestration) run from one planner spreadsheet. Repurpose, carousels, ad briefs, SEO blogs, then push to Notion / WordPress.</td>
+  <td><span class="pill cowork">Cowork</span> <span class="pill cc">CC</span></td>
+  <td>Intermediate</td>
+  <td><span class="pill part">Partial</span></td>
+  <td><code>recipe-library.html</code> (repurpose, carousels, ad briefs, SEO, schedule) + S5</td>
+  <td>Cowork parts already added as recipes. Only the Notion/WordPress push uses a Python script in Claude Code = <span class="pill beyond">excluded</span>; the Notion native connector is covered in S4.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/X8afcX2s2Mo">5</a></td>
+  <td>Building an AI marketing team with Claude Skills: skill-creator, research/content/creative skills, subagents vs Agent Teams, and packaging skills into a shareable plugin.</td>
+  <td><span class="pill cc">Claude Code</span></td>
+  <td>Advanced</td>
+  <td><span class="pill beyond">Beyond scope</span></td>
+  <td>Excluded (too technical)</td>
+  <td>Claude Code + Agent Teams, not taught. Transferable to S3/S6: <strong>"show, don't tell" when building a skill</strong> (give real example content) and <strong>make skills brand-agnostic</strong>.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/l_Iy4ZCK1lY">6</a></td>
+  <td>Six Cowork use cases: the three Claude modes explained, port a Chat project into Cowork, batch creative with parallel agents, synthesise a large local dataset, a browser-use audit skill, turn a workflow into a skill, plugins.</td>
+  <td><span class="pill cowork">Cowork</span></td>
+  <td>Intermediate</td>
+  <td><span class="pill part">Partial</span></td>
+  <td>S1 (files), S3 (skills/plugins), S4 (Chrome), S5 (parallel agents)</td>
+  <td>Add: <strong>the three modes framing</strong> (S1), <strong>point at a folder, do not upload to chat</strong> (S1), <strong>tell Cowork to run parallel agents + keep its own progress tracker</strong> for big jobs (S5).</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/0J2_YGuNrDo">7</a></td>
+  <td>A 5-agent marketing team in Claude Code: every agent needs role + knowledge + tools, built via <code>/agents</code>, wired with MCP, and routed through rules in <code>CLAUDE.md</code>.</td>
+  <td><span class="pill cc">Claude Code</span></td>
+  <td>Advanced</td>
+  <td><span class="pill beyond">Beyond scope</span></td>
+  <td>Excluded (too technical)</td>
+  <td>Deeply technical (terminal, routing files). Not taught. The <strong>"role + knowledge + tools" recipe for an agent</strong> is a clean mental model to mention in S5/S6.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/m-5DjcgFmfQ">8</a></td>
+  <td>Skills explained: what a skill is vs a Project vs MCP, three skill sources (official, partner, custom), enabling them, why they do not always auto-trigger, three ways to build one, and a decision rule for when to build.</td>
+  <td><span class="pill cowork">Cowork</span></td>
+  <td>Intermediate</td>
+  <td><span class="pill part">Partial</span></td>
+  <td>S3 (skills &amp; plugins)</td>
+  <td>Add to S3: <strong>the "build a skill?" decision rule</strong> (repeated 3+ times, quality matters), <strong>enable code execution + file creation first</strong>, <strong>skill-creator</strong>, <strong>extend an official skill</strong> instead of starting blank.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/Mz7G0ug7gJ4">9</a></td>
+  <td>Notion as a marketing connector: content calendar, artifact dashboards from a tracker, a team knowledge base, an ops "launch pad", and turning a raw CSV into a labelled Notion database.</td>
+  <td><span class="pill cowork">Cowork</span></td>
+  <td>Intermediate</td>
+  <td><span class="pill part">Partial</span></td>
+  <td>S4 (connectors)</td>
+  <td>Add to S4: <strong>Notion as the worked connector example</strong> (calendar + dashboard), which pairs with the distribution recipe. Native connector only; the local GitHub MCP install is <span class="pill beyond">excluded</span>.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/xBcSLxpIlr0">10</a></td>
+  <td>MCP explained: what it is, its architecture, and four ways to connect a tool in order of safety - native, official, community, custom (no-code n8n) - plus minimal-permission and tool-count best practices.</td>
+  <td><span class="pill cowork">Cowork</span> <span class="pill cc">CC</span></td>
+  <td>Intermediate</td>
+  <td><span class="pill part">Partial</span></td>
+  <td>S4 (connectors)</td>
+  <td>Add to S4: <strong>"a connector in one breath"</strong> and the <strong>native &gt; official &gt; community &gt; custom safety order</strong> + grant-minimum-access. The JSON config and n8n server build are <span class="pill beyond">excluded</span>.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/-NPOejX2qCA">11</a></td>
+  <td>Gemini + Claude orchestration: use each model for its strength (Gemini for scale/data, Claude for strategy/story), ending on the "one drafts, the other critiques" adversarial loop.</td>
+  <td><span class="pill web">Gemini</span></td>
+  <td>Intermediate</td>
+  <td><span class="pill add">To add</span></td>
+  <td>Advanced phase (S6)</td>
+  <td>Add to the Advanced phase: <strong>use each model for its strength</strong> (Gemini for scale and long documents, Claude for strategy and story) and the <strong>critique loop</strong> (one model drafts, the other critiques). Two web tools, no terminal.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/p0pR_zq-85M">12</a></td>
+  <td>Turn Claude into agents with MCP: the "problem before tool" framework and five agent builds (research, business intelligence, personal ops, UX/Figma, project intelligence), each a Project with a role + connectors.</td>
+  <td><span class="pill cowork">Cowork</span> <span class="pill cc">CC</span></td>
+  <td>Advanced</td>
+  <td><span class="pill add">To add</span></td>
+  <td>S4 / S5 (as a native-connector starter pack)</td>
+  <td>Add the two <strong>native-connector agents</strong> (a research/Drive agent, a Gmail+Calendar+Drive ops agent) as an optional starter pack. Figma / n8n custom-server builds are <span class="pill beyond">excluded</span>.</td>
+</tr>
+
+<tr>
+  <td><a href="https://youtu.be/zK3KlDOnpn4">13</a></td>
+  <td>Perplexity + Claude workflows: research on Perplexity, then Claude builds the deliverable (dashboard, competitor report, persona style guide, elevator pitch, mockup), with task-code triggers and self-critique.</td>
+  <td><span class="pill web">Perplexity</span></td>
+  <td>Intermediate</td>
+  <td><span class="pill add">To add</span></td>
+  <td>Advanced phase (S5)</td>
+  <td>Add to the Advanced phase: the <strong>research-to-deliverable flow</strong> (Perplexity gathers live sources, Claude builds the dashboard / report / persona guide), plus <strong>self-critique prompts</strong> and saving an output as a reusable template.</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<h2>What to add, and where (Cowork, in scope)</h2>
+<p>Everything below runs in the desktop app with no code. Each item names the session file it belongs in.</p>
+
+<h3>Session 1 - Meet Cowork <span class="muted">(sessions/session-1.html)</span></h3>
+<ul>
+  <li><strong>The three modes in one slide</strong> - Chat (cloud, hands you text), Cowork (local, does the work), and where Claude Code sits (power users, out of scope here). From videos 6, 10.</li>
+  <li><strong>Point at a folder, do not paste into chat</strong> - the habit that makes Cowork better than Chat. From video 6.</li>
+</ul>
+
+<h3>Session 2 - Standing context &amp; projects <span class="muted">(sessions/session-2.html)</span></h3>
+<ul>
+  <li><strong>Let Claude interview you to build your brand files</strong> - point Cowork at an empty folder and ask it to create <code>brand-context.md</code>, <code>brand-voice.md</code>, and <code>ideal-customer-profile.md</code> by asking you questions, then save them to <code>context/</code>. The fastest way for the team to onboard their real brand after the workshop. From videos 1, 12.</li>
+  <li><strong>Set the project instructions field</strong> for every project (the per-project system prompt), separate from the context files. From videos 1, 12.</li>
+</ul>
+
+<h3>Session 3 - Skills &amp; plugins <span class="muted">(sessions/session-3.html)</span></h3>
+<ul>
+  <li><strong>The "should this be a skill?" rule</strong> - build one when a task repeats 3+ times, you would train a human on it, and quality has to be consistent. From video 8.</li>
+  <li><strong>Enable code execution + file creation first</strong>, then turn on skills one at a time (not all at once). From video 8.</li>
+  <li><strong>Two ways to make a skill</strong> - use <code>skill-creator</code>, or extend an official skill so you do not start from a blank page. Tell Claude to make it brand-agnostic. From videos 5, 6, 8.</li>
+  <li><strong>Install the official Anthropic marketing plugin</strong> for working skills on day one (brand review, campaign plan, competitive brief). From video 1, 6.
+    <span class="muted">(<a href="https://github.com/anthropics/knowledge-work-plugins/tree/main/marketing">official plugin</a>, <a href="https://code.claude.com/docs/en/discover-plugins">install docs</a>)</span></li>
+</ul>
+
+<h3>Session 4 - Connect your tools <span class="muted">(sessions/session-4.html)</span></h3>
+<ul>
+  <li><strong>A connector in one breath</strong> + the safety order: <strong>native &gt; official &gt; community &gt; custom</strong>, and grant the minimum access. From video 10.</li>
+  <li><strong>Notion as the worked example</strong> - connect it, push a content calendar, build a dashboard from a tracker. Pairs with the distribution recipe. From video 9.</li>
+  <li><strong>Apify - full segment</strong>: what web scraping is, install it as a connector, scrape competitor social posts into a spreadsheet + dashboard for Verdal. From video 1.
+    <span class="muted">(<a href="https://apify.com/">apify.com</a>, <a href="https://docs.apify.com/">docs</a>)</span></li>
+</ul>
+
+<h3>Session 5 - Bigger outputs &amp; automation <span class="muted">(sessions/session-5.html)</span></h3>
+<ul>
+  <li><strong>Gamma - full segment</strong>: connect Gamma inside Claude to turn Cowork's work into a polished, editable deck; a Verdal example. From video 1.
+    <span class="muted">(<a href="https://help.gamma.app/">help.gamma.app</a>)</span></li>
+  <li><strong>Live-artifact gotchas</strong>: turn on Artifacts + AI-powered artifacts + Code Execution first; use the literal words "live artifact" in the prompt; pin it and hit refresh to update without rerunning. From video 1.</li>
+  <li><strong>Parallel agents + self-tracking for big jobs</strong> - tell Cowork to run parts in parallel and keep its own checklist so nothing is dropped, then spot-check. From video 6.</li>
+  <li><strong>Research with Perplexity, build with Claude</strong> - the research-to-deliverable flow: Perplexity gathers live sources, Claude turns them into a dashboard, competitor report, or persona guide. Two web tools, no code. From video 13.</li>
+  <li><strong>Optional native-connector starter pack</strong> - a research/Drive agent and a Gmail+Calendar+Drive ops agent, as Projects. From video 12.</li>
+</ul>
+
+<h3>Session 6 - Safety, sharing, next steps <span class="muted">(sessions/session-6.html)</span></h3>
+<ul>
+  <li><strong>Human-in-the-loop for high-stakes actions</strong> - any agent that sends or publishes must confirm first; never give send + delete together. From videos 7, 12.</li>
+  <li><strong>Use two models together</strong> - Gemini for scale and long documents, Claude for strategy and story, and the critique loop where one drafts and the other sharpens it. Non-technical, just two web tools. From video 11.</li>
+  <li><strong>The "beyond Cowork" pointer</strong> - one honest slide: this is where Claude Code and agent teams begin, for anyone who wants to go further.</li>
+</ul>
+
+<h2>Excluded - Claude Code only (too technical)</h2>
+<p>Only one tool is left out: <strong>Claude Code</strong>. Videos 2, 3, 5 and 7 (and the technical setup parts of 10) need a terminal, JSON config, or command-line agent tools, which breaks the promise that this workshop needs no code. They are named here, in one place, so nobody assumes they were missed. A one-slide "beyond Cowork" pointer in Session 6 tells the team this ceiling exists, without teaching it.</p>
+<ul>
+  <li>Building a multi-agent marketing team in Claude Code (subagents, <code>/agents</code>, routing via <code>CLAUDE.md</code>). Videos 3, 7.</li>
+  <li>Skills at scale in Claude Code: brand/function/specialty taxonomy, Agent Teams, a Notion skill library. Videos 2, 5.</li>
+  <li>MCP the technical way: local JSON config, community servers, no-code n8n custom servers. Video 10 (the native-connector half is taught in S4).</li>
+</ul>
+<p class="muted" style="margin-top:14px">Note: Gemini and Perplexity are <strong>not</strong> excluded. They run in the browser with no code, so their marketing workflows (videos 11 and 13) are taught in the Advanced phase.</p>
+
+<div class="footer">
+  <p>Status is judged against the non-technical, Cowork-only scope Aditya set. "Beyond scope" is not a gap in the workshop - it is content that belongs to a more technical audience, kept visible so nobody thinks it was missed. The source videos are referenced here for planning only and are not named anywhere in the workshop materials themselves.</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 3 - Advanced</title>
+<style>
+  :root{ --bg:#0D0D0D; --panel:#1a1a1d; --panel-2:#232327; --border:#2e2e33; --text:#ececec;
+    --muted:#9a9aa0; --accent:#63c69a; --accent-soft:#63c69a1f; --code-bg:#141416; --amber:#f0b866; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6;font-size:15px;}
+  .container{max-width:860px;margin:0 auto;padding:44px 32px 90px;}
+  .top{font-size:13px;margin-bottom:20px;}
+  header{border-bottom:2px solid var(--accent);padding-bottom:22px;margin-bottom:26px;}
+  .eyebrow{color:var(--accent);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:8px;}
+  h1{font-size:32px;margin:0 0 10px;line-height:1.2;}
+  h2{font-size:15px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:38px 0 10px;}
+  .lead{font-size:18px;color:var(--muted);}
+  p{margin:12px 0;} .muted{color:var(--muted);}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);}
+  a:hover{border-bottom-style:solid;}
+  code{font-family:"SF Mono",Menlo,monospace;font-size:12.5px;background:var(--code-bg);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:#f4d6a8;}
+  .callout{background:var(--accent-soft);border-left:3px solid var(--accent);padding:13px 18px;margin:18px 0;border-radius:4px;}
+  .callout strong{color:var(--accent);}
+  .callout.warn{background:#f0b8661f;border-left-color:var(--amber);}
+  .callout.warn strong{color:var(--amber);}
+  .sess{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px 26px;margin:18px 0;}
+  .sess h3{margin:0 0 4px;font-size:20px;}
+  .sess .meta{color:var(--muted);font-size:13px;margin-bottom:12px;}
+  .sess ul{margin:8px 0;padding-left:20px;} .sess li{margin:5px 0;}
+  .out{background:#4ade8014;border-left:3px solid #4ade80;padding:8px 14px;margin-top:12px;border-radius:4px;font-size:14px;}
+  .out strong{color:#6ee7a8;}
+  .lk{margin-top:14px;display:flex;gap:16px;font-size:14px;}
+  .nav{display:flex;justify-content:space-between;margin-top:44px;padding-top:22px;border-top:1px solid var(--border);font-size:14px;}
+  ul.can{padding-left:20px;} ul.can li{margin:6px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="top"><a href="../course-map.html">&larr; Course map</a></div>
+
+<header>
+  <div class="eyebrow">Phase 3 of 3 &middot; Advanced</div>
+  <h1>Automate &amp; combine</h1>
+  <p class="lead">Bigger outputs, work that runs itself, and pairing Claude with other tools. Ends on working safely and where to go next.</p>
+</header>
+
+<div class="callout"><strong>Who this is for.</strong> Anyone comfortable after Phases 1 and 2. Still no code: "advanced" here means bigger, more automated, and multi-tool, not more technical.</div>
+
+<div class="sess">
+  <h3>Session 5 - Bigger outputs &amp; automation</h3>
+  <div class="meta">Live artifacts &middot; scheduled tasks &middot; parallel agents &middot; Gamma &middot; Perplexity</div>
+  <p>Move from one-off files to living dashboards and work that runs on a schedule. Then make it look sharp and pull in live research.</p>
+  <ul>
+    <li>Live artifacts: an interactive dashboard you build once and refresh</li>
+    <li>Scheduled tasks: a weekly job that runs on its own</li>
+    <li>Parallel agents for big batch jobs, with Cowork tracking its own progress</li>
+    <li>Gamma: turn Cowork's work into a polished, editable deck</li>
+    <li>Research with Perplexity, then build the deliverable in Claude</li>
+  </ul>
+  <div class="out"><strong>You can now:</strong> build a live dashboard, schedule a recurring job, polish a deck with Gamma, and research with Perplexity.</div>
+  <div class="lk"><a href="../sessions/session-5.html">Present the deck &rarr;</a><a href="../sessions/session-5-guide.html">Lab guide &rarr;</a></div>
+</div>
+
+<div class="sess">
+  <h3>Session 6 - Safety, sharing &amp; next steps</h3>
+  <div class="meta">Permission modes &middot; sharing a skill &middot; human-in-the-loop &middot; two models together</div>
+  <p>Work safely, hand your best skill to a colleague, and see where this goes after the workshop.</p>
+  <ul>
+    <li>Permission modes and reviewing output before it ships</li>
+    <li>Human-in-the-loop: any tool that sends or publishes must confirm first</li>
+    <li>Validate and package a skill to share with the team</li>
+    <li>Use two models together: Gemini for scale, Claude for strategy, and the critique loop</li>
+  </ul>
+  <div class="out"><strong>You can now:</strong> work safely, share a skill, combine tools, and plan your own next task with confidence.</div>
+  <div class="lk"><a href="../sessions/session-6.html">Present the deck &rarr;</a><a href="../sessions/session-6-guide.html">Lab guide &rarr;</a></div>
+</div>
+
+<div class="callout warn">
+<strong>Beyond Cowork - what we did not cover.</strong> There is a more technical path, <strong>Claude Code</strong>: multi-agent teams built in a terminal, command-line skills, and custom code connectors. It is powerful but not for this workshop, since it needs coding comfort. If someone wants to go there later, <a href="../becoming-ai-native.html">becoming-ai-native</a> points the way. Everything in these six sessions stays no-code.
+</div>
+
+<h2>By the end of Phase 3</h2>
+<ul class="can">
+  <li>Build a live dashboard and schedule work that runs itself</li>
+  <li>Produce polished decks with Gamma and live research with Perplexity</li>
+  <li>Work safely and share a skill with a colleague</li>
+  <li>Combine Claude with another model, and know what lies beyond Cowork</li>
+</ul>
+
+<div class="nav">
+  <span><a href="intermediate.html">&larr; Intermediate</a></span>
+  <span><a href="../course-map.html">Course map</a></span>
+</div>
+
+</div>
+</body>
+</html>
