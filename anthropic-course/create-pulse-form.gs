@@ -144,12 +144,12 @@ function addLearningQuestions(form) {
   form.addCheckboxItem()
     .setTitle('Which of these can you already do in Claude Cowork today? Tick all that apply.')
     .setChoiceValues([
-      'Give it a task on a folder and get a finished file back (Session 1)',
-      'Set brand rules or a project it remembers (Session 2)',
-      'Build a reusable skill (Session 3)',
-      'Connect a tool like Gmail or Drive (Session 4)',
-      'Build a live dashboard or schedule a task (Session 5)',
-      'Share a skill with a teammate, or set connector access safely (Session 6)',
+      'Give it a task on a folder and get a finished file back',
+      'Set brand rules or a project it remembers',
+      'Build a reusable skill',
+      'Connect a tool like Gmail or Drive',
+      'Build a live dashboard or schedule a task',
+      'Share a skill with a teammate, or set connector access safely',
       'None of these yet'
     ])
     .setRequired(true);
