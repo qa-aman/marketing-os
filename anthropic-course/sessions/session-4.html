@@ -371,6 +371,98 @@ section to projects/verdal-newsletter.md.</code>
     </ul>
   </section>
 
+  <!-- CONNECTOR + SAFETY ORDER -->
+  <section class="slide" data-notes="A connector in one breath: it lets Cowork read and use a tool you already have, like Drive or Notion, the same way it reads your folder. The safety rule: prefer native built-in connectors, then official ones from the vendor, then community ones only if there is no official option. Always grant the least access it needs.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">What a connector is</div>
+        <h2>Give Cowork a key to one more room.</h2>
+        <div class="sub">A connector lets Cowork read and use a tool you already have, live, the same way it reads your folder.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Pick connectors in this order</div>
+          <ul class="big" style="gap:10px">
+            <li><span class="n">1</span><span>Native - built into Claude (Drive, Gmail)</span></li>
+            <li><span class="n">2</span><span>Official - from the tool's maker (Notion)</span></li>
+            <li><span class="n">3</span><span>Community - only if there is no official one</span></li>
+          </ul>
+          <div class="foot" style="margin-top:12px">Always grant the least access it needs.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTION EXAMPLE -->
+  <section class="slide" data-notes="Notion is the connector marketers get the most from. Connect it once, then Cowork can push a content calendar and build a dashboard from a tracker. This pairs with the distribution recipe in the recipe library.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">A connector in action - Notion</div>
+        <h2>Push a calendar, build a dashboard.</h2>
+        <div class="sub">Connect Notion once. Then Cowork writes finished content into your content calendar and turns a tracker into a live dashboard.</div>
+      </div>
+      <div class="right">
+        <div class="code">
+          <div class="lbl">The prompt</div>
+          <code>Read projects/output/ and add each finished
+post to my Notion content calendar with its
+platform and date. Then build a dashboard of
+what is scheduled this month.</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APIFY WHAT/WHY -->
+  <section class="slide" data-notes="Apify is a web scraping tool you connect to Cowork. Scraping means pulling public data off websites automatically, for example competitor social posts. This turns hours of manual copying into one prompt. It is a connector you install once with an API token.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Apify - pull live data from the web</div>
+        <h2>Scrape competitor posts, automatically.</h2>
+        <div class="sub">Apify is a connector that reads public web data for you, like competitor social posts, instead of you copying it by hand.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">Set up once</div>
+          <div class="tree" style="font-size:14px;line-height:1.9">
+            <div><span class="dir">1</span> Customize &rarr; Connectors &rarr; find Apify</div>
+            <div><span class="dir">2</span> Install, paste your Apify API token</div>
+            <div><span class="dir">3</span> Cowork can now scrape on request</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APIFY DEMO -->
+  <section class="slide" data-notes="The demo: ask Cowork to scrape the last 25 posts from each Verdal competitor and build a spreadsheet plus an interactive dashboard. It calls Apify, pulls the posts, analyses engagement, and saves everything to the project folder. Official Apify docs: apify.com and docs.apify.com.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Live demo - watch this</div>
+        <h2>From competitor posts to a dashboard.</h2>
+        <div class="code" style="margin-top:16px">
+          <div class="lbl">The prompt</div>
+          <code>Using Apify, scrape the last 25 Instagram
+posts from The Sill, Bloomscape, and Leon
+and George. Build a spreadsheet of the data
+and an interactive dashboard for our content
+strategy. Save both to projects/.</code>
+        </div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What comes back</div>
+          <div class="thumbs">
+            <div class="th"><div class="b g"></div><div class="b"></div><div class="b" style="width:80%"></div></div>
+            <div class="th"><div class="b t"></div><div class="b"></div><div class="b" style="width:70%"></div></div>
+            <div class="th"><div class="b g"></div><div class="b"></div><div class="b" style="width:85%"></div></div>
+          </div>
+          <div style="margin-top:12px;font:600 13px/1.4 var(--sans);color:var(--muted)">Posting frequency, engagement by type, top topics.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 12 YOUR TURN (LAB) -->
   <section class="slide lab" data-notes="Attendees work on their own laptops. Circulate. Common blockers: the connector sign-in flow gets interrupted, or they look for results in the chat panel instead of in projects/. If someone is on a shared login, they watch the volunteer drive and do this as homework. Allow extra time for the connector sign-in step - it takes 2-3 minutes the first time.">
     <div class="split">
