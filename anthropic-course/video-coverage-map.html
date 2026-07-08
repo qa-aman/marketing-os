@@ -65,16 +65,16 @@
 </div>
 
 <div class="legend">
-  <span><span class="pill cov">Covered</span> already taught, with a hands-on lab</span>
-  <span><span class="pill part">Partial</span> core idea covered, a concept still to add</span>
-  <span><span class="pill add">To add</span> in scope, not yet in the workshop</span>
-  <span><span class="pill beyond">Beyond scope</span> Claude Code / multi-model, awareness only</span>
+  <span><span class="pill cov">Covered</span> built into the decks and lab guides</span>
+  <span><span class="pill beyond">Beyond scope</span> Claude Code, excluded on purpose</span>
 </div>
 <div class="legend">
   <span><span class="pill cowork">Cowork</span> runs in the desktop app, no code</span>
   <span><span class="pill cc">Claude Code</span> needs terminal / technical setup - excluded</span>
   <span><span class="pill web">Web tools</span> Chat, Perplexity, Gemini - browser, no code</span>
 </div>
+
+<div class="callout"><strong>Current status.</strong> Every in-scope item below is now built into the session decks and their lab guides, including the native-connector starter pack (<code>verdal-marketing/projects/starter-agents.md</code>). The four Claude Code videos remain out of scope on purpose. The per-row notes record what was added and where.</div>
 
 <h2>The 13 videos at a glance</h2>
 <div class="scroll">
@@ -87,7 +87,7 @@
   <th style="width:9%">Difficulty</th>
   <th style="width:9%">Status</th>
   <th style="width:16%">Where in our workshop</th>
-  <th style="width:23%">Gap to close / what to add</th>
+  <th style="width:23%">What was added / notes</th>
 </tr>
 </thead>
 <tbody>
@@ -127,7 +127,7 @@
   <td>A content system in Cowork: three layers (context, skills, orchestration) run from one planner spreadsheet. Repurpose, carousels, ad briefs, SEO blogs, then push to Notion / WordPress.</td>
   <td><span class="pill cowork">Cowork</span> <span class="pill cc">CC</span></td>
   <td>Intermediate</td>
-  <td><span class="pill part">Partial</span></td>
+  <td><span class="pill cov">Covered</span></td>
   <td><code>recipe-library.html</code> (repurpose, carousels, ad briefs, SEO, schedule) + S5</td>
   <td>Cowork parts already added as recipes. Only the Notion/WordPress push uses a Python script in Claude Code = <span class="pill beyond">excluded</span>; the Notion native connector is covered in S4.</td>
 </tr>
@@ -147,7 +147,7 @@
   <td>Six Cowork use cases: the three Claude modes explained, port a Chat project into Cowork, batch creative with parallel agents, synthesise a large local dataset, a browser-use audit skill, turn a workflow into a skill, plugins.</td>
   <td><span class="pill cowork">Cowork</span></td>
   <td>Intermediate</td>
-  <td><span class="pill part">Partial</span></td>
+  <td><span class="pill cov">Covered</span></td>
   <td>S1 (files), S3 (skills/plugins), S4 (Chrome), S5 (parallel agents)</td>
   <td>Add: <strong>the three modes framing</strong> (S1), <strong>point at a folder, do not upload to chat</strong> (S1), <strong>tell Cowork to run parallel agents + keep its own progress tracker</strong> for big jobs (S5).</td>
 </tr>
@@ -167,7 +167,7 @@
   <td>Skills explained: what a skill is vs a Project vs MCP, three skill sources (official, partner, custom), enabling them, why they do not always auto-trigger, three ways to build one, and a decision rule for when to build.</td>
   <td><span class="pill cowork">Cowork</span></td>
   <td>Intermediate</td>
-  <td><span class="pill part">Partial</span></td>
+  <td><span class="pill cov">Covered</span></td>
   <td>S3 (skills &amp; plugins)</td>
   <td>Add to S3: <strong>the "build a skill?" decision rule</strong> (repeated 3+ times, quality matters), <strong>enable code execution + file creation first</strong>, <strong>skill-creator</strong>, <strong>extend an official skill</strong> instead of starting blank.</td>
 </tr>
@@ -177,7 +177,7 @@
   <td>Notion as a marketing connector: content calendar, artifact dashboards from a tracker, a team knowledge base, an ops "launch pad", and turning a raw CSV into a labelled Notion database.</td>
   <td><span class="pill cowork">Cowork</span></td>
   <td>Intermediate</td>
-  <td><span class="pill part">Partial</span></td>
+  <td><span class="pill cov">Covered</span></td>
   <td>S4 (connectors)</td>
   <td>Add to S4: <strong>Notion as the worked connector example</strong> (calendar + dashboard), which pairs with the distribution recipe. Native connector only; the local GitHub MCP install is <span class="pill beyond">excluded</span>.</td>
 </tr>
@@ -187,7 +187,7 @@
   <td>MCP explained: what it is, its architecture, and four ways to connect a tool in order of safety - native, official, community, custom (no-code n8n) - plus minimal-permission and tool-count best practices.</td>
   <td><span class="pill cowork">Cowork</span> <span class="pill cc">CC</span></td>
   <td>Intermediate</td>
-  <td><span class="pill part">Partial</span></td>
+  <td><span class="pill cov">Covered</span></td>
   <td>S4 (connectors)</td>
   <td>Add to S4: <strong>"a connector in one breath"</strong> and the <strong>native &gt; official &gt; community &gt; custom safety order</strong> + grant-minimum-access. The JSON config and n8n server build are <span class="pill beyond">excluded</span>.</td>
 </tr>
@@ -197,7 +197,7 @@
   <td>Gemini + Claude orchestration: use each model for its strength (Gemini for scale/data, Claude for strategy/story), ending on the "one drafts, the other critiques" adversarial loop.</td>
   <td><span class="pill web">Gemini</span></td>
   <td>Intermediate</td>
-  <td><span class="pill add">To add</span></td>
+  <td><span class="pill cov">Covered</span></td>
   <td>Advanced phase (S6)</td>
   <td>Add to the Advanced phase: <strong>use each model for its strength</strong> (Gemini for scale and long documents, Claude for strategy and story) and the <strong>critique loop</strong> (one model drafts, the other critiques). Two web tools, no terminal.</td>
 </tr>
@@ -207,9 +207,9 @@
   <td>Turn Claude into agents with MCP: the "problem before tool" framework and five agent builds (research, business intelligence, personal ops, UX/Figma, project intelligence), each a Project with a role + connectors.</td>
   <td><span class="pill cowork">Cowork</span> <span class="pill cc">CC</span></td>
   <td>Advanced</td>
-  <td><span class="pill add">To add</span></td>
-  <td>S4 / S5 (as a native-connector starter pack)</td>
-  <td>Add the two <strong>native-connector agents</strong> (a research/Drive agent, a Gmail+Calendar+Drive ops agent) as an optional starter pack. Figma / n8n custom-server builds are <span class="pill beyond">excluded</span>.</td>
+  <td><span class="pill cov">Covered</span></td>
+  <td><code>verdal-marketing/projects/starter-agents.md</code> + S5 pointer</td>
+  <td>Built as the two <strong>native-connector agents</strong> (research/Drive, and Gmail+Calendar+Drive ops) in <code>starter-agents.md</code>. Figma / n8n custom-server builds stay <span class="pill beyond">excluded</span>.</td>
 </tr>
 
 <tr>
@@ -217,7 +217,7 @@
   <td>Perplexity + Claude workflows: research on Perplexity, then Claude builds the deliverable (dashboard, competitor report, persona style guide, elevator pitch, mockup), with task-code triggers and self-critique.</td>
   <td><span class="pill web">Perplexity</span></td>
   <td>Intermediate</td>
-  <td><span class="pill add">To add</span></td>
+  <td><span class="pill cov">Covered</span></td>
   <td>Advanced phase (S5)</td>
   <td>Add to the Advanced phase: the <strong>research-to-deliverable flow</strong> (Perplexity gathers live sources, Claude builds the dashboard / report / persona guide), plus <strong>self-critique prompts</strong> and saving an output as a reusable template.</td>
 </tr>
@@ -226,8 +226,8 @@
 </table>
 </div>
 
-<h2>What to add, and where (Cowork, in scope)</h2>
-<p>Everything below runs in the desktop app with no code. Each item names the session file it belongs in.</p>
+<h2>What was added, and where (Cowork, in scope)</h2>
+<p>All of the below is now in the workshop, runs in the desktop app with no code, and names the session file it lives in.</p>
 
 <h3>Session 1 - Meet Cowork <span class="muted">(sessions/session-1.html)</span></h3>
 <ul>
@@ -265,7 +265,7 @@
   <li><strong>Live-artifact gotchas</strong>: turn on Artifacts + AI-powered artifacts + Code Execution first; use the literal words "live artifact" in the prompt; pin it and hit refresh to update without rerunning. From video 1.</li>
   <li><strong>Parallel agents + self-tracking for big jobs</strong> - tell Cowork to run parts in parallel and keep its own checklist so nothing is dropped, then spot-check. From video 6.</li>
   <li><strong>Research with Perplexity, build with Claude</strong> - the research-to-deliverable flow: Perplexity gathers live sources, Claude turns them into a dashboard, competitor report, or persona guide. Two web tools, no code. From video 13.</li>
-  <li><strong>Optional native-connector starter pack</strong> - a research/Drive agent and a Gmail+Calendar+Drive ops agent, as Projects. From video 12.</li>
+  <li><strong>Native-connector starter pack</strong> - a research/Drive agent and a Gmail+Calendar+Drive ops agent, now in <code>verdal-marketing/projects/starter-agents.md</code>. From video 12.</li>
 </ul>
 
 <h3>Session 6 - Safety, sharing, next steps <span class="muted">(sessions/session-6.html)</span></h3>
