@@ -47,6 +47,8 @@ Verdal example to anchor point 2: "Imagine you get a monthly competitor newslett
 
 ## 0:40 - 0:55  Demo - pull a live email into a Verdal deliverable
 
+**Lead with this:** the live Gmail pull is the hook, watching Cowork reach into a real inbox and write to a file lands hardest.
+
 This is the headline moment for this session. Follow these steps exactly.
 
 1. Open Cowork. Confirm the Verdal folder is loaded.
@@ -74,6 +76,11 @@ The lab steps:
 3. Watch the task loop. Open the file in projects/ when it is done.
 4. Stretch task for fast finishers: repeat with the other connector (Gmail if they did Drive first, or vice versa), or try Claude in Chrome to search for a competitor.
 
+Pick one, so everyone's output is different:
+(a) pull the latest doc from Google Drive and summarize it
+(b) find a thread in Gmail and pull the key points into a file
+(c) use Claude in Chrome to check how a competitor shows up in search
+
 Login note: if some attendees are on a common ID, they watch the volunteer drive and do the real task as homework. Confirm this before the session.
 
 Circulate. Common blockers:
@@ -85,6 +92,8 @@ Allow extra time for the connector sign-in step. The first OAuth flow takes 2-3 
 
 ## 1:45 - 1:55  Debrief and Q&A
 
+Showcase and vote (about 2 minutes): ask 2 or 3 volunteers to share their screen, put their output up, and let the room vote or clap for the favorite. Name a table favorite. This turns solo lab work into a shared moment, and it is where the energy is.
+
 Ask three questions: Which tool did you connect? What did Cowork pull in? What would you automate with this? Let a few people answer. The goal is to surface the moment connectors clicked for them - when Cowork pulled something real from a live tool and put it straight into a file. That is the mental model for the rest of the course.
 
 ## 1:55 - 2:00  Preview and homework
@@ -92,6 +101,8 @@ Ask three questions: Which tool did you connect? What did Cowork pull in? What w
 Preview Session 5: "Next time we go bigger - live dashboards and scheduled jobs. Cowork runs tasks without you sitting at the keyboard."
 
 Homework (5 minutes): connect one tool for their own brand and ask Cowork to pull one real piece of content into their projects folder using their own brand voice rules. They should arrive at Session 5 with at least one connector already working.
+
+Cowork MVP: give a quick shout-out to the best output of the session, or to anyone who used Cowork for something real outside the lab. Keep a running MVP across the six sessions if the room enjoys it.
 
 ---
 

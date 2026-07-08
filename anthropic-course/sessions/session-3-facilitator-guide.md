@@ -46,6 +46,8 @@ Key line: "The description is not a label. It is what Cowork reads to decide whe
 
 ## 0:30 - 0:55  Demo - turn the Verdal weekly brief into a skill
 
+**Lead with this:** run an existing skill live in one line first, so they see the payoff before you teach how to build one.
+
 This is the headline moment. Follow the demo steps exactly.
 
 1. Open Cowork. Confirm skill-creator is installed under Customize > Claude Skills. Point to it.
@@ -73,6 +75,11 @@ High level steps:
 
 The starter prompt on the lab slide targets an instagram-captions skill. Attendees can substitute any workflow they repeat.
 
+Pick one workflow to package as a skill, so everyone's output is different:
+(a) an Instagram-caption skill
+(b) the weekly-content-brief skill
+(c) a "turn a blog post into a LinkedIn post" skill
+
 Login note: if some attendees are on a common ID, they follow along while the volunteer drives, and build their own skill at their desk as homework. Confirm this before the session.
 
 Circulate. The two most common blockers:
@@ -80,6 +87,8 @@ Circulate. The two most common blockers:
 - Brand details baked into the skill: remind them the skill should load context at runtime from the context/ folder, not hardcode Verdal's voice rules inside the SKILL.md. This is the brand-agnostic principle.
 
 ## 1:45 - 1:55  Debrief and Q&A
+
+Showcase and vote (about 2 minutes): ask 2 or 3 volunteers to share their screen, put their output up, and let the room vote or clap for the favorite. Name a table favorite. This turns solo lab work into a shared moment, and it is where the energy is.
 
 Ask three questions: What workflow will you package first for your own brand? What did you write in the description - the trigger? How is a skill different from just saving a prompt?
 
@@ -90,6 +99,8 @@ The third question is the important one. The answer the room needs: a saved prom
 Preview Session 4: "Next time we connect your tools - your CMS, your calendar, your analytics. Real data in, finished output out."
 
 Homework: think of one workflow you repeat for your own brand (not Verdal) and package it as a skill before next session. Run it once and bring the result to Session 4.
+
+Cowork MVP: give a quick shout-out to the best output of the session, or to anyone who used Cowork for something real outside the lab. Keep a running MVP across the six sessions if the room enjoys it.
 
 ---
 

@@ -42,6 +42,8 @@ Analogy that lands: "Chat is a smart colleague on a phone call. Cowork is that c
 
 ## 0:30 - 0:55  Demo - strategy deck from Verdal
 
+**Lead with this:** the strategy deck demo is the biggest wow of the whole course, do not bury it, open with it.
+
 This is the headline "wow". The steps below are your demo script. Run them in order:
 
 1. Open Cowork. Load the Verdal marketing folder. Point out the permission prompt and grant it.
@@ -66,11 +68,18 @@ The attendee handout is `session-1-guide.html` (their step-by-step guide, with t
 3. Watch the task loop. Open the file it saved.
 4. Try the model picker: rerun with a different model and notice the difference.
 
+Pick one, so everyone's output is different:
+(a) three Instagram captions about repotting a plant
+(b) a warm welcome message for a first-time plant owner
+(c) a myth-buster post, "you are probably not overwatering, here is what is really happening"
+
 Login note: if some attendees are on a common ID, they follow along while the volunteer drives, and do the real task as homework. Confirm this before the session.
 
 Circulate. The two most common blockers, and their fixes: folder access not granted (re-open the folder and click Allow on the permission prompt), and looking for output in the chat instead of the folder (open the `projects/` folder, the file is there).
 
 ## 1:45 - 1:55  Debrief and Q&A
+
+Showcase and vote (about 2 minutes): ask 2 or 3 volunteers to share their screen, put their output up, and let the room vote or clap for the favorite. Name a table favorite. This turns solo lab work into a shared moment, and it is where the energy is.
 
 Ask three questions: What surprised you? Where did it save the file? How was this different from Chat? Let a few people answer. This cements the mental model.
 
@@ -79,6 +88,8 @@ Ask three questions: What surprised you? Where did it save the file? How was thi
 Preview Session 2: "Next time we make Cowork yours, so it remembers your brand and your rules without you repeating them."
 
 Homework (5 minutes): hand Cowork one more task on Verdal, any task you like, and see what it makes.
+
+Cowork MVP: give a quick shout-out to the best output of the session, or to anyone who used Cowork for something real outside the lab. Keep a running MVP across the six sessions if the room enjoys it.
 
 ---
 

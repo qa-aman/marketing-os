@@ -48,6 +48,8 @@ Analogy that helps: "Global instructions are like the team handbook every new co
 
 ## 0:40 - 1:00  Demo - carousel project from Verdal
 
+**Lead with this:** show the before and after, the same task run with and without standing context, so they feel the difference.
+
 This is the show. Follow the demo walkthrough below exactly.
 
 **Before you start:** confirm your Settings > Global instructions are visible and have something in them. The room should see that the setup is real.
@@ -85,6 +87,11 @@ High level - three steps:
 Starter prompt (also on the lab slide):
 "Create a project from verdal-marketing/context/. Name it 'Verdal email'. Add this project instruction: 'Always read context/ and match brand-voice.md before writing.' Then write a short welcome email for Nate, a new plant owner, and save it to projects/welcome-email.md"
 
+Pick one project to create, so everyone's output is different:
+(a) a carousel project from the carousel-design-system folder
+(b) a weekly-email project
+(c) a competitor-watch project
+
 Common blockers and fixes:
 
 - **Project instructions not added** - they skipped step 3. Redirect them: click the project settings or instructions file and type two lines before running.
@@ -94,6 +101,8 @@ Common blockers and fixes:
 Login note: if some attendees share a common login, they follow along while the volunteer drives and do the real task as homework. Confirm this before the session.
 
 ## 1:50 - 1:55  Debrief and Q&A
+
+Showcase and vote (about 2 minutes): ask 2 or 3 volunteers to share their screen, put their output up, and let the room vote or clap for the favorite. Name a table favorite. This turns solo lab work into a shared moment, and it is where the energy is.
 
 Ask three questions. Let a few people answer each.
 
@@ -108,6 +117,8 @@ The goal: they can articulate in their own words why global instructions and pro
 Preview Session 3: "Next time we look at skills and plugins. You will package a workflow so Cowork repeats it the same way every time, on any brand, without you re-explaining the steps."
 
 Homework (can be done in five minutes): set one global instruction in Settings, then create one project on your own brand's folder, add a project instruction, run one task, and note what it saves and where. Bring the output to Session 3.
+
+Cowork MVP: give a quick shout-out to the best output of the session, or to anyone who used Cowork for something real outside the lab. Keep a running MVP across the six sessions if the room enjoys it.
 
 ---
 

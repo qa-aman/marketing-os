@@ -76,6 +76,8 @@ Say: "Every one of these is something you did on Verdal in this workshop. Now yo
 
 ## 0:58 - 1:08  Demo - validate and share a Verdal skill
 
+**Lead with this:** the "catch the made-up stat" demo, ask Cowork to cite its source and watch it flag a claim it cannot trace.
+
 This is the last live demo of the course. Follow these steps:
 
 1. Open Cowork. Load the Verdal marketing folder. Confirm the weekly-content-brief.skill is in templates/.
@@ -111,7 +113,14 @@ Do this as a show of hands or a quick written form. Review answers together. Fla
 
 Walk the room. The goal is a prompt they can paste into Cowork today. If they are stuck on the task, prompt them: what did you do last Monday that took more than 30 minutes and involved writing or researching?
 
+Pick one skill to validate and share, so everyone's output is different:
+(a) the weekly-content-brief skill
+(b) a skill you built in Session 3
+(c) a caption skill
+
 Login note: attendees on a shared login write their prompt now and run it as homework. Confirm this before the session and make sure they have their own Cowork access arranged for after.
+
+Showcase and vote (about 2 minutes): ask 2 or 3 volunteers to share their screen, put their output up, and let the room vote or clap for the favorite. Name a table favorite. This turns solo lab work into a shared moment, and it is where the energy is.
 
 ## 1:45 - 1:55  Where next
 
@@ -128,6 +137,8 @@ Slide 15. Keep this brief. Let the slide land.
 Say: "You built something real in six sessions. A Verdal skill that runs, a connected tool, a scheduled job, a packaged workflow. Now take that pattern and rebuild it on your own brand. That is where it stops being an exercise and becomes your system."
 
 Thank them. Point anyone who wants individual help toward the official course or office hours if you offer them.
+
+Cowork MVP: give a quick shout-out to the best output of the session, or to anyone who used Cowork for something real outside the lab. Keep a running MVP across the six sessions if the room enjoys it.
 
 ---
 

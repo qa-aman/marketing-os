@@ -56,6 +56,8 @@ Connect all three. A scheduled task runs on Sunday morning and updates a file in
 
 ## 0:30 - 0:55  Demo - Verdal dashboard and scheduled digest
 
+**Lead with this:** the live dashboard that refreshes is the "build once, it stays" moment, open with it.
+
 This is the headline demonstration. One prompt, two outcomes.
 
 1. Open Cowork on the demo machine. Confirm Artifacts and Code Execution are on in settings before you start.
@@ -92,6 +94,12 @@ Starter prompt (also on slide 11):
 
 > Load verdal-marketing/context/. Build a LIVE ARTIFACT that tracks Verdal's top 5 keyword opportunities this week and flags any new content from The Sill or Bloomscape. Pin it. Then schedule this same research task to run every Monday at 8am, saving a summary to projects/weekly-brief.md.
 
+Pick one dashboard to build, so everyone's output is different:
+(a) a keyword-opportunities radar from data/keyword-opportunities.csv
+(b) a competitor-engagement dashboard from data/competitor-posts.csv
+(c) a channel-performance snapshot from data/last-month-metrics.csv
+Then schedule one weekly job.
+
 Login note: attendees on a shared login follow along while the volunteer drives and complete the task as homework. Confirm this before the session.
 
 **Common blockers to watch for:**
@@ -106,6 +114,8 @@ Circulate every 8-10 minutes. Ask: "Is your artifact pinned? Can you see the ref
 ---
 
 ## 1:45 - 1:55  Debrief and Q&A
+
+Showcase and vote (about 2 minutes): ask 2 or 3 volunteers to share their screen, put their output up, and let the room vote or clap for the favorite. Name a table favorite. This turns solo lab work into a shared moment, and it is where the energy is.
 
 Ask three questions. Let a few people answer each.
 
@@ -124,6 +134,8 @@ Take 3-4 minutes for open questions before moving on.
 Preview Session 6: "The final session covers safety, sharing, and next steps - how to use Cowork with a team, what is safe to share, and where the guardrails are."
 
 Homework: pick one recurring task for their own brand, schedule it in Cowork to run weekly, let it run once, open the output, and bring it to Session 6 to share. Keep it simple - a weekly content brief or a weekly competitor check is enough.
+
+Cowork MVP: give a quick shout-out to the best output of the session, or to anyone who used Cowork for something real outside the lab. Keep a running MVP across the six sessions if the room enjoys it.
 
 ---
 
