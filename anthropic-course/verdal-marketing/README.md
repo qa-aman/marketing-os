@@ -44,6 +44,7 @@ verdal-marketing/
   projects/         where your finished work is saved
     verdal-newsletter.md
     weekly-content-brief-example.md a finished brief to package in Session 3
+    starter-agents.md               two ready-to-run agents to set up (Session 5)
   guides/           the guides - open in a browser, for you not Cowork
     session-0-setup.html            do this before Session 1: install, folder, global instructions
     session-1-guide.html ... session-6-guide.html
@@ -62,6 +63,18 @@ verdal-marketing/
 | 4 - Connect your tools | `projects/verdal-newsletter.md`, plus `reference/plant-care-trend-email.md` if you have no live Gmail |
 | 5 - Outputs and automation | `data/keyword-opportunities.csv`, `data/competitor-posts.csv`, `reference/competitors.md` |
 | 6 - Safety and sharing | any skill you built (validate and share it) |
+
+## What each session covers
+
+A plain-language summary of the topics, good for sharing before the workshop.
+
+- **Session 0 (before we start):** install Claude Cowork and set up the workshop folder.
+- **Session 1 - Meet Claude Cowork:** what Cowork is and how it differs from the chat, giving it a task on your files, and watching it save a finished file.
+- **Session 2 - Context and projects:** setting rules it remembers, building a project with memory, and letting Cowork interview you to build your brand files.
+- **Session 3 - Skills and plugins:** turning a repeated task into a reusable skill, and installing ready-made ones like the official marketing plugin.
+- **Session 4 - Connect your tools:** connecting Gmail, Drive, Notion, and tools like Apify to pull live data into your work.
+- **Session 5 - Bigger outputs and automation:** live dashboards, scheduled tasks, polished decks with Gamma, and research with Perplexity.
+- **Session 6 - Safety, sharing and next steps:** working safely, sharing a skill with the team, and setting up your own brand.
 
 ## A note on the data
 
