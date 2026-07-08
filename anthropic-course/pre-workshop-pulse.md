@@ -2,7 +2,7 @@
 
 A 60-second read for the team before the Claude Cowork workshop. The point is to learn where they are starting from, so we can pace the sessions and sort logins. It is not a test. Frame it that way, or people will not answer.
 
-> Prefer a Google Form that saves every answer to a sheet? Run `create-pulse-form.gs` (instructions inside). It builds the same questions as a form, with a "Before / After" toggle so you can run it once before the workshop and again after, and measure what the team learned.
+> Prefer a Google Form that saves every answer to a sheet? Run `create-pulse-form.gs` (instructions inside). It builds two forms: `createPreForm()` for before the workshop (readiness plus the capability self-map) and `createPostForm()` for after (the same capability self-map plus feedback). The gate and capability questions are identical in both, so you compare those two sheets to measure what the team learned.
 
 Aditya posts these in the company group. Use WhatsApp's native Poll feature (tap the plus, then Poll) for each one, so people answer with a single tap and we get clean counts. Five short polls, about 50 seconds total.
 
