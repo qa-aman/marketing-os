@@ -72,6 +72,7 @@ function createPulseForm() {
       'Build a reusable skill (Session 3)',
       'Connect a tool like Gmail or Drive (Session 4)',
       'Build a live dashboard or schedule a task (Session 5)',
+      'Share a skill with a teammate, or set connector access safely (Session 6)',
       'None of these yet'
     ])
     .setRequired(true);
