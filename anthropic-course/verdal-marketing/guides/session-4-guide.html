@@ -201,6 +201,7 @@
     <li><a href="#live-data">Pull real data into a deliverable</a></li>
     <li><a href="#chrome">Claude in Chrome</a></li>
     <li><a href="#safety">Safety and access</a></li>
+    <li><a href="#apify">Scrape competitors with Apify</a></li>
     <li><a href="#wrap">Recap and homework</a></li>
     <li><a href="#check">Check yourself</a></li>
   </ol>
@@ -372,6 +373,34 @@ them to projects/search-audit.md.</code></pre>
 </div>
 
 <!-- ============================================ -->
+<div class="pattern" id="apify">
+<span class="pattern-num">STEP 06</span>
+<h2>Scrape competitors with Apify</h2>
+<p class="lead">Some data is not in your inbox or Drive, it is on the open web. Apify is a connector that pulls it for you.</p>
+<div class="callout"><strong>What scraping means.</strong> Pulling public data off websites automatically, for example competitor social posts, instead of copying it by hand. Apify is the connector that does it.</div>
+<h3>Set it up once</h3>
+<ol>
+  <li>Go to <strong>Customize &gt; Connectors</strong> and find <strong>Apify</strong>.</li>
+  <li>Click install, and paste your Apify API token when asked. An API token is just a password unique to this one connection.</li>
+  <li>Cowork can now scrape on request.</li>
+</ol>
+<div class="method">
+<div class="method-head"><span class="method-badge">Paste into Cowork</span></div>
+<span class="pre-label ask">scrape competitors</span>
+<pre><code>Using Apify, scrape the last 25 Instagram posts from
+The Sill, Bloomscape, and Leon and George. Build a
+spreadsheet of the data and an interactive dashboard for
+our content strategy. Save both to projects/.</code></pre>
+</div>
+<h3>What good looks like</h3>
+<ul>
+  <li>Cowork calls Apify, pulls the posts, and analyses engagement by type.</li>
+  <li>A spreadsheet and a dashboard land in <code>projects/</code>, not the chat.</li>
+</ul>
+<div class="callout"><strong>Fallback.</strong> If the live scrape fails or returns nothing, open the prebuilt <code>data/competitor-posts.csv</code> in the kit and build the dashboard from that instead. Do not debug the connector live.</div>
+<p class="muted">Official Apify: apify.com and docs.apify.com. Choosing connectors: prefer native, then official, then community, and grant the least access. For work accounts, check with IT that connectors are enabled.</p>
+</div>
+
 <h2 id="wrap">Recap and homework</h2>
 
 <p>If you followed along, you have:</p>
