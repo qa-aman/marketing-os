@@ -20,8 +20,8 @@
  * Share the pre link a few days before Session 1. Share the post link after the last
  * session. To compare, put the two responses sheets side by side and look at Poll B.
  *
- * Want to match each person's before-to-after change? Change the name field from
- * setRequired(false) to setRequired(true) in addNameField below, or setCollectEmail(true).
+ * The name field is required in both forms, so you can match each person's answers
+ * before to after. To make it optional instead, edit addNameField below.
  */
 
 // ---------- BEFORE the workshop ----------
@@ -125,11 +125,12 @@ function createPostForm() {
 
 // ---------- shared pieces (keep pre and post identical where it matters) ----------
 
-// Optional name. Make it required if you want to match each person before to after.
+// Name is required so you can match each person's answers before to after.
+// To make it optional instead, set setRequired(false) and add " (optional)" to the title.
 function addNameField(form) {
   form.addTextItem()
-    .setTitle('Your name (optional)')
-    .setRequired(false);
+    .setTitle('Your name')
+    .setRequired(true);
 }
 
 // Poll A (the gate) + Poll B (the capability self-map). These are the two questions
