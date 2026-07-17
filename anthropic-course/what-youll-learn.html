@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What you'll learn - Claude Cowork workshop</title>
+<style>
+  :root{
+    --green:#2F6B4F; --green-d:#234f3b; --cream:#F7F4EC; --terra:#C56B47;
+    --ink:#1F2A24; --muted:#5c6b62; --line:#e2ddd0; --white:#fffdf8; --paper:#fbf9f2;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--ink);color:var(--ink);overflow:hidden}
+
+  #bar{position:fixed;top:0;left:0;height:4px;background:var(--terra);width:0;z-index:50;transition:width .3s ease}
+  #counter{position:fixed;bottom:16px;right:20px;z-index:50;font:600 12px/1 var(--sans);color:var(--muted);letter-spacing:.04em}
+  #hint{position:fixed;bottom:16px;left:20px;z-index:50;font:500 11px/1 var(--sans);color:var(--muted);opacity:.75}
+  #hint b{color:var(--green);font-weight:700}
+
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:6.5vh 6vw;background:var(--cream);color:var(--ink)}
+  .slide.active{display:flex;animation:in .4s ease}
+  @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .kicker{font:700 12px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:18px}
+  h1{font-size:clamp(32px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  h2{font-size:clamp(26px,3.6vw,42px);line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--green-d)}
+  .sub{font-size:clamp(16px,1.9vw,21px);color:var(--muted);margin-top:16px;font-weight:500;max-width:38ch}
+  .foot{margin-top:26px;font-size:14px;color:var(--muted);font-weight:600}
+
+  .split{display:grid;grid-template-columns:1.05fr 1fr;gap:46px;align-items:center;width:100%}
+  .split .left h2{max-width:16ch}
+
+  .title{background:var(--green);color:var(--cream);justify-content:center}
+  .title h1{color:#fff}.title .kicker{color:#e7c9b6}.title .sub{color:#d8e6dd;max-width:42ch}
+  .title .brandbar{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--terra)}
+
+  .phase{background:var(--green-d);color:var(--cream);justify-content:center}
+  .phase .kicker{color:#e7c9b6}.phase h1{color:#fff}.phase .sub{color:#cfe0d6;max-width:40ch}
+  .phase .brandbar{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--terra)}
+
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:26px 28px;
+    box-shadow:0 14px 36px rgba(35,79,59,.10)}
+  .panel .cap{font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:12px}
+  .panel .outcome{font-size:clamp(17px,1.9vw,22px);line-height:1.35;font-weight:700;color:var(--green-d)}
+
+  ul.q{list-style:none;display:grid;gap:15px}
+  ul.q li{font-size:clamp(17px,2.05vw,24px);font-weight:700;color:var(--green-d);padding-left:24px;position:relative;line-height:1.2}
+  ul.q li:before{content:"";position:absolute;left:0;top:.5em;width:11px;height:11px;border-radius:50%;background:var(--terra)}
+
+  ul.big{list-style:none;display:grid;gap:14px}
+  ul.big li{font-size:clamp(16px,1.8vw,21px);font-weight:600;display:flex;gap:14px;align-items:flex-start;line-height:1.25}
+  ul.big li .n{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:var(--green);color:#fff;font:800 15px/30px var(--sans);text-align:center}
+
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:6px}
+  .chips span{font:700 13px/1 var(--sans);background:var(--paper);border:1px solid var(--line);color:var(--green-d);padding:9px 13px;border-radius:8px}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;width:100%;margin-top:8px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px 24px;box-shadow:0 10px 30px rgba(35,79,59,.06)}
+  .card .tag{font:800 15px/1 var(--sans);margin-bottom:10px;color:var(--green)}
+  .card p{font-size:clamp(14px,1.5vw,17px);line-height:1.4;color:var(--ink)}
+  .card .sess{margin-top:10px;font:600 13px/1.5 var(--sans);color:var(--muted)}
+
+  .pill{align-self:flex-start;margin-top:20px;background:var(--terra);color:#fff;font:800 14px/1 var(--sans);padding:12px 20px;border-radius:999px}
+
+  #notes{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(16,25,20,.96);color:#e8f3ec;
+    padding:16px 22px 20px;transform:translateY(110%);transition:transform .3s ease;max-height:42vh;overflow:auto}
+  #notes.show{transform:none}
+  #notes .nlbl{font:800 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#7fb79a;margin-bottom:7px}
+  #notes p{font-size:15px;line-height:1.5;max-width:82ch}
+
+  @media (max-width:860px){.split,.cols{grid-template-columns:1fr;gap:24px}}
+  @media print{body{overflow:visible;background:#fff}#bar,#counter,#hint,#notes{display:none}
+    .slide{position:relative;display:flex!important;height:100vh;page-break-after:always;inset:auto}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide title" data-notes="Open the workshop. This is the map of the whole thing: what they will learn over six sessions, and what they will be able to do at the end. Keep it warm. Nobody needs any experience to start.">
+    <div class="brandbar"></div>
+    <div class="kicker">Claude Cowork workshop</div>
+    <h1>What you'll learn</h1>
+    <div class="sub">Six short sessions that take you from never having touched it to running real marketing work with Claude Cowork. No code, ever.</div>
+  </section>
+
+  <!-- 2 THE SHAPE -->
+  <section class="slide" data-notes="Set the shape before the detail. Six 2-hour sessions, grouped into three phases by difficulty. Everything is hands-on, on a ready-made sample brand called Verdal, so nobody practises on live client work. The only tool is the Cowork desktop app.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">The shape of it</div>
+        <h2>Six sessions, three phases, no code.</h2>
+        <div class="sub">Each session you watch it done live, then do it yourself on a sample brand. You leave each one having built something real.</div>
+      </div>
+      <div class="right">
+        <div class="cols" style="grid-template-columns:1fr">
+          <div class="card"><div class="tag">Beginner</div><p>Get working: meet the tool and make it remember your brand.</p><div class="sess">Sessions 1 and 2</div></div>
+          <div class="card"><div class="tag">Intermediate</div><p>Build and connect: reusable skills, and your real tools plugged in.</p><div class="sess">Sessions 3 and 4</div></div>
+          <div class="card"><div class="tag">Advanced</div><p>Automate and combine: dashboards, scheduled work, and more tools.</p><div class="sess">Sessions 5 and 6</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 PHASE 1 -->
+  <section class="slide phase" data-notes="Phase one. The goal is simply to get comfortable: hand Cowork a task, and set it up so it knows your brand.">
+    <div class="brandbar"></div>
+    <div class="kicker">Phase 1 of 3 - Beginner</div>
+    <h1>Get working</h1>
+    <div class="sub">Meet the tool and make it yours.</div>
+  </section>
+
+  <!-- 4 SESSION 1 -->
+  <section class="slide" data-notes="Session 1. The mental shift: Chat hands you text to copy, Cowork does the work and saves the finished file into your folder. The headline moment is watching it build a strategy deck from the brand files.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Session 1 - Beginner</div>
+        <h2>Meet Claude Cowork</h2>
+        <ul class="q" style="margin-top:18px">
+          <li>What Cowork is, and how it differs from the chat</li>
+          <li>The task loop: it plans, works, and saves a file</li>
+          <li>Giving it access to a folder</li>
+          <li>Choosing files and a model</li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">By the end you can</div>
+          <div class="outcome">Hand Cowork a real task, steer it, and find the finished file it saved.</div>
+          <div class="cap" style="margin-top:20px">Tools you'll use</div>
+          <div class="chips"><span>Claude Cowork</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 SESSION 2 -->
+  <section class="slide" data-notes="Session 2. Stop repeating yourself. Global instructions apply to every task; a Project remembers your brand. The standout move is letting Cowork interview you to write your brand files, which is how they onboard their own brand later.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Session 2 - Beginner</div>
+        <h2>Context and projects</h2>
+        <ul class="q" style="margin-top:18px">
+          <li>Rules it remembers across every task</li>
+          <li>Projects with their own memory</li>
+          <li>Letting Cowork interview you to build your brand files</li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">By the end you can</div>
+          <div class="outcome">Set up a project that knows your brand, so you never re-explain it.</div>
+          <div class="cap" style="margin-top:20px">Tools you'll use</div>
+          <div class="chips"><span>Cowork</span><span>Projects</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 PHASE 2 -->
+  <section class="slide phase" data-notes="Phase two. Now turn repeat work into reusable skills, and connect Cowork to the tools they already use.">
+    <div class="brandbar"></div>
+    <div class="kicker">Phase 2 of 3 - Intermediate</div>
+    <h1>Build and connect</h1>
+    <div class="sub">Reusable skills, and your real tools plugged in.</div>
+  </section>
+
+  <!-- 7 SESSION 3 -->
+  <section class="slide" data-notes="Session 3. A skill packages a workflow so Cowork repeats it with the same quality. Teach the simple rule for when to build one, and show that Anthropic ships ready-made marketing skills you can install.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Session 3 - Intermediate</div>
+        <h2>Skills and plugins</h2>
+        <ul class="q" style="margin-top:18px">
+          <li>Turning a repeated task into a reusable skill</li>
+          <li>When something is worth making into a skill</li>
+          <li>Installing ready-made ones (the official marketing plugin)</li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">By the end you can</div>
+          <div class="outcome">Build a skill once and run it any time, at the same quality.</div>
+          <div class="cap" style="margin-top:20px">Tools you'll use</div>
+          <div class="chips"><span>Cowork</span><span>Skills</span><span>Marketing plugin</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 SESSION 4 -->
+  <section class="slide" data-notes="Session 4. Connectors let Cowork read live data from tools you already use. Cover the safety order briefly, then the real ones a marketer uses: Gmail, Drive, Notion, Apify for competitor scraping, and Claude in Chrome for live web pages.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Session 4 - Intermediate</div>
+        <h2>Connect your tools</h2>
+        <ul class="q" style="margin-top:18px">
+          <li>Connecting the tools you already use</li>
+          <li>Gmail, Drive and Notion</li>
+          <li>Apify for competitor research</li>
+          <li>Claude in Chrome for live web pages</li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">By the end you can</div>
+          <div class="outcome">Pull live data from your real tools straight into your work.</div>
+          <div class="cap" style="margin-top:20px">Tools you'll use</div>
+          <div class="chips"><span>Gmail</span><span>Drive</span><span>Notion</span><span>Apify</span><span>Claude in Chrome</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 PHASE 3 -->
+  <section class="slide phase" data-notes="Phase three. Bigger outputs, work that runs itself, and pairing Claude with other tools. Advanced here means bigger and more automated, not more technical. Still no code.">
+    <div class="brandbar"></div>
+    <div class="kicker">Phase 3 of 3 - Advanced</div>
+    <h1>Automate and combine</h1>
+    <div class="sub">Bigger outputs, work that runs itself, and more tools.</div>
+  </section>
+
+  <!-- 10 SESSION 5 -->
+  <section class="slide" data-notes="Session 5. Move from one-off files to living dashboards and work that runs on a schedule. Then make it look sharp with Gamma and pull in live research with Perplexity.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Session 5 - Advanced</div>
+        <h2>Bigger outputs and automation</h2>
+        <ul class="q" style="margin-top:18px">
+          <li>Live dashboards that refresh</li>
+          <li>Scheduled tasks that run on their own</li>
+          <li>Polished decks with Gamma</li>
+          <li>Research with Perplexity</li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">By the end you can</div>
+          <div class="outcome">Build a live dashboard and schedule work that runs without you.</div>
+          <div class="cap" style="margin-top:20px">Tools you'll use</div>
+          <div class="chips"><span>Cowork</span><span>Gamma</span><span>Perplexity</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 SESSION 6 -->
+  <section class="slide" data-notes="Session 6. Work safely, hand your best skill to a colleague, and, most important for going it alone, set up your own real brand in the room with help on hand.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">Session 6 - Advanced</div>
+        <h2>Safety, sharing and next steps</h2>
+        <ul class="q" style="margin-top:18px">
+          <li>Working safely and reviewing before anything ships</li>
+          <li>Sharing a skill with the team</li>
+          <li>Setting up your own brand, with help in the room</li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">By the end you can</div>
+          <div class="outcome">Work safely, share what you built, and go it alone on your own brand.</div>
+          <div class="cap" style="margin-top:20px">Tools you'll use</div>
+          <div class="chips"><span>Cowork</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 OUTCOMES -->
+  <section class="slide" data-notes="Pull it together. This is the promise: by the end, these are the six things every person can do. Read them out; it is a strong close to the overview.">
+    <div class="kicker">By the end of the workshop</div>
+    <h2 style="max-width:20ch">You will be able to, on your own:</h2>
+    <div class="cols" style="grid-template-columns:1fr 1fr;margin-top:24px">
+      <div class="card"><p><b>Hand Cowork a task</b> and get a finished file back.</p></div>
+      <div class="card"><p><b>Set up a project</b> that remembers your brand.</p></div>
+      <div class="card"><p><b>Build and share</b> a reusable skill.</p></div>
+      <div class="card"><p><b>Connect your tools</b> and pull in live data.</p></div>
+      <div class="card"><p><b>Build a dashboard</b> and schedule work.</p></div>
+      <div class="card"><p><b>Do it all</b> on your own real brand.</p></div>
+    </div>
+  </section>
+
+  <!-- 13 HOW IT RUNS -->
+  <section class="slide" data-notes="Set expectations for the format so nobody is surprised. Two-hour sessions, one topic cluster each. We show it live, then you do it. It is all no-code on a sample brand. There is a short setup step to do before Session 1, which will be sent with the folder.">
+    <div class="split">
+      <div class="left">
+        <div class="kicker">How each session runs</div>
+        <h2>Watch it live, then do it yourself.</h2>
+        <div class="sub">Every session is hands-on. You practise on a ready-made sample brand, so you never touch live client work while learning.</div>
+      </div>
+      <div class="right">
+        <div class="panel">
+          <div class="cap">What to expect</div>
+          <ul class="big">
+            <li><span class="n">1</span><span>Six 2-hour sessions, one topic cluster each</span></li>
+            <li><span class="n">2</span><span>We show it live, then you do it on your laptop</span></li>
+            <li><span class="n">3</span><span>No code and no terminal, ever</span></li>
+            <li><span class="n">4</span><span>A short setup step to do before Session 1</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 CLOSE -->
+  <section class="slide title" data-notes="Warm close. Invite questions. The next step is scheduling and the setup sheet.">
+    <div class="brandbar"></div>
+    <div class="kicker">Ready when you are</div>
+    <h1>Let's build something real.</h1>
+    <div class="sub">By the end, Cowork is not a demo you watched, it is a tool you use every week.</div>
+  </section>
+
+</div>
+
+<div id="counter">1 / 14</div>
+<div id="hint">Arrows to move &middot; <b>N</b> notes &middot; <b>F</b> fullscreen</div>
+<div id="notes"><div class="nlbl">Speaker notes</div><p id="notetext"></p></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar'),counter=document.getElementById('counter');
+  const notes=document.getElementById('notes'),noteText=document.getElementById('notetext');
+  let i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,x)=>s.classList.toggle('active',x===i));
+    bar.style.width=(i/(slides.length-1)*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    noteText.textContent=slides[i].dataset.notes||'';
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  const next=()=>show(i+1),prev=()=>show(i-1);
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='n')notes.classList.toggle('show');
+    else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  });
+  document.getElementById('deck').addEventListener('click',e=>{(e.clientX<window.innerWidth*0.33)?prev():next()});
+  let tx=0;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next():prev())},{passive:true});
+  addEventListener('hashchange',()=>{const n=parseInt(location.hash.replace('#',''));if(n&&n-1!==i)show(n-1)});
+  show((parseInt(location.hash.replace('#',''))||1)-1);
+</script>
+</body>
+</html>
